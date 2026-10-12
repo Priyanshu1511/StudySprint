@@ -177,7 +177,7 @@
         <div class="card"><div class="stat-head">Priyanshu · Today's attendance</div><div class="stat-value" id="libraryPriyanshuStatus" style="font-size:20px">Not checked in</div><div class="stat-note" id="libraryPriyanshuTimes">Check-in — · Check-out —</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn primary" data-library-action="checkin" data-person="Priyanshu">Check in</button><button class="btn" data-library-action="checkout" data-person="Priyanshu">Check out</button></div></div>
         <div class="card"><div class="stat-head">Sona · Today's attendance</div><div class="stat-value" id="librarySonaStatus" style="font-size:20px">Not checked in</div><div class="stat-note" id="librarySonaTimes">Check-in — · Check-out —</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn primary" data-library-action="checkin" data-person="Sona">Check in</button><button class="btn" data-library-action="checkout" data-person="Sona">Check out</button></div></div>
       </div>
-      <div class="card" style="margin:18px 0"><h3 style="margin-top:0">Attendance history</h3><div class="filters"><input id="libraryDateFilter" type="date" aria-label="Filter attendance by date"><select id="libraryPersonFilter"><option value="">Both people</option><option>Priyanshu</option><option>Sona</option></select></div><div class="table-wrap"><table style="min-width:650px"><thead><tr><th>Date</th><th>Person</th><th>Check-in</th><th>Check-out</th><th>Hours at library</th></tr></thead><tbody id="libraryAttendanceRows"></tbody></table></div><div class="table-note"><span>One record per person per calendar day.</span><span>Times use this device's local time.</span></div></div>
+      <div class="card" style="margin:18px 0"><div class="section-title"><div><h3>Attendance history</h3><p>Delete individual entries or clear the full history.</p></div><button class="btn small danger" id="deleteAllLibraryLogs" type="button">Delete all logs</button></div><div class="filters"><input id="libraryDateFilter" type="date" aria-label="Filter attendance by date"><select id="libraryPersonFilter"><option value="">Both people</option><option>Priyanshu</option><option>Sona</option></select></div><div class="table-wrap"><table style="min-width:650px"><thead><tr><th>Date</th><th>Person</th><th>Check-in</th><th>Check-out</th><th>Hours at library</th><th>Action</th></tr></thead><tbody id="libraryAttendanceRows"></tbody></table></div><div class="table-note"><span>One record per person per calendar day. Use Delete to remove a single log.</span><span>Times use this device's local time.</span></div></div>
     </section>
 
     <section id="page-habits" class="hidden">
@@ -288,11 +288,34 @@ function renderLibraryAttendance(){
  const dateFilter=document.getElementById('libraryDateFilter')?.value||'',personFilter=document.getElementById('libraryPersonFilter')?.value||'';
  const rows=(state.libraryAttendance||[]).filter(x=>(!dateFilter||x.date===dateFilter)&&(!personFilter||x.person===personFilter)).slice().sort((a,b)=>b.date.localeCompare(a.date)||a.person.localeCompare(b.person));
  const tbody=document.getElementById('libraryAttendanceRows');
- if(tbody)tbody.innerHTML=rows.map(x=>{let mins=x.checkIn&&x.checkOut?Math.max(0,Math.round((new Date(x.checkOut)-new Date(x.checkIn))/60000)):null;let duration=mins===null?'—':`${Math.floor(mins/60)}h ${mins%60}m`;return `<tr><td>${esc(x.date)}</td><td><strong>${esc(x.person)}</strong></td><td>${esc(clockLabel(x.checkIn))}</td><td>${esc(clockLabel(x.checkOut))}</td><td>${duration}</td></tr>`}).join('')||'<tr><td colspan="5"><div class="empty">No library attendance records for this filter.</div></td></tr>';
+ if(tbody)tbody.innerHTML=rows.map(x=>{let mins=x.checkIn&&x.checkOut?Math.max(0,Math.round((new Date(x.checkOut)-new Date(x.checkIn))/60000)):null;let duration=mins===null?'—':`${Math.floor(mins/60)}h ${mins%60}m`;return `<tr><td>${esc(x.date)}</td><td><strong>${esc(x.person)}</strong></td><td>${esc(clockLabel(x.checkIn))}</td><td>${esc(clockLabel(x.checkOut))}</td><td>${duration}</td><td><button class="btn small danger" type="button" data-library-delete="${esc(x.id)}">Delete</button></td></tr>`}).join('')||'<tr><td colspan="6"><div class="empty">No library attendance records for this filter.</div></td></tr>';
 }
 document.addEventListener('click',e=>{const btn=e.target.closest('[data-library-action]');if(!btn)return;const person=btn.dataset.person,action=btn.dataset.libraryAction,date=localDateISO();state.libraryAttendance=state.libraryAttendance||[];let item=attendanceFor(person,date);if(!item){item={id:uid(),person,date,checkIn:null,checkOut:null};state.libraryAttendance.unshift(item)}if(action==='checkin'){if(item.checkIn){notify(`${person} is already checked in today`);return}item.checkIn=new Date().toISOString();addActivity(`${person} checked in at the library`)}else{if(!item.checkIn){notify(`Check in ${person} first`);return}if(item.checkOut){notify(`${person} is already checked out today`);return}item.checkOut=new Date().toISOString();addActivity(`${person} checked out of the library`)}save();renderLibraryAttendance();notify(`${person}: ${action==='checkin'?'check-in':'check-out'} saved`)});
 document.getElementById('libraryDateFilter')?.addEventListener('change',renderLibraryAttendance);
 document.getElementById('libraryPersonFilter')?.addEventListener('change',renderLibraryAttendance);
+
+document.addEventListener('click',e=>{
+  const deleteBtn=e.target.closest('[data-library-delete]');
+  if(!deleteBtn)return;
+  const id=deleteBtn.dataset.libraryDelete;
+  const item=(state.libraryAttendance||[]).find(x=>String(x.id)===String(id));
+  if(!item)return;
+  if(!confirm(`Delete ${item.person}'s library log for ${item.date}? This cannot be undone.`))return;
+  state.libraryAttendance=state.libraryAttendance.filter(x=>String(x.id)!==String(id));
+  save();
+  renderLibraryAttendance();
+  notify('Library log deleted');
+});
+
+document.getElementById('deleteAllLibraryLogs')?.addEventListener('click',()=>{
+  const logs=state.libraryAttendance||[];
+  if(!logs.length){notify('There are no library logs to delete');return;}
+  if(!confirm(`Delete all ${logs.length} library attendance logs for both people? This cannot be undone.`))return;
+  state.libraryAttendance=[];
+  save();
+  renderLibraryAttendance();
+  notify('All library attendance logs deleted');
+});
 
 function renderLectures(){
  const q=(document.getElementById('lectureSearch')?.value||'').toLowerCase(),sub=document.getElementById('subjectFilter')?.value||'',done=document.getElementById('completionFilter')?.value||'',rev=document.getElementById('revisionFilter')?.value||'';
