@@ -32,6 +32,7 @@
     <button class="navbtn" data-page="meetups"><span class="ico">▣</span>Meetups & Google Meet</button>
     <button class="navbtn" data-page="diary"><span class="ico">✎</span>Diary & messages</button>
     <button class="navbtn" data-page="library"><span class="ico">📚</span>Library check-in/out</button>
+    <button class="navbtn" data-page="manifestation"><span class="ico">✨</span>Daily manifestation</button>
     <button class="navbtn" data-page="voice"><span class="ico">♫</span>Daily voice notes</button>
     <button class="navbtn" data-page="habits"><span class="ico">☀</span>Daily wellness</button>
   </div>
@@ -56,6 +57,38 @@
         <div class="card"><div class="stat-head">Revision sessions <span class="stat-icon" style="background:var(--green-soft)">↻</span></div><div class="stat-value" id="statRevisions">0</div><div class="stat-note">Date entries recorded by Priyanshu</div></div>
         <div class="card"><div class="stat-head">Mock tests logged <span class="stat-icon" style="background:var(--orange-soft)">◷</span></div><div class="stat-value" id="statMocks">0</div><div class="stat-note">Testbook + Oliveboard</div></div>
         <div class="card"><div class="stat-head">Geography topics <span class="stat-icon" style="background:#f4eaff">◎</span></div><div class="stat-value" id="statTopics">0</div><div class="stat-note">Topics added to Sona's tracker</div></div>
+      </div>
+      <div class="card" id="rewardsCard" style="margin:0 0 18px">
+        <div class="section-title"><div><h3>🏆 Separate reward scoreboards</h3><p>Healthy progress game: earn points, hit targets, and take breaks when needed.</p></div><span class="tag blue">Rewards</span></div>
+        <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:14px" id="rewardPeople">
+          <div class="branch-card">
+            <div style="font-size:18px">🌷 <strong>Sona</strong></div>
+            <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px">
+              <div><small>Today</small><strong id="sonaPointsDaily">0 pts</strong></div>
+              <div><small>This week</small><strong id="sonaPointsWeekly">0 pts</strong><small id="sonaWeeklyTargetLabel">Target: 250 pts</small></div>
+              <div><small>This month</small><strong id="sonaPointsMonthly">0 pts</strong><small id="sonaMonthlyTargetLabel">Target: 1000 pts</small></div>
+              <div><small>Lifetime</small><strong id="sonaPointsTotal">0 pts</strong></div>
+              <div><small>Daily average</small><strong id="sonaPointsAverage">0 pts</strong></div>
+            </div>
+            <div class="track" style="margin-top:12px"><div class="fill green" id="sonaDailyTargetBar" style="width:0%"></div></div>
+            <small id="sonaTargetLabel">Daily target: 40 pts</small>
+          </div>
+          <div class="branch-card">
+            <div style="font-size:18px">⚡ <strong>Priyanshu</strong></div>
+            <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px">
+              <div><small>Today</small><strong id="priyanshuPointsDaily">0 pts</strong></div>
+              <div><small>This week</small><strong id="priyanshuPointsWeekly">0 pts</strong><small id="priyanshuWeeklyTargetLabel">Target: 250 pts</small></div>
+              <div><small>This month</small><strong id="priyanshuPointsMonthly">0 pts</strong><small id="priyanshuMonthlyTargetLabel">Target: 1000 pts</small></div>
+              <div><small>Lifetime</small><strong id="priyanshuPointsTotal">0 pts</strong></div>
+              <div><small>Daily average</small><strong id="priyanshuPointsAverage">0 pts</strong></div>
+            </div>
+            <div class="track" style="margin-top:12px"><div class="fill" id="priyanshuDailyTargetBar" style="width:0%"></div></div>
+            <small id="priyanshuTargetLabel">Daily target: 40 pts</small>
+          </div>
+        </div>
+        <div class="section-title" style="margin-top:16px"><div><h3>Recent rewards</h3><p>Who earned what, and when</p></div></div>
+        <div id="rewardHistory" class="records"></div>
+        <div class="privacy-note"><strong>Study-first points:</strong> lecture +10; revision +5; mock test +20; Geography topic +10; library check-in +5 and check-out +10; each checked wellness habit +2; completed manifestation activity +5. Photos, voice notes, calls, messages and meetups earn no points. Old study/library/wellness records are backfilled once; records without dates count toward lifetime totals only.</div>
       </div>
       <div class="grid dashboard-grid">
         <div class="card"><div class="section-title"><div><h3>Lecture completion</h3><p>Progress by bank-exam subject</p></div><button class="btn small" data-go="lectures">Open tracker ↗</button></div><div id="subjectProgress"></div><div class="legend"><span><i class="dot" style="background:var(--blue)"></i>Completed</span><span><i class="dot" style="background:#edf0f6"></i>Remaining</span></div></div>
@@ -172,6 +205,34 @@
       <div class="card" style="margin:18px 0"><h3>📸 Shared photos</h3><p>Upload a photo for both of you to see.</p><input id="sharedPhotoUpload" type="file" accept="image/*"><button class="btn primary" id="uploadSharedPhoto" style="margin:10px 0">Upload photo</button><div id="sharedMediaGallery" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px"></div><p class="privacy-note">This no-login bucket is public. Upload only photos you are comfortable sharing publicly.</p></div><div class="section-title"><div><h3>Voice message library</h3><p>Voice recordings are uploaded to cloud storage and shared across devices.</p></div></div><div class="records" id="voiceRecords"></div>
     </section>
 
+
+    <section id="page-manifestation" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Mindset · Small daily practice</div><h2>✨ Daily manifestation practice</h2><p>Write a positive feeling, connect it to one realistic action, and upload a photo of your written page. This is a reflection habit—not a promise that thoughts alone cause outcomes.</p></div></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="section-title"><div><h3 id="manifestPromptTitle">Today's activity</h3><p id="manifestPromptMeta">A fresh prompt each day</p></div><span class="tag blue">+5 points</span></div>
+        <div class="callout" style="margin-bottom:14px;padding:18px;border:2px solid var(--accent,#6c63ff);border-radius:14px">
+          <div style="font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">TODAY'S PROMPT</div>
+          <strong id="manifestPromptText" style="display:block;font-size:18px;line-height:1.5"></strong>
+          <div style="font-size:15px;font-weight:800;margin-top:16px">👇 KYA KARNA HAI? (STEP-BY-STEP)</div>
+          <p id="manifestHowTo" style="margin:8px 0 0;line-height:1.7;white-space:pre-line"></p>
+          <ol style="margin:12px 0 0;padding-left:22px;line-height:1.8">
+            <li>Apni notebook mein aaj ke prompt par 3–5 honest sentences likho.</li>
+            <li>Ek real, chhota action likho jo aaj apne goal ke liye kar sakte ho.</li>
+            <li>Likhe hue page ki clear photo upload karo.</li>
+            <li>Sona ya Priyanshu select karke submit karo. Ek person ko ek din mein ek hi reward milega.</li>
+          </ol>
+        </div>
+        <form id="manifestationForm">
+          <div class="form-field"><label for="manifestPerson">Whose activity?</label><select id="manifestPerson" required><option value="Sona">Sona</option><option value="Priyanshu">Priyanshu</option></select></div>
+          <div class="form-field"><label for="manifestWriting">Your positive-feeling writing</label><textarea id="manifestWriting" rows="5" required minlength="20" placeholder="Write 3–5 honest sentences: what you feel, what you appreciate, and one action you can take today."></textarea></div>
+          <div class="form-field"><label for="manifestPhoto">Photo of your written activity (required to complete)</label><input id="manifestPhoto" type="file" accept="image/*" required><small>Upload a photo of your notebook/page. Avoid including private information.</small></div>
+          <button class="btn primary" type="submit" id="completeManifestation">Upload photo & complete activity (+5 points)</button>
+        </form>
+        <p class="privacy-note">One reward per person per day. No penalties for missed days. Keep goals realistic; this practice supports motivation and reflection, not guaranteed outcomes.</p>
+      </div>
+      <div class="card"><div class="section-title"><div><h3>Manifestation history</h3><p>Completed writing activities and photo proof</p></div></div><div id="manifestationHistory" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px"></div></div>
+    </section>
+
     <section id="page-library" class="hidden">
       <div class="page-head"><div><div class="eyebrow">Daily attendance · Study routine</div><h2>Library check-in / check-out</h2><p>One record per person per day. Check-in and check-out times are saved and shared across devices.</p></div></div>
       <div class="grid stats" style="grid-template-columns:repeat(2,minmax(0,1fr))">
@@ -235,8 +296,8 @@ let ssReady=false, ssRemote=false, ssTimer;
 async function ssUpload(file,folder){if(file.size>25*1024*1024)throw Error("File must be under 25 MB.");const path=folder+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,9)+"-"+String(file.name||"upload").replace(/[^a-zA-Z0-9._-]/g,"_");const r=await ssSupabase.storage.from(ssBucket).upload(path,file,{contentType:file.type||"application/octet-stream"});if(r.error)throw r.error;return {path,url:ssSupabase.storage.from(ssBucket).getPublicUrl(path).data.publicUrl}}
 async function ssDelete(path){if(path){const r=await ssSupabase.storage.from(ssBucket).remove([path]);if(r.error)throw r.error}}
 function ssSave(){if(!ssReady||ssRemote)return;clearTimeout(ssTimer);ssTimer=setTimeout(async()=>{try{let r=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});if(r.error)throw r.error;let e=document.getElementById("cloudStatus");if(e)e.textContent="Cloud synced"}catch(e){console.error(e);let b=document.getElementById("cloudStatus");if(b)b.textContent="Cloud sync error"}},600)}
-async function ssRenderAll(){localStorage.setItem(KEY,JSON.stringify(state));renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderPersonal==="function")renderPersonal();if(typeof renderVoiceList==="function")renderVoiceList();if(typeof renderMediaGallery==="function")renderMediaGallery()}
-async function ssStart(){let badge=document.getElementById("cloudStatus");try{let r=await ssSupabase.from("shared_content").select("id,content").eq("id",1).maybeSingle();if(r.error)throw r.error;if(r.data?.content){ssRemote=true;state=r.data.content;["calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance"].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[]});await ssRenderAll();ssRemote=false}else{let w=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});if(w.error)throw w.error}ssReady=true;if(badge)badge.textContent="Cloud connected";ssSupabase.channel("ss-shared").on("postgres_changes",{event:"*",schema:"public",table:"shared_content",filter:"id=eq.1"},async p=>{if(!p.new?.content)return;ssRemote=true;state=p.new.content;["calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance"].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[]});await ssRenderAll();ssRemote=false;if(badge)badge.textContent="Cloud synced"}).subscribe()}catch(e){console.error("Supabase setup",e);if(badge)badge.textContent="Cloud error — check policies";}}
+async function ssRenderAll(){localStorage.setItem(KEY,JSON.stringify(state));renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderManifestation==='function')renderManifestation();if(typeof renderPersonal==="function")renderPersonal();if(typeof renderVoiceList==="function")renderVoiceList();if(typeof renderMediaGallery==="function")renderMediaGallery()}
+async function ssStart(){let badge=document.getElementById("cloudStatus");try{let r=await ssSupabase.from("shared_content").select("id,content").eq("id",1).maybeSingle();if(r.error)throw r.error;if(r.data?.content){ssRemote=true;state=r.data.content;["calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance","rewardEvents","manifestationLogs"].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[]});ensureLegacyRewards();await ssRenderAll();ssRemote=false;ssReady=true;ssSave()}else{ensureLegacyRewards();let w=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});if(w.error)throw w.error}ssReady=true;if(badge)badge.textContent="Cloud connected";ssSupabase.channel("ss-shared").on("postgres_changes",{event:"*",schema:"public",table:"shared_content",filter:"id=eq.1"},async p=>{if(!p.new?.content)return;ssRemote=true;state=p.new.content;["calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance","rewardEvents","manifestationLogs"].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[]});await ssRenderAll();ssRemote=false;if(badge)badge.textContent="Cloud synced"}).subscribe()}catch(e){console.error("Supabase setup",e);if(badge)badge.textContent="Cloud error — check policies";}}
 </script>
 
 <script>
@@ -245,21 +306,124 @@ const subjects=['Reasoning','Maths','English'];
 const branches=['Physical Geography','Climatology','Oceanography','Human Geography','Indian Geography','World Geography','Economic Geography','Environmental Geography','Biogeography'];
 const platforms=['Testbook','Oliveboard'];
 let state=loadState(), currentPage='dashboard', editorKind='', editId=null;
-['calls','meetups','diary','messages','habits','priyanshuHabits','voiceMeta','mediaMeta','libraryAttendance'].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[];});
+['calls','meetups','diary','messages','habits','priyanshuHabits','voiceMeta','mediaMeta','libraryAttendance','rewardEvents'].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[];});
 let voiceRecorder=null, voiceChunks=[], voiceStream=null;
 function uid(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36)}
 function freshState(){let lectures=[];subjects.forEach(subject=>{for(let n=1;n<=50;n++)lectures.push({id:uid(),subject,num:n,topic:'',pdf:'',done:false,r1:'',r2:'',r3:''})});return {lectures,mocks:[],topics:[],activity:[]}}
 function loadState(){try{let s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.lectures)&&Array.isArray(s.mocks)&&Array.isArray(s.topics))return s}catch(e){}return freshState()}
-function save(){localStorage.setItem(KEY,JSON.stringify(state));if(window.ssSave)ssSave();renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderPersonal==='function')renderPersonal();if(typeof renderMediaGallery==='function')renderMediaGallery();}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));if(window.ssSave)ssSave();renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderManifestation==='function')renderManifestation();if(typeof renderPersonal==='function')renderPersonal();if(typeof renderMediaGallery==='function')renderMediaGallery();}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function notify(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
-function addActivity(text){state.activity.unshift({text,time:new Date().toISOString()});state.activity=state.activity.slice(0,8)}
+const REWARD_TARGETS={Sona:{daily:40,weekly:250,monthly:1000},Priyanshu:{daily:40,weekly:250,monthly:1000}};
+function rewardOwnerFromText(text){
+ const t=String(text||'');
+ if(/\bSona\b/i.test(t)) return 'Sona';
+ if(/\bPriyanshu\b/i.test(t)) return 'Priyanshu';
+ if(/^Completed .+ lecture /i.test(t)||/^Completed revision /i.test(t)||/^Logged mock test:/i.test(t)||/^Added Geography topic:/i.test(t)) return /^Added Geography topic:/i.test(t)?'Sona':'Priyanshu';
+ return 'Priyanshu';
+}
+function pointsForActivity(text){
+ const t=String(text||'');
+ if(/^Completed .+ lecture /i.test(t)) return 10;
+ if(/^Completed revision /i.test(t)) return 5;
+ if(/^Logged mock test:/i.test(t)) return 20;
+ if(/^Added Geography topic:/i.test(t)) return 10;
+ if(/checked in at the library/i.test(t)) return 5;
+ if(/checked out of the library/i.test(t)) return 10;
+ if(/^Saved daily wellness log /i.test(t)){const m=t.match(/\((\d+) habits\)/i);return m?Number(m[1])*2:0}
+ if(/^Completed manifestation activity/i.test(t)) return 5;
+ return 0;
+}
+function awardPoints(owner,text,points,time=new Date().toISOString(),sourceKey=''){
+ if(!['Sona','Priyanshu'].includes(owner)||!Number(points))return;
+ state.rewardEvents=state.rewardEvents||[];
+ const key=sourceKey||`event:${owner}:${text}:${time}`;
+ if(state.rewardEvents.some(x=>x.key===key))return;
+ state.rewardEvents.unshift({id:uid(),key,owner,text,points:Number(points),time:time||null,legacy:!time});
+}
+function addActivity(text, ownerOverride=null, sourceKey=''){
+ const time=new Date().toISOString();
+ state.activity.unshift({text,time});state.activity=state.activity.slice(0,8);
+ const points=pointsForActivity(text);
+ const owner=ownerOverride||rewardOwnerFromText(text);
+ if(points>0)awardPoints(owner,text,points,time,sourceKey||`activity:${uid()}`);
+}
+function ensureLegacyRewards(){
+ // V7 is deliberately idempotent: preserve live awards, rebuild legacy awards from source records.
+ if(!Array.isArray(state.rewardEvents))state.rewardEvents=[];
+ if(state.rewardMigrationV7)return;
+ state.rewardEvents=state.rewardEvents.filter(e=>!e.legacy);
+ const checked=v=>v===true||v===1||String(v).toLowerCase()==='true'||String(v).toLowerCase()==='yes'||String(v)==='1';
+ const stamp=v=>{if(!v)return null;const d=new Date(v);return Number.isNaN(d.getTime())?null:d.toISOString()};
+ const addLegacy=(owner,source,id,text,points,date)=>{
+   if(!['Sona','Priyanshu'].includes(owner)||!Number(points))return;
+   const key=`legacy:v7:${source}:${String(id)}`;
+   if(state.rewardEvents.some(e=>e.key===key))return;
+   state.rewardEvents.push({id:uid(),key,owner,text,points:Number(points),time:stamp(date),legacy:true});
+ };
+ (state.lectures||[]).forEach((x,i)=>{
+   const id=x.id??`${x.subject||'subject'}:${x.num??i}`;
+   if(checked(x.done))addLegacy('Priyanshu','lecture',id,`Existing completed lecture: ${x.subject||''} ${x.num??''}`.trim(),10,x.completedAt||x.doneAt||x.updatedAt||null);
+   ['r1','r2','r3'].forEach(k=>{if(checked(x[k])||(typeof x[k]==='string'&&/^\d{4}-\d{2}-\d{2}/.test(x[k])))addLegacy('Priyanshu','revision',`${id}:${k}`,`Existing revision ${k.toUpperCase()}: ${x.subject||''} ${x.num??''}`.trim(),5,typeof x[k]==='string'&&/^\d{4}-\d{2}-\d{2}/.test(x[k])?x[k]:null)});
+ });
+ (state.mocks||[]).forEach((x,i)=>addLegacy('Priyanshu','mock',x.id??`${x.name||'mock'}:${x.date||x.createdAt||i}`,`Existing mock test: ${x.name||'Mock test'}`,20,x.createdAt||x.date||null));
+ (state.topics||[]).forEach((x,i)=>addLegacy('Sona','geography',x.id??`${x.branch||''}:${x.topic||i}:${x.date||''}`,`Existing Geography topic: ${x.topic||'Geography topic'}`,10,x.createdAt||x.date||x.updatedAt||null));
+ const habitKeys=['aloe','yoga','meditation','sunwater','temple','balanced','water','revision','walk'];
+ (state.habits||[]).forEach((x,i)=>{const n=habitKeys.filter(k=>checked(x[k])).length;if(n)addLegacy('Sona','wellness',x.id??`${x.date||'undated'}:${i}`,`Existing wellness: ${n}/9 habits`,n*2,x.date||x.createdAt||x.updatedAt||null)});
+ (state.priyanshuHabits||[]).forEach((x,i)=>{const n=habitKeys.filter(k=>checked(x[k])).length;if(n)addLegacy('Priyanshu','wellness',x.id??`${x.date||'undated'}:${i}`,`Existing wellness: ${n}/9 habits`,n*2,x.date||x.createdAt||x.updatedAt||null)});
+ (state.libraryAttendance||[]).forEach((x,i)=>{const raw=String(x.person||'').trim().toLowerCase();const owner=raw==='sona'?'Sona':raw==='priyanshu'?'Priyanshu':null;if(!owner)return;const id=x.id??`${owner}:${x.date||''}:${x.checkIn||''}:${x.checkOut||''}:${i}`;if(x.checkIn)addLegacy(owner,'library-in',id,`Existing library check-in`,5,x.checkIn||x.date||null);if(x.checkOut)addLegacy(owner,'library-out',id,`Existing library check-out`,10,x.checkOut||x.date||null)});
+ (state.manifestationLogs||[]).forEach((x,i)=>{if(checked(x.completed)){const owner=String(x.person||'').toLowerCase()==='sona'?'Sona':'Priyanshu';addLegacy(owner,'manifestation',x.id??`${owner}:${x.date||i}`,`Existing manifestation activity`,5,x.completedAt||x.date||null)}});
+ // Older data may have study actions only in activity. Use these only if the matching source collection is absent,
+ // preventing a source record and its activity log from earning twice.
+ (state.activity||[]).forEach((x,i)=>{
+   const text=String(x.text||''), points=pointsForActivity(text);if(!points)return;
+   let owner=rewardOwnerFromText(text),source='activity';
+   if(/^Completed .+ lecture /i.test(text)&&!(state.lectures||[]).some(v=>checked(v.done)))source='activity-lecture';
+   else if(/^Completed revision /i.test(text)&&!(state.lectures||[]).some(v=>['r1','r2','r3'].some(k=>checked(v[k]))))source='activity-revision';
+   else if(/^Logged mock test:/i.test(text)&&!(state.mocks||[]).length)source='activity-mock';
+   else if(/^Added Geography topic:/i.test(text)&&!(state.topics||[]).length)source='activity-geography';
+   else if(/checked in at the library/i.test(text)&&!(state.libraryAttendance||[]).length)source='activity-library-in';
+   else if(/checked out of the library/i.test(text)&&!(state.libraryAttendance||[]).length)source='activity-library-out';
+   else if(/^Saved daily wellness log /i.test(text)&&!(state.habits||[]).length&&!(state.priyanshuHabits||[]).length)source='activity-wellness';
+   else if(/^Completed manifestation activity/i.test(text)&&!(state.manifestationLogs||[]).length)source='activity-manifestation';
+   else return;
+   addLegacy(owner,source,`${i}:${x.time||text}`,text,points,x.time||null);
+ });
+ state.rewardMigrationV7=true;
+}
 function revCount(x){return [x.r1,x.r2,x.r3].filter(Boolean).length}
 function pct(a,b){return Number(b)>0&&a!==''?Number(a)/Number(b)*100:null}
 function avg(arr){let nums=arr.filter(v=>Number.isFinite(v));return nums.length?nums.reduce((a,b)=>a+b,0)/nums.length:null}
 function fmt(v){return v===null||!Number.isFinite(v)?'—':v.toFixed(1)+'%'}
 function dateLabel(d){try{return new Date(d).toLocaleDateString(undefined,{day:'numeric',month:'short'})}catch(e){return ''}}
 function dateTimeLabel(d){try{return new Date(d).toLocaleString(undefined,{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return ''}}
+function renderRewards(){
+ const events=Array.isArray(state.rewardEvents)?state.rewardEvents:[];
+ const today=localDateISO();
+ const now=new Date();
+ const weekStart=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+ const dow=(weekStart.getDay()+6)%7;weekStart.setDate(weekStart.getDate()-dow);weekStart.setHours(0,0,0,0);
+ const monthStart=new Date(now.getFullYear(),now.getMonth(),1);monthStart.setHours(0,0,0,0);
+ const eventDate=e=>{if(!e.time)return null;const d=new Date(e.time);return Number.isNaN(d.getTime())?null:d};
+ const sum=(person,pred=()=>true)=>events.filter(e=>e.owner===person&&pred(e)).reduce((n,e)=>n+(Number(e.points)||0),0);
+ for(const person of ['Sona','Priyanshu']){
+   const key=person==='Sona'?'sona':'priyanshu';
+   const daily=sum(person,e=>{const d=eventDate(e);return d&&localDateISO(d)===today});
+   const weekly=sum(person,e=>{const d=eventDate(e);return d&&d>=weekStart&&d<=now});
+   const monthly=sum(person,e=>{const d=eventDate(e);return d&&d>=monthStart&&d<=now});
+   const total=sum(person);
+   const dated=events.filter(e=>e.owner===person&&eventDate(e));
+   const first=dated.length?Math.min(...dated.map(e=>eventDate(e).getTime())):now.getTime();
+   const days=Math.max(1,Math.floor((now.getTime()-first)/86400000)+1);
+   const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val};
+   set(key+'PointsDaily',`${daily} pts`);set(key+'PointsWeekly',`${weekly} pts`);set(key+'PointsMonthly',`${monthly} pts`);set(key+'PointsTotal',`${total} pts`);set(key+'PointsAverage',`${(total/days).toFixed(1)} pts`);
+   const targets=REWARD_TARGETS[person]||{daily:40,weekly:250,monthly:1000};
+   set(key+'WeeklyTargetLabel',`Target: ${targets.weekly} pts`);set(key+'MonthlyTargetLabel',`Target: ${targets.monthly} pts`);set(key+'TargetLabel',`Daily target: ${targets.daily} pts`);
+   const bar=document.getElementById(key+'DailyTargetBar');if(bar)bar.style.width=`${Math.min(100,daily/targets.daily*100)}%`;
+ }
+ const history=document.getElementById('rewardHistory');
+ if(history){const recent=events.slice().sort((a,b)=>(eventDate(b)?.getTime()||0)-(eventDate(a)?.getTime()||0)).slice(0,12);history.innerHTML=recent.length?recent.map(e=>`<div class="record" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)"><div><strong>${esc(e.owner||'')}</strong><div class="record-meta">${esc(e.text||'Reward')} · ${e.time?esc(dateLabel(e.time)):'Date not saved'}</div></div><span class="tag green">+${Number(e.points)||0} pts</span></div>`).join(''):'<div class="empty">No reward points yet. Existing eligible study, library and wellness records will appear here after migration.</div>'}
+}
 function renderDashboard(){
  let completed=state.lectures.filter(x=>x.done).length,revisions=state.lectures.reduce((a,x)=>a+revCount(x),0);
  document.getElementById('statCompleted').innerHTML=`${completed} <span style="font-size:15px;color:#8b95a7">/ ${state.lectures.length}</span>`;
@@ -271,6 +435,7 @@ function renderDashboard(){
  document.getElementById('branchProgress').innerHTML=known.length?known.slice(0,6).map(x=>`<div class="progress-row"><div class="progress-top"><strong>${branchEmoji[x.b]||'◎'} ${esc(x.b)}</strong><span>${x.n} topic${x.n===1?'':'s'}</span></div><div class="track"><div class="fill green" style="width:${Math.min(100,x.n*10)}%"></div></div></div>`).join(''):'<div class="empty"><strong>No Geography topics yet</strong>Add Sona’s first topic to see branch progress here.</div>';
  document.getElementById('activity').innerHTML=state.activity.length?state.activity.slice(0,5).map(a=>`<div style="padding:11px 0;border-bottom:1px solid var(--line);display:flex;gap:10px"><span style="color:var(--blue)">●</span><div><div style="font-size:13px">${esc(a.text)}</div><small style="color:var(--muted)">${dateLabel(a.time)}</small></div></div>`).join(''):'<div class="empty"><strong>Your activity will appear here</strong>Tick a lecture, log a mock or add a Geography topic.</div>';
  renderLibraryAttendance();
+ renderRewards();
 }
 function localDateISO(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
 function clockLabel(iso){if(!iso)return '—';try{return new Date(iso).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})}catch(e){return '—'}}
@@ -291,7 +456,7 @@ function renderLibraryAttendance(){
  const tbody=document.getElementById('libraryAttendanceRows');
  if(tbody)tbody.innerHTML=rows.map(x=>{let mins=x.checkIn&&x.checkOut?Math.max(0,Math.round((new Date(x.checkOut)-new Date(x.checkIn))/60000)):null;let duration=mins===null?'—':`${Math.floor(mins/60)}h ${mins%60}m`;return `<tr><td>${esc(x.date)}</td><td><strong>${esc(x.person)}</strong></td><td>${esc(clockLabel(x.checkIn))}</td><td>${esc(clockLabel(x.checkOut))}</td><td>${duration}</td></tr>`}).join('')||'<tr><td colspan="5"><div class="empty">No library attendance records for this filter.</div></td></tr>';
 }
-document.addEventListener('click',e=>{const btn=e.target.closest('[data-library-action]');if(!btn)return;const person=btn.dataset.person,action=btn.dataset.libraryAction,date=localDateISO();state.libraryAttendance=state.libraryAttendance||[];let item=attendanceFor(person,date);if(!item){item={id:uid(),person,date,checkIn:null,checkOut:null};state.libraryAttendance.unshift(item)}if(action==='checkin'){if(item.checkIn){notify(`${person} is already checked in today`);return}item.checkIn=new Date().toISOString();addActivity(`${person} checked in at the library`)}else{if(!item.checkIn){notify(`Check in ${person} first`);return}if(item.checkOut){notify(`${person} is already checked out today`);return}item.checkOut=new Date().toISOString();addActivity(`${person} checked out of the library`)}save();renderLibraryAttendance();notify(`${person}: ${action==='checkin'?'check-in':'check-out'} saved`)});
+document.addEventListener('click',e=>{const btn=e.target.closest('[data-library-action]');if(!btn)return;const person=btn.dataset.person,action=btn.dataset.libraryAction,date=localDateISO();state.libraryAttendance=state.libraryAttendance||[];let item=attendanceFor(person,date);if(!item){item={id:uid(),person,date,checkIn:null,checkOut:null};state.libraryAttendance.unshift(item)}if(action==='checkin'){if(item.checkIn){notify(`${person} is already checked in today`);return}item.checkIn=new Date().toISOString();addActivity(`${person} checked in at the library`,person,`library:${person}:${date}:in`)}else{if(!item.checkIn){notify(`Check in ${person} first`);return}if(item.checkOut){notify(`${person} is already checked out today`);return}item.checkOut=new Date().toISOString();addActivity(`${person} checked out of the library`,person,`library:${person}:${date}:out`)}save();renderLibraryAttendance();notify(`${person}: ${action==='checkin'?'check-in':'check-out'} saved`)});
 document.getElementById('libraryDateFilter')?.addEventListener('change',renderLibraryAttendance);
 document.getElementById('libraryPersonFilter')?.addEventListener('change',renderLibraryAttendance);
 
@@ -326,11 +491,19 @@ function openEditor(kind,id=null){editorKind=kind;editId=id;let old=id?(kind==='
 function closeEditor(){document.getElementById('editor').close()}
 document.getElementById('editorForm').addEventListener('submit',e=>{e.preventDefault();let fd=new FormData(e.target),v=Object.fromEntries(fd.entries());
  if(editorKind==='mock'){let obj={id:editId||uid(),platform:v.platform,name:v.name.trim(),score:v.score===''?'':Number(v.score),total:v.total===''?'':Number(v.total),percentile:v.percentile===''?'':Number(v.percentile),weak:v.weak.trim()};if(editId)state.mocks=state.mocks.map(x=>x.id===editId?obj:x);else state.mocks.unshift(obj);addActivity(`${editId?'Updated':'Logged'} mock test: ${obj.name}`);}
- else if(editorKind==='topic'){let obj={id:editId||uid(),branch:v.branch,topic:v.topic.trim(),pdf:v.pdf.trim(),platform:v.platform,correct:v.correct===''?'':Number(v.correct),total:v.total===''?'':Number(v.total),status:v.status};if(editId)state.topics=state.topics.map(x=>x.id===editId?obj:x);else state.topics.unshift(obj);addActivity(`${editId?'Updated':'Added'} Geography topic: ${obj.topic}`);}
+ else if(editorKind==='topic'){let obj={id:editId||uid(),branch:v.branch,topic:v.topic.trim(),pdf:v.pdf.trim(),platform:v.platform,correct:v.correct===''?'':Number(v.correct),total:v.total===''?'':Number(v.total),status:v.status};if(editId)state.topics=state.topics.map(x=>x.id===editId?obj:x);else state.topics.unshift(obj);if(!editId)addActivity(`Added Geography topic: ${obj.topic}`,'Sona',`geography:${obj.id}`);}
  else {let num=Math.max(1,Math.min(50,Number(v.num)||1)),found=state.lectures.find(x=>x.subject===v.subject&&x.num===num);if(found){found.topic=v.topic.trim();found.pdf=v.pdf.trim()}else state.lectures.push({id:uid(),subject:v.subject,num,topic:v.topic.trim(),pdf:v.pdf.trim(),done:false,r1:'',r2:'',r3:''});addActivity(`Updated ${v.subject} lecture ${num}`);}
  closeEditor();save();notify('Saved successfully');});
 document.getElementById('closeEditor').onclick=closeEditor;document.getElementById('cancelEditor').onclick=closeEditor;
-document.addEventListener('change',e=>{let t=e.target;if(t.dataset.edit==='lecture'){let x=state.lectures.find(x=>x.id===t.dataset.id);if(!x)return;x[t.dataset.key]=t.type==='checkbox'?t.checked:t.value;addActivity(t.dataset.key==='done'?(x.done?`Completed ${x.subject} lecture ${x.num}`:`Unmarked ${x.subject} lecture ${x.num}`):`Updated ${x.subject} lecture ${x.num}`);save();notify('Change saved');}});
+document.addEventListener('change',e=>{let t=e.target;if(t.dataset.edit==='lecture'){
+ let x=state.lectures.find(x=>x.id===t.dataset.id);if(!x)return;
+ const key=t.dataset.key,previous=x[key],next=t.type==='checkbox'?t.checked:t.value;
+ x[key]=next;
+ if(key==='done'&&next===true&&previous!==true)addActivity(`Completed ${x.subject} lecture ${x.num}`,'Priyanshu',`lecture:${x.id}:done`);
+ else if(['r1','r2','r3'].includes(key)&&next&& !previous)addActivity(`Completed revision ${key.toUpperCase()} for ${x.subject} lecture ${x.num}`,'Priyanshu',`lecture:${x.id}:${key}`);
+ else if(key!=='done'&&!['r1','r2','r3'].includes(key))addActivity(`Updated ${x.subject} lecture ${x.num}`);
+ save();notify('Change saved');
+}});
 document.addEventListener('click',e=>{let b=e.target.closest('button');if(!b)return;if(b.dataset.page)go(b.dataset.page);if(b.dataset.go)go(b.dataset.go);if(b.id==='addMock')openEditor('mock');if(b.id==='addTopic')openEditor('topic');if(b.id==='addLecture')openEditor('lecture');if(b.id==='quickAdd')openEditor(currentPage==='sona'?'topic':currentPage==='mocks'?'mock':'lecture');if(b.dataset.pdf){let x=state.lectures.find(x=>x.id===b.dataset.pdf);let val=prompt('Paste the Google Drive PDF URL:',x?.pdf||'');if(val!==null&&x){x.pdf=val.trim();addActivity(`Updated PDF link for ${x.subject} lecture ${x.num}`);save();notify('PDF link saved')}}if(b.dataset.delete){let kind=b.dataset.delete,id=b.dataset.id;if(confirm('Delete this record? This cannot be undone unless you have a backup.')){if(kind==='lecture')state.lectures=state.lectures.filter(x=>x.id!==id);if(kind==='mock')state.mocks=state.mocks.filter(x=>x.id!==id);if(kind==='topic')state.topics=state.topics.filter(x=>x.id!==id);save();notify('Record deleted')}}if(b.dataset.editRecord){openEditor(b.dataset.editRecord,b.dataset.id)}});
 ['lectureSearch','subjectFilter','completionFilter','revisionFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderLectures));
 ['mockSearch','mockPlatformFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderMocks));
@@ -375,11 +548,11 @@ function renderPersonal(){
  renderVoiceList();
 }
 function formObj(form){return Object.fromEntries(new FormData(form).entries())}
-document.getElementById('callForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.calls.unshift({id:uid(),person:v.person.trim(),when:v.when,duration:v.duration,kind:v.kind,follow:v.follow,notes:v.notes.trim()});addActivity(`Logged call with ${v.person}`);e.target.reset();save();notify('Call record saved')});
-document.getElementById('meetForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.meetups.push({id:uid(),title:v.title.trim(),when:v.when,kind:v.kind,people:v.people,place:v.place,url:v.url,notes:v.notes});state.meetups.sort((a,b)=>a.when.localeCompare(b.when));addActivity(`Scheduled ${v.title}`);e.target.reset();save();notify('Meetup saved')});
-document.getElementById('diaryForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.diary.unshift({id:uid(),date:v.date,author:v.author,mood:v.mood,text:v.text.trim()});addActivity(`Added diary entry (${v.author})`);e.target.reset();e.target.elements.date.value=todayISO();save();notify('Diary entry saved')});
-document.getElementById('messageForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.messages.unshift({id:uid(),from:v.from,to:v.to,kind:v.kind,text:v.text.trim(),created:new Date().toISOString()});addActivity(`${v.from} left a message for ${v.to}`);e.target.reset();save();notify('Message saved')});
-document.getElementById('habitForm').addEventListener('submit',e=>{e.preventDefault();const person=prompt('Whose habit record are you saving? Type Sona or Priyanshu.','Sona');if(person===null)return;const owner=person.trim().toLowerCase();if(!['sona','priyanshu'].includes(owner)){alert('Please type exactly Sona or Priyanshu. No record was saved.');return}const personName=owner==='sona'?'Sona':'Priyanshu';const arrName=owner==='sona'?'habits':'priyanshuHabits';if(!Array.isArray(state[arrName]))state[arrName]=[];let f=e.target,v=formObj(f),date=v.date;let item={id:uid(),person:personName,date,wake:v.wake,sleep:v.sleep,aloe:f.elements.aloe.checked,yoga:f.elements.yoga.checked,meditation:f.elements.meditation.checked,sunwater:f.elements.sunwater.checked,temple:f.elements.temple.checked,balanced:f.elements.balanced.checked,water:f.elements.water.checked,revision:f.elements.revision.checked,walk:f.elements.walk.checked,outside:v.outside,revisionMins:v.revisionMins,mood:v.mood,notes:v.notes,updatedAt:new Date().toISOString()};let old=state[arrName].findIndex(x=>x.date===date);if(old>=0){item.id=state[arrName][old].id;state[arrName][old]=item}else state[arrName].unshift(item);addActivity(`Saved daily wellness log for ${personName} on ${date}`);save();notify(`${personName}'s routine saved`)});
+document.getElementById('callForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.calls.unshift({id:uid(),person:v.person.trim(),when:v.when,duration:v.duration,kind:v.kind,follow:v.follow,notes:v.notes.trim()});addActivity(`Logged call with ${v.person}`,'Priyanshu');e.target.reset();save();notify('Call record saved')});
+document.getElementById('meetForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.meetups.push({id:uid(),title:v.title.trim(),when:v.when,kind:v.kind,people:v.people,place:v.place,url:v.url,notes:v.notes});state.meetups.sort((a,b)=>a.when.localeCompare(b.when));addActivity(`Scheduled ${v.title}`,'Priyanshu');e.target.reset();save();notify('Meetup saved')});
+document.getElementById('diaryForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.diary.unshift({id:uid(),date:v.date,author:v.author,mood:v.mood,text:v.text.trim()});addActivity(`Added diary entry (${v.author})`,v.author);e.target.reset();e.target.elements.date.value=todayISO();save();notify('Diary entry saved')});
+document.getElementById('messageForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.messages.unshift({id:uid(),from:v.from,to:v.to,kind:v.kind,text:v.text.trim(),created:new Date().toISOString()});addActivity(`${v.from} left a message for ${v.to}`,v.from);e.target.reset();save();notify('Message saved')});
+document.getElementById('habitForm').addEventListener('submit',e=>{e.preventDefault();const person=prompt('Whose habit record are you saving? Type Sona or Priyanshu.','Sona');if(person===null)return;const owner=person.trim().toLowerCase();if(!['sona','priyanshu'].includes(owner)){alert('Please type exactly Sona or Priyanshu. No record was saved.');return}const personName=owner==='sona'?'Sona':'Priyanshu';const arrName=owner==='sona'?'habits':'priyanshuHabits';if(!Array.isArray(state[arrName]))state[arrName]=[];let f=e.target,v=formObj(f),date=v.date;let item={id:uid(),person:personName,date,wake:v.wake,sleep:v.sleep,aloe:f.elements.aloe.checked,yoga:f.elements.yoga.checked,meditation:f.elements.meditation.checked,sunwater:f.elements.sunwater.checked,temple:f.elements.temple.checked,balanced:f.elements.balanced.checked,water:f.elements.water.checked,revision:f.elements.revision.checked,walk:f.elements.walk.checked,outside:v.outside,revisionMins:v.revisionMins,mood:v.mood,notes:v.notes,updatedAt:new Date().toISOString()};let old=state[arrName].findIndex(x=>x.date===date);if(old>=0){item.id=state[arrName][old].id;state[arrName][old]=item}else state[arrName].unshift(item);const completedHabitCount=['aloe','yoga','meditation','sunwater','temple','balanced','water','revision','walk'].filter(k=>f.elements[k].checked).length;if(old<0)addActivity(`Saved daily wellness log for ${personName} on ${date} (${completedHabitCount} habits)`,personName,`wellness:${personName}:${date}`);else state.activity.unshift({text:`Updated daily wellness log for ${personName} on ${date}`,time:new Date().toISOString()});save();notify(`${personName}'s routine saved`)});
 document.getElementById('callSearch').addEventListener('input',renderPersonal);
 document.getElementById('diaryFilter').addEventListener('change',renderPersonal);
 document.getElementById('habitSearch').addEventListener('change',renderPersonal);
@@ -390,16 +563,77 @@ function voiceDb(){if(voiceDbPromise)return voiceDbPromise;voiceDbPromise=new Pr
 async function putAudio(record){let db=await voiceDb();return new Promise((resolve,reject)=>{let tx=db.transaction('audio','readwrite');tx.objectStore('audio').put(record);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
 async function getAudio(id){let db=await voiceDb();return new Promise((resolve,reject)=>{let req=db.transaction('audio','readonly').objectStore('audio').get(id);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
 async function deleteAudio(id){let db=await voiceDb();return new Promise((resolve,reject)=>{let tx=db.transaction('audio','readwrite');tx.objectStore('audio').delete(id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
+
+const manifestationPrompts=[
+ ["Gratitude and calm","Write 3 things you appreciate today and describe the feeling each brings.","Write one sentence per item, then add: “Today I can build on this by…” Keep it honest and specific."],
+ ["Future-self encouragement","Write a supportive note from your future self after a week of steady effort.","Mention one small study habit, one obstacle you handled, and one encouraging sentence to present-you."],
+ ["Confidence before study","Write how you want to feel before your next study session.","Name the feeling, why it matters, and the first 10-minute action that supports it."],
+ ["A peaceful study space","Imagine a calm, focused study session and write what it looks and feels like.","Describe your desk, breathing, attention and one distraction you will put away."],
+ ["Progress over perfection","Write about one small win you can create today.","Choose a task small enough to finish in 20–30 minutes. Write how you will feel after completing it."],
+ ["Kindness to yourself","Write 3 kind sentences you would say to a friend who is learning.","Now write those sentences to yourself. Avoid perfection language; focus on effort and learning."],
+ ["Exam-day composure","Describe how you want to respond when a difficult question appears.","Write: pause, breathe, mark it, move on. Add one practice step you can do today."],
+ ["Visualise the process","Write about the process—not just the result—of reaching your study goal.","Picture opening your notes, solving questions, checking mistakes and returning after a break."],
+ ["A brave first step","Name one task you have been avoiding and write the smallest first step.","Make the first step take under 10 minutes. Write when you will start it today."],
+ ["Learning mindset","Complete: “I can improve at ___ by practising ___.”","Pick Geography, Maths, Reasoning or English. Name one practice action, not a guaranteed result."],
+ ["Thank your body","Write a short note appreciating what your body helps you do.","Mention rest, water, movement or breathing. Choose one caring action for today."],
+ ["Focus intention","Write one clear intention for your next 25-minute study block.","Choose one topic, silence one distraction, and define what “done” means."],
+ ["Handling setbacks","Write about a setback as information, not a verdict on you.","Note what happened, what you learned, and one adjustment to try next time."],
+ ["Self-belief with evidence","List 3 pieces of evidence that you can learn or improve.","Use real examples such as a completed lesson, corrected mistake or returning after a break."],
+ ["Supportive relationships","Write a positive message you would like to give yourself or someone you care about.","Keep it specific, kind and free of pressure. You may write it in your notebook."],
+ ["A day of balance","Describe a balanced day that includes study, food, movement and rest.","Write a realistic plan with one study priority and one proper break."],
+ ["Geography curiosity","Write about one place or geography concept you are curious to understand.","Name the concept and one question you will answer in a 15-minute study session."],
+ ["Maths confidence","Write how you will react when a maths problem feels difficult.","Commit to showing steps, trying one method and checking the solution calmly."],
+ ["Reasoning patience","Describe the patient, systematic approach you want to use in reasoning questions.","Write a 3-step plan: identify pattern, test possibilities, verify answer."],
+ ["English expression","Write 3 positive sentences about becoming clearer in English.","Choose one word or sentence pattern to practise today."],
+ ["Celebrate consistency","Write about a time you kept going even when progress was slow.","Name what helped you continue and how you can reuse it today."],
+ ["Let go of comparison","Write a reminder that your progress is your own.","Choose a personal measure for today: questions attempted, concepts understood or mistakes reviewed."],
+ ["Ask for help","Write one question you can ask when you get stuck.","Make it precise and choose a resource, teacher or person to ask."],
+ ["Make the goal concrete","Write one goal for the next 7 days and the action behind it.","Make it measurable and realistic; break it into small sessions."],
+ ["Positive environment","Write what you want your study environment to remind you of.","Create a short phrase for your notebook and remove one distraction."],
+ ["Recovery is productive","Write why rest helps you return with attention.","Schedule one real break and one reasonable study block; no guilt for resting."],
+ ["Mistakes are data","Write about one mistake you can learn from.","Record the error, the correct method and how you will recognise it next time."],
+ ["Values and goals","Write why your education goal matters to you personally.","Focus on your values and choices, not on controlling outcomes you cannot guarantee."],
+ ["Notice today's effort","Write 3 efforts you made today, however small.","Include one action, one lesson and one thing you will try tomorrow."],
+ ["Monthly reflection","Write what you are proud of learning this month and what you want to practise next.","Pick one strength to keep and one small improvement for the coming month."]
+];
+function todayPromptIndex(){const d=new Date();const start=new Date(d.getFullYear(),0,0);return Math.floor((d-start)/86400000)%manifestationPrompts.length}
+function renderManifestation(){
+ const idx=todayPromptIndex(),p=manifestationPrompts[idx],today=localDateISO();
+ const title=document.getElementById('manifestPromptTitle'),meta=document.getElementById('manifestPromptMeta'),txt=document.getElementById('manifestPromptText'),how=document.getElementById('manifestHowTo');
+ if(title)title.textContent=`Day ${idx+1}: ${p[0]}`;if(meta)meta.textContent=`${today} · Today's prompt`;
+ if(txt)txt.textContent=p[1];if(how)how.textContent=p[2];
+ const hist=document.getElementById('manifestationHistory');
+ if(hist){const items=(state.manifestationLogs||[]).slice().sort((a,b)=>(b.completedAt||'').localeCompare(a.completedAt||''));hist.innerHTML=items.length?items.map(x=>`<div class="record"><div><strong>${esc(x.person)} · ${esc(x.title)}</strong><div class="record-meta">${esc(x.date||'')} · +5 points</div><p>${esc(x.writing||'')}</p>${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener"><img src="${esc(x.url)}" alt="Manifestation writing photo" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px"></a>`:''}</div></div>`).join(''):'<div class="empty">No completed activities yet. Start with today’s prompt.</div>'}
+}
+document.getElementById('manifestationForm')?.addEventListener('submit',async e=>{
+ e.preventDefault();
+ const person=document.getElementById('manifestPerson').value,writing=document.getElementById('manifestWriting').value.trim(),file=document.getElementById('manifestPhoto').files[0],date=localDateISO();
+ if(writing.length<20){alert('Write at least 20 characters, ideally 3–5 honest sentences.');return}
+ if(!file||!file.type.startsWith('image/')){alert('Choose a photo of your written activity first.');return}
+ if((state.manifestationLogs||[]).some(x=>x.person===person&&x.date===date)){alert(`${person} has already completed today's manifestation activity. You can review it in the history.`);return}
+ const btn=document.getElementById('completeManifestation');if(btn){btn.disabled=true;btn.textContent='Uploading…'}
+ try{
+  const promptData=manifestationPrompts[todayPromptIndex()];
+  const up=await ssUpload(file,'manifestation');
+  const record={id:uid(),person,date,title:promptData[0],prompt:promptData[1],writing,path:up.path,url:up.url,completed:true,completedAt:new Date().toISOString()};
+  state.manifestationLogs=state.manifestationLogs||[];state.manifestationLogs.unshift(record);
+  addActivity('Completed manifestation activity: '+promptData[0],person,'manifestation:'+person+':'+date);
+  save();renderManifestation();notify(`${person} completed today's practice (+5 points)`);
+  e.target.reset();
+ }catch(err){console.error(err);alert('Could not upload the photo or save the activity: '+(err.message||'Unknown error'))}
+ finally{if(btn){btn.disabled=false;btn.textContent='Upload photo & complete activity (+5 points)'}}
+});
+
 function renderMediaGallery(){const el=document.getElementById('sharedMediaGallery');if(!el)return;const items=(state.mediaMeta||[]).slice().sort((a,b)=>b.created.localeCompare(a.created));el.innerHTML=items.length?items.map(x=>`<div class="record"><a href="${esc(x.url)}" target="_blank" rel="noopener"><img src="${esc(x.url)}" alt="${esc(x.name||"Shared photo")}" style="width:100%;height:150px;object-fit:cover;border-radius:10px"></a><div>${esc(x.name||"Photo")}</div><button class="btn small danger" data-ss-photo-delete="${esc(x.path)}">Delete</button></div>`).join(''):'<div class="empty">No shared photos yet.</div>'}
-document.getElementById('uploadSharedPhoto')?.addEventListener('click',async()=>{const i=document.getElementById('sharedPhotoUpload'),f=i.files[0];if(!f){alert('Choose a photo first');return}if(!f.type.startsWith('image/')){alert('Choose an image');return}try{const u=await ssUpload(f,'photos');state.mediaMeta=state.mediaMeta||[];state.mediaMeta.unshift({id:uid(),name:f.name,path:u.path,url:u.url,created:new Date().toISOString()});save();i.value='';renderMediaGallery();notify('Photo shared')}catch(e){console.error('Photo upload failed',e);alert('Photo upload failed: '+(e.message||e.error||'Unknown error')+'. Check Storage policies and make the bucket public if using public URLs.')}});
+document.getElementById('uploadSharedPhoto')?.addEventListener('click',async()=>{const i=document.getElementById('sharedPhotoUpload'),f=i.files[0];if(!f){alert('Choose a photo first');return}if(!f.type.startsWith('image/')){alert('Choose an image');return}try{const u=await ssUpload(f,'photos');state.mediaMeta=state.mediaMeta||[];state.mediaMeta.unshift({id:uid(),name:f.name,path:u.path,url:u.url,created:new Date().toISOString()});addActivity('Shared a photo',null);save();i.value='';renderMediaGallery();notify('Photo shared')}catch(e){console.error('Photo upload failed',e);alert('Photo upload failed: '+(e.message||e.error||'Unknown error')+'. Check Storage policies and make the bucket public if using public URLs.')}});
 document.addEventListener('click',async e=>{const b=e.target.closest('[data-ss-photo-delete]');if(!b)return;if(!confirm('Delete this photo for everyone?'))return;try{await ssDelete(b.dataset.ssPhotoDelete);state.mediaMeta=(state.mediaMeta||[]).filter(x=>x.path!==b.dataset.ssPhotoDelete);save();renderMediaGallery()}catch(e){alert('Delete failed: '+e.message)}});
 async function renderVoiceList(){let el=document.getElementById('voiceRecords');if(!el)return;let list=(state.voiceMeta||[]).slice().sort((a,b)=>b.created.localeCompare(a.created));if(!list.length){el.innerHTML='<div class="empty"><strong>No voice notes yet</strong>Record or upload a voice note to start your library.</div>';return}el.innerHTML='';for(let x of list){let article=document.createElement('article');article.className='record';article.innerHTML=`<div class="record-head"><div><h4>♫ ${esc(x.caption||'Voice message')} · ${esc(x.from)} → ${esc(x.to)}</h4><div class="record-meta">${dateLabel(x.created)} · ${esc(x.source||'Recorded audio')}</div></div></div><div class="audio-row" style="margin-top:12px"><audio controls></audio><a class="btn small" download="${esc((x.caption||'voice-message').replace(/[^a-z0-9-_]/gi,'_'))}.webm">Download audio</a><button class="btn small danger">Delete</button></div>`;el.appendChild(article);try{let aud=null,url=x.url||'';if(!url){aud=await getAudio(x.id);if(aud&&aud.blob)url=URL.createObjectURL(aud.blob)}if(url){article.querySelector('audio').src=url;article.querySelector('a').href=url;article.querySelector('button').onclick=async()=>{if(confirm('Delete this voice message?')){if(x.path)await ssDelete(x.path);await deleteAudio(x.id).catch(()=>{});state.voiceMeta=state.voiceMeta.filter(y=>y.id!==x.id);save();notify('Voice note deleted')}}}else{article.querySelector('audio').remove();article.querySelector('a').remove();article.querySelector('button').disabled=true;article.querySelector('button').textContent='Audio unavailable'}}catch(err){article.querySelector('audio').remove()}}}
-async function saveVoiceBlob(blob,source='Recorded audio'){let id=uid(),caption=document.getElementById('voiceCaption').value.trim()||'Daily voice message',from=document.getElementById('voiceFrom').value,to=document.getElementById('voiceTo').value;await putAudio({id,blob});const file=new File([blob],id+'.webm',{type:blob.type||'audio/webm'});const u=await ssUpload(file,'voice');state.voiceMeta.unshift({id,caption,from,to,source,path:u.path,url:u.url,created:new Date().toISOString()});addActivity(`${from} saved a voice message for ${to}`);save();if(typeof renderVoiceList==='function')await renderVoiceList();notify('Voice recording uploaded and shared')}
+async function saveVoiceBlob(blob,source='Recorded audio'){let id=uid(),caption=document.getElementById('voiceCaption').value.trim()||'Daily voice message',from=document.getElementById('voiceFrom').value,to=document.getElementById('voiceTo').value;await putAudio({id,blob});const file=new File([blob],id+'.webm',{type:blob.type||'audio/webm'});const u=await ssUpload(file,'voice');state.voiceMeta.unshift({id,caption,from,to,source,path:u.path,url:u.url,created:new Date().toISOString()});addActivity(`${from} saved a voice message for ${to}`,from);save();if(typeof renderVoiceList==='function')await renderVoiceList();notify('Voice recording uploaded and shared')}
 document.getElementById('recordVoice').onclick=async()=>{try{if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)throw Error('This browser does not support audio recording. Try a recent Chrome or Edge version on localhost/HTTPS.');voiceStream=await navigator.mediaDevices.getUserMedia({audio:true});voiceChunks=[];voiceRecorder=new MediaRecorder(voiceStream);voiceRecorder.ondataavailable=e=>{if(e.data.size)voiceChunks.push(e.data)};voiceRecorder.onstop=async()=>{let blob=new Blob(voiceChunks,{type:voiceRecorder.mimeType||'audio/webm'});voiceStream?.getTracks().forEach(t=>t.stop());voiceStream=null;try{await saveVoiceBlob(blob)}catch(err){alert('Could not save this audio. Please download a shorter recording or check browser storage.')}document.getElementById('recordVoice').disabled=false;document.getElementById('stopVoice').disabled=true;document.getElementById('recordingState').classList.remove('on')};voiceRecorder.start();document.getElementById('recordVoice').disabled=true;document.getElementById('stopVoice').disabled=false;document.getElementById('recordingState').classList.add('on')}catch(err){alert(err.message||'Microphone permission was not granted.')}}; 
 document.getElementById('stopVoice').onclick=()=>{if(voiceRecorder&&voiceRecorder.state!=='inactive')voiceRecorder.stop()};
 document.getElementById('saveUploadedVoice').onclick=async()=>{let f=document.getElementById('voiceUpload').files[0];if(!f){alert('Choose an audio file first.');return}try{await saveVoiceBlob(f,'Uploaded audio');document.getElementById('voiceUpload').value=''}catch(e){console.error('Audio upload failed',e);alert('Audio upload failed: '+(e.message||e.error||'Unknown error')+'. Check Storage policies and bucket visibility.')}};
 
-function init(){document.getElementById('diaryForm').elements.date.value=todayISO();document.getElementById('habitDate').value=todayISO();renderDashboard();renderLectures();renderMocks();renderSona();renderPersonal();if(window.ssStart)ssStart();if(typeof renderMediaGallery==="function")renderMediaGallery()}
+function init(){if(!Array.isArray(state.manifestationLogs))state.manifestationLogs=[];ensureLegacyRewards();document.getElementById('diaryForm').elements.date.value=todayISO();document.getElementById('habitDate').value=todayISO();renderDashboard();renderLectures();renderMocks();renderSona();renderPersonal();renderManifestation();if(window.ssStart)ssStart();if(typeof renderMediaGallery==="function")renderMediaGallery()}
 init();
 </script>
 <style>
