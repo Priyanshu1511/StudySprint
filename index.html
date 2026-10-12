@@ -102,7 +102,7 @@
 
     <section id="page-lectures" class="hidden">
       <div class="page-head"><div><div class="eyebrow">Priyanshu · Bank exam preparation</div><h2>Lecture tracker</h2><p>150 planned lecture slots across Reasoning, Maths and English.</p></div><button class="btn primary" id="addLecture">＋ Add topic</button></div>
-      <div class="callout"><strong>How to use:</strong> Tick completion when you finish the first study session. Add real dates for each revision. Paste a Google Drive PDF link in the notes field.</div>
+      <div class="callout"><strong>How to use:</strong> Tick completion when you finish the first study session. Add real dates for each revision. Paste a permanent Google Drive PDF link. After saving, wait for the cloud status to say “Cloud synced”. Set Drive sharing to anyone with the link if you want the other device to open it.</div>
       <div class="filters"><input id="lectureSearch" placeholder="Search topic or lecture number…"><select id="subjectFilter"><option value="">All subjects</option><option>Reasoning</option><option>Maths</option><option>English</option></select><select id="completionFilter"><option value="">All completion states</option><option value="done">Completed</option><option value="todo">Not completed</option></select><select id="revisionFilter"><option value="">All revision states</option><option value="revised">Revised at least once</option><option value="pending">No revisions yet</option></select></div>
       <div class="table-wrap"><table><thead><tr><th>Subject</th><th>#</th><th>Topic</th><th>PDF notes</th><th>Done</th><th>Revision 1</th><th>Revision 2</th><th>Revision 3</th><th>Revisions</th><th></th></tr></thead><tbody id="lectureRows"></tbody></table></div><div class="table-note"><span id="lectureCount">150 lecture slots</span><span>Changes save automatically in this browser.</span></div>
     </section>
@@ -295,7 +295,29 @@ const ssBucket="studysprint-media";
 let ssReady=false, ssRemote=false, ssTimer;
 async function ssUpload(file,folder){if(file.size>25*1024*1024)throw Error("File must be under 25 MB.");const path=folder+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,9)+"-"+String(file.name||"upload").replace(/[^a-zA-Z0-9._-]/g,"_");const r=await ssSupabase.storage.from(ssBucket).upload(path,file,{contentType:file.type||"application/octet-stream"});if(r.error)throw r.error;return {path,url:ssSupabase.storage.from(ssBucket).getPublicUrl(path).data.publicUrl}}
 async function ssDelete(path){if(path){const r=await ssSupabase.storage.from(ssBucket).remove([path]);if(r.error)throw r.error}}
-function ssSave(){if(!ssReady||ssRemote)return;clearTimeout(ssTimer);ssTimer=setTimeout(async()=>{try{let r=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});if(r.error)throw r.error;let e=document.getElementById("cloudStatus");if(e)e.textContent="Cloud synced"}catch(e){console.error(e);let b=document.getElementById("cloudStatus");if(b)b.textContent="Cloud sync error"}},600)}
+async function ssPersistNow(){
+ if(!ssReady||ssRemote)return false;
+ clearTimeout(ssTimer);
+ const badge=document.getElementById("cloudStatus");
+ try{
+  if(badge)badge.textContent="Saving to cloud…";
+  const r=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});
+  if(r.error)throw r.error;
+  if(badge)badge.textContent="Cloud synced";
+  return true;
+ }catch(err){
+  console.error("Cloud save failed",err);
+  if(badge)badge.textContent="Cloud sync error — export backup";
+  return false;
+ }
+}
+function ssSave(){
+ if(!ssReady||ssRemote)return;
+ clearTimeout(ssTimer);
+ const badge=document.getElementById("cloudStatus");
+ if(badge)badge.textContent="Changes pending…";
+ ssTimer=setTimeout(()=>{ssPersistNow()},250);
+}
 async function ssRenderAll(){localStorage.setItem(KEY,JSON.stringify(state));renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderManifestation==='function')renderManifestation();if(typeof renderPersonal==="function")renderPersonal();if(typeof renderVoiceList==="function")renderVoiceList();if(typeof renderMediaGallery==="function")renderMediaGallery()}
 async function ssStart(){let badge=document.getElementById("cloudStatus");try{let r=await ssSupabase.from("shared_content").select("id,content").eq("id",1).maybeSingle();if(r.error)throw r.error;if(r.data?.content){ssRemote=true;state=r.data.content;["calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance","rewardEvents","manifestationLogs"].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[]});ensureLegacyRewards();await ssRenderAll();ssRemote=false;ssReady=true;ssSave()}else{ensureLegacyRewards();let w=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});if(w.error)throw w.error}ssReady=true;if(badge)badge.textContent="Cloud connected";ssSupabase.channel("ss-shared").on("postgres_changes",{event:"*",schema:"public",table:"shared_content",filter:"id=eq.1"},async p=>{if(!p.new?.content)return;ssRemote=true;state=p.new.content;["calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance","rewardEvents","manifestationLogs"].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[]});await ssRenderAll();ssRemote=false;if(badge)badge.textContent="Cloud synced"}).subscribe()}catch(e){console.error("Supabase setup",e);if(badge)badge.textContent="Cloud error — check policies";}}
 </script>
@@ -489,11 +511,11 @@ function openEditor(kind,id=null){editorKind=kind;editId=id;let old=id?(kind==='
  else {title='Add lecture topic';eyebrow='Priyanshu · Lecture tracker';fields=field('subject','Subject','select','Reasoning',subjects,true)+field('num','Lecture number (1–50)','number','1',[],true)+field('topic','Topic name','text','',[],false)+field('pdf','Google Drive PDF link','url','',[],false);}
  document.getElementById('formTitle').textContent=title;document.getElementById('formEyebrow').textContent=eyebrow;document.getElementById('formFields').innerHTML=fields;document.getElementById('editor').showModal();}
 function closeEditor(){document.getElementById('editor').close()}
-document.getElementById('editorForm').addEventListener('submit',e=>{e.preventDefault();let fd=new FormData(e.target),v=Object.fromEntries(fd.entries());
+document.getElementById('editorForm').addEventListener('submit',async e=>{e.preventDefault();let fd=new FormData(e.target),v=Object.fromEntries(fd.entries());
  if(editorKind==='mock'){let obj={id:editId||uid(),platform:v.platform,name:v.name.trim(),score:v.score===''?'':Number(v.score),total:v.total===''?'':Number(v.total),percentile:v.percentile===''?'':Number(v.percentile),weak:v.weak.trim()};if(editId)state.mocks=state.mocks.map(x=>x.id===editId?obj:x);else state.mocks.unshift(obj);addActivity(`${editId?'Updated':'Logged'} mock test: ${obj.name}`);}
  else if(editorKind==='topic'){let obj={id:editId||uid(),branch:v.branch,topic:v.topic.trim(),pdf:v.pdf.trim(),platform:v.platform,correct:v.correct===''?'':Number(v.correct),total:v.total===''?'':Number(v.total),status:v.status};if(editId)state.topics=state.topics.map(x=>x.id===editId?obj:x);else state.topics.unshift(obj);if(!editId)addActivity(`Added Geography topic: ${obj.topic}`,'Sona',`geography:${obj.id}`);}
  else {let num=Math.max(1,Math.min(50,Number(v.num)||1)),found=state.lectures.find(x=>x.subject===v.subject&&x.num===num);if(found){found.topic=v.topic.trim();found.pdf=v.pdf.trim()}else state.lectures.push({id:uid(),subject:v.subject,num,topic:v.topic.trim(),pdf:v.pdf.trim(),done:false,r1:'',r2:'',r3:''});addActivity(`Updated ${v.subject} lecture ${num}`);}
- closeEditor();save();notify('Saved successfully');});
+ closeEditor();save();const cloudOK=await ssPersistNow();notify(cloudOK?'Saved locally and synced to cloud': 'Saved on this device; cloud sync failed — export a backup');});
 document.getElementById('closeEditor').onclick=closeEditor;document.getElementById('cancelEditor').onclick=closeEditor;
 document.addEventListener('change',e=>{let t=e.target;if(t.dataset.edit==='lecture'){
  let x=state.lectures.find(x=>x.id===t.dataset.id);if(!x)return;
