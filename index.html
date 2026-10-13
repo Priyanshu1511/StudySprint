@@ -292,34 +292,133 @@
 <script>
 const ssSupabase=window.supabase.createClient("https://vukqgbafhdsbtwozqpti.supabase.co","sb_publishable_lpCqw9VbhinOjVvr8j9otA_nCrN0qqC");
 const ssBucket="studysprint-media";
-let ssReady=false, ssRemote=false, ssTimer;
+let ssReady=false, ssRemote=false, ssTimer, ssSaveQueue=Promise.resolve();
+let ssRevision=0, ssPersistedRevision=0, ssSaving=false, ssChannelReady=false;
+const ssArrayKeys=["lectures","mocks","topics","activity","calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance","rewardEvents","manifestationLogs"];
+function ssNormalizeState(value){
+ const out=value&&typeof value==="object"&&!Array.isArray(value)?value:{};
+ ssArrayKeys.forEach(k=>{if(!Array.isArray(out[k]))out[k]=[]});
+ return out;
+}
+function ssRecordKey(x,index){
+ if(x&&x.id!=null)return `${x.id}`;
+ if(x&&x.key)return `key:${x.key}`;
+ if(x&&x.date&&x.person)return `${x.person}:${x.date}`;
+ if(x&&x.date&&x.branch&&x.topic)return `${x.date}:${x.branch}:${x.topic}`;
+ if(x&&x.subject&&x.num!=null)return `${x.subject}:${x.num}`;
+ if(x&&x.time&&x.text)return `${x.time}:${x.text}`;
+ return `fallback:${index}:${JSON.stringify(x)}`;
+}
+function ssMergeStates(cloud,local){
+ const merged={...(cloud||{}),...(local||{})};
+ ssArrayKeys.forEach(k=>{
+  const c=Array.isArray(cloud?.[k])?cloud[k]:[];
+  const l=Array.isArray(local?.[k])?local[k]:[];
+  const map=new Map();
+  c.forEach((x,i)=>map.set(ssRecordKey(x,i),x));
+  l.forEach((x,i)=>{const key=ssRecordKey(x,i);if(map.has(key))map.set(key,{...map.get(key),...x});else map.set(key,x)});
+  merged[k]=Array.from(map.values());
+ });
+ // Preserve the higher migration version/true flags from either copy.
+ Object.keys({...cloud,...local}).filter(k=>/^rewardMigrationV\d+$/.test(k)).forEach(k=>merged[k]=Boolean(cloud?.[k]||local?.[k]));
+ return merged;
+}
 async function ssUpload(file,folder){if(file.size>25*1024*1024)throw Error("File must be under 25 MB.");const path=folder+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,9)+"-"+String(file.name||"upload").replace(/[^a-zA-Z0-9._-]/g,"_");const r=await ssSupabase.storage.from(ssBucket).upload(path,file,{contentType:file.type||"application/octet-stream"});if(r.error)throw r.error;return {path,url:ssSupabase.storage.from(ssBucket).getPublicUrl(path).data.publicUrl}}
 async function ssDelete(path){if(path){const r=await ssSupabase.storage.from(ssBucket).remove([path]);if(r.error)throw r.error}}
 async function ssPersistNow(){
  if(!ssReady||ssRemote)return false;
  clearTimeout(ssTimer);
  const badge=document.getElementById("cloudStatus");
- try{
-  if(badge)badge.textContent="Saving to cloud…";
-  const r=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});
-  if(r.error)throw r.error;
-  if(badge)badge.textContent="Cloud synced";
-  return true;
- }catch(err){
-  console.error("Cloud save failed",err);
-  if(badge)badge.textContent="Cloud sync error — export backup";
-  return false;
- }
+ const job=async()=>{
+  ssSaving=true;
+  try{
+   let attempts=0;
+   do{
+    const version=ssRevision;
+    const snapshot=JSON.parse(JSON.stringify(state));
+    if(badge)badge.textContent="Saving to cloud…";
+    const r=await ssSupabase.from("shared_content").upsert({id:1,content:snapshot},{onConflict:"id"});
+    if(r.error)throw r.error;
+    ssPersistedRevision=version;
+    attempts++;
+    if(version===ssRevision){if(badge)badge.textContent="Cloud synced";break}
+    if(badge)badge.textContent="Saving latest changes…";
+   }while(attempts<10);
+   if(ssPersistedRevision!==ssRevision){if(badge)badge.textContent="Changes still pending — retrying";ssSave()}
+   return ssPersistedRevision===ssRevision;
+  }catch(err){
+   console.error("[StudySprint] Cloud save failed",err);
+   if(badge)badge.textContent="Cloud sync error — export backup";
+   return false;
+  }finally{ssSaving=false}
+ };
+ ssSaveQueue=ssSaveQueue.then(job,job);
+ return ssSaveQueue;
 }
 function ssSave(){
  if(!ssReady||ssRemote)return;
+ ssRevision++;
+ try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.error("[StudySprint] Local backup failed",e)}
  clearTimeout(ssTimer);
  const badge=document.getElementById("cloudStatus");
  if(badge)badge.textContent="Changes pending…";
- ssTimer=setTimeout(()=>{ssPersistNow()},250);
+ ssTimer=setTimeout(()=>{ssPersistNow()},300);
 }
 async function ssRenderAll(){localStorage.setItem(KEY,JSON.stringify(state));renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderManifestation==='function')renderManifestation();if(typeof renderPersonal==="function")renderPersonal();if(typeof renderVoiceList==="function")renderVoiceList();if(typeof renderMediaGallery==="function")renderMediaGallery()}
-async function ssStart(){let badge=document.getElementById("cloudStatus");try{let r=await ssSupabase.from("shared_content").select("id,content").eq("id",1).maybeSingle();if(r.error)throw r.error;if(r.data?.content){ssRemote=true;state=r.data.content;["calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance","rewardEvents","manifestationLogs"].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[]});ensureLegacyRewards();await ssRenderAll();ssRemote=false;ssReady=true;ssSave()}else{ensureLegacyRewards();let w=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});if(w.error)throw w.error}ssReady=true;if(badge)badge.textContent="Cloud connected";ssSupabase.channel("ss-shared").on("postgres_changes",{event:"*",schema:"public",table:"shared_content",filter:"id=eq.1"},async p=>{if(!p.new?.content)return;ssRemote=true;state=p.new.content;["calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance","rewardEvents","manifestationLogs"].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[]});await ssRenderAll();ssRemote=false;if(badge)badge.textContent="Cloud synced"}).subscribe()}catch(e){console.error("Supabase setup",e);if(badge)badge.textContent="Cloud error — check policies";}}
+function ssAcceptRemote(incoming){
+ if(!incoming||typeof incoming!=="object")return;
+ // Never replace local edits while a debounce or cloud write is pending.
+ if(ssRevision!==ssPersistedRevision||ssSaving){
+  console.warn("[StudySprint] Incoming cloud update deferred; local edits are pending.");
+  ssSave();return;
+ }
+ const before=JSON.stringify(state);
+ ssRemote=true;
+ // Merge remote and local records instead of replacing the entire local state.
+ state=ssNormalizeState(ssMergeStates(incoming,state));
+ ensureLegacyRewards();
+ const mergedDiffersFromCloud=JSON.stringify(state)!==JSON.stringify(ssNormalizeState(JSON.parse(JSON.stringify(incoming))));
+ ssRenderAll().catch(e=>console.error("[StudySprint] Render remote state failed",e)).finally(()=>{
+  ssRemote=false;
+  if(document.getElementById("cloudStatus"))document.getElementById("cloudStatus").textContent="Cloud synced";
+  if(mergedDiffersFromCloud||JSON.stringify(state)!==before)ssSave();
+ });
+}
+async function ssStart(){
+ const badge=document.getElementById("cloudStatus");
+ try{
+  const r=await ssSupabase.from("shared_content").select("id,content").eq("id",1).maybeSingle();
+  if(r.error)throw r.error;
+  const local=(()=>{try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}})();
+  if(r.data?.content){
+   const cloud=ssNormalizeState(r.data.content);
+   const merged=ssMergeStates(cloud,local);
+   ssRemote=true;state=ssNormalizeState(merged);ensureLegacyRewards();await ssRenderAll();ssRemote=false;
+   ssReady=true;ssRevision++;await ssPersistNow();
+  }else{
+   state=ssNormalizeState(state);ensureLegacyRewards();
+   const w=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});
+   if(w.error)throw w.error;
+   ssReady=true;ssRevision=0;ssPersistedRevision=0;
+  }
+  if(badge)badge.textContent="Cloud connected";
+  if(!ssChannelReady){
+   ssChannelReady=true;
+   ssSupabase.channel("ss-shared").on("postgres_changes",{event:"*",schema:"public",table:"shared_content",filter:"id=eq.1"},p=>{
+    if(!p.new?.content)return;
+    const incoming=p.new.content;
+    // Ignore the realtime echo of our own just-persisted snapshot.
+    if(ssSaving||ssRevision!==ssPersistedRevision){console.warn("[StudySprint] Ignored cloud echo while local changes are pending.");return}
+    const current=JSON.stringify(state),remote=JSON.stringify(incoming);
+    if(current===remote)return;
+    ssAcceptRemote(incoming);
+   }).subscribe(status=>{if(status==="SUBSCRIBED"&&badge&&ssRevision===ssPersistedRevision)badge.textContent="Cloud synced"});
+  }
+ }catch(e){
+  ssRemote=false;console.error("[StudySprint] Supabase setup/sync failed",e);
+  if(badge)badge.textContent="Cloud error — local data retained";
+ }
+}
 </script>
 
 <script>
@@ -655,6 +754,39 @@ document.getElementById('recordVoice').onclick=async()=>{try{if(!navigator.media
 document.getElementById('stopVoice').onclick=()=>{if(voiceRecorder&&voiceRecorder.state!=='inactive')voiceRecorder.stop()};
 document.getElementById('saveUploadedVoice').onclick=async()=>{let f=document.getElementById('voiceUpload').files[0];if(!f){alert('Choose an audio file first.');return}try{await saveVoiceBlob(f,'Uploaded audio');document.getElementById('voiceUpload').value=''}catch(e){console.error('Audio upload failed',e);alert('Audio upload failed: '+(e.message||e.error||'Unknown error')+'. Check Storage policies and bucket visibility.')}};
 
+// Read-only diagnostics for DevTools Console. Does not mutate or delete app records.
+window.StudySprintTests={
+ async runFourRounds(){
+  const results=[];
+  const checks=async(round)=>{
+   const out=[];
+   const check=(name,ok,detail="")=>out.push({round,name,status:ok?"PASS":"FAIL",detail});
+   check("local state exists",!!state&&typeof state==="object");
+   ["lectures","mocks","topics","activity","calls","meetups","diary","messages","habits","priyanshuHabits","libraryAttendance","rewardEvents","manifestationLogs"].forEach(k=>check(`state.${k} is an array`,Array.isArray(state[k]),`count=${Array.isArray(state[k])?state[k].length:"not-array"}`));
+   check("reward owners are valid",(state.rewardEvents||[]).every(x=>["Sona","Priyanshu"].includes(x.owner)),`events=${(state.rewardEvents||[]).length}`);
+   const keys=(state.rewardEvents||[]).map(x=>x.key).filter(Boolean);
+   check("reward keys are unique",keys.length===new Set(keys).size,`keys=${keys.length}`);
+   check("reward dashboard nodes exist",!!document.getElementById("sonaPointsTotal")&&!!document.getElementById("priyanshuPointsTotal"));
+   check("localStorage parses",(()=>{try{const x=JSON.parse(localStorage.getItem(KEY)||"null");return !!x&&typeof x==="object"}catch{return false}})());
+   try{
+    const r=await ssSupabase.from("shared_content").select("id,content").eq("id",1).maybeSingle();
+    check("Supabase read succeeds",!r.error,r.error?.message||"read-only query");
+    check("cloud row id=1 exists",!!r.data?.content,`row=${r.data?.id??"missing"}`);
+    if(r.data?.content){
+     const cloud=ssNormalizeState(r.data.content);
+     ["lectures","topics","habits","priyanshuHabits","libraryAttendance","rewardEvents","manifestationLogs"].forEach(k=>check(`cloud ${k} is an array`,Array.isArray(cloud[k]),`count=${cloud[k].length}`));
+     check("cloud reward owners are valid",(cloud.rewardEvents||[]).every(x=>["Sona","Priyanshu"].includes(x.owner)),`events=${cloud.rewardEvents.length}`);
+    }
+   }catch(e){check("Supabase read succeeds",false,e.message||String(e))}
+   return out;
+  };
+  for(let round=1;round<=4;round++){results.push(...await checks(round));await new Promise(resolve=>setTimeout(resolve,150))}
+  console.table(results);
+  const failed=results.filter(x=>x.status==="FAIL");
+  console.info(`[StudySprint tests] ${results.length-failed.length}/${results.length} checks passed across 4 rounds; failures=${failed.length}`);
+  return {passed:results.length-failed.length,failed:failed.length,results};
+ }
+};
 function init(){if(!Array.isArray(state.manifestationLogs))state.manifestationLogs=[];ensureLegacyRewards();document.getElementById('diaryForm').elements.date.value=todayISO();document.getElementById('habitDate').value=todayISO();renderDashboard();renderLectures();renderMocks();renderSona();renderPersonal();renderManifestation();if(window.ssStart)ssStart();if(typeof renderMediaGallery==="function")renderMediaGallery()}
 init();
 </script>
