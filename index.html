@@ -17,10 +17,13 @@
 @media(max-width:1100px){.module-grid{grid-template-columns:1fr}.habit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.habit-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.habit-grid{grid-template-columns:1fr}.habit-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+
+/* Cloud status lives inside the top bar flow; never floats over action buttons. */
+.cloud-status{display:inline-flex;align-items:center;justify-content:center;max-width:180px;min-width:96px;padding:6px 9px;border:1px solid #dce9df;border-radius:999px;background:#f0faf3;color:#16835d;font-size:12px;font-weight:650;line-height:1.25;white-space:normal;text-align:center;overflow-wrap:anywhere}
+@media(max-width:760px){.cloud-status{max-width:120px;min-width:0;font-size:11px;padding:5px 7px}.top-actions{gap:6px}}
 </style>
 </head>
-<body><div id="cloudStatus" style="position:fixed;right:12px;top:8px;z-index:9999;background:white;color:#16835d;padding:5px 9px;border-radius:8px;font-size:12px">Connecting cloud…</div>
-<div class="app">
+<body><div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="brand"><div class="logo">S</div><div><strong>StudySprint</strong><small>Exam prep workspace</small></div></div>
   <div><div class="nav-label">WORKSPACE</div>
@@ -47,7 +50,7 @@
 <main class="main">
   <header class="topbar">
     <div style="display:flex;align-items:center;gap:12px"><button class="btn mobile-menu" id="menuBtn">☰</button><div><div class="crumb">Study workspace / <span id="crumb">Dashboard</span></div><h1 id="topTitle">Your preparation at a glance</h1></div></div>
-    <div class="top-actions"><button class="btn desktop-only" id="topExport">Export backup</button><button class="btn primary" id="quickAdd">＋ Quick add</button></div>
+    <div class="top-actions"><span id="cloudStatus" class="cloud-status" role="status" aria-live="polite">Connecting cloud…</span><button class="btn desktop-only" id="topExport">Export backup</button><button class="btn primary" id="quickAdd">＋ Quick add</button></div>
   </header>
   <div class="content">
     <section id="page-dashboard">
@@ -323,7 +326,42 @@ function ssMergeStates(cloud,local){
  Object.keys({...cloud,...local}).filter(k=>/^rewardMigrationV\d+$/.test(k)).forEach(k=>merged[k]=Boolean(cloud?.[k]||local?.[k]));
  return merged;
 }
-async function ssUpload(file,folder){if(file.size>25*1024*1024)throw Error("File must be under 25 MB.");const path=folder+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,9)+"-"+String(file.name||"upload").replace(/[^a-zA-Z0-9._-]/g,"_");const r=await ssSupabase.storage.from(ssBucket).upload(path,file,{contentType:file.type||"application/octet-stream"});if(r.error)throw r.error;return {path,url:ssSupabase.storage.from(ssBucket).getPublicUrl(path).data.publicUrl}}
+async function ssCompressImage(file){
+ // Compress large photos in the browser before sending them to Supabase.
+ // Leave SVG and animated GIF files untouched to avoid changing their behaviour.
+ if(!file||!file.type||!file.type.startsWith('image/')||/image\/(svg\+xml|gif)/i.test(file.type)||file.size<250*1024)return file;
+ let objectUrl;
+ try{
+  let bitmap;
+  if('createImageBitmap' in window){bitmap=await createImageBitmap(file)}
+  else{
+   objectUrl=URL.createObjectURL(file);
+   bitmap=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Could not read this image'));img.src=objectUrl});
+  }
+  const maxSide=1600,scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));
+  const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+  const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas is unavailable');ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+  if(typeof bitmap.close==='function')bitmap.close();
+  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Image compression failed')),'image/webp',0.78));
+  // Keep the original if conversion would make the file larger.
+  if(blob.size>=file.size)return file;
+  // Some browsers may fall back to PNG if WebP encoding is unavailable.
+  const outputType=blob.type||'image/png';
+  const extension=outputType==='image/webp'?'.webp':outputType==='image/jpeg'?'.jpg':outputType==='image/png'?'.png':'.img';
+  const base=String(file.name||'photo').replace(/\.[^.]+$/,'')||'photo';
+  return new File([blob],base+extension,{type:outputType,lastModified:Date.now()});
+ }catch(err){console.warn('Photo compression skipped; uploading original file.',err);return file}
+ finally{if(objectUrl)URL.revokeObjectURL(objectUrl)}
+}
+async function ssUpload(file,folder){
+ const uploadFile=await ssCompressImage(file);
+ // Apply the storage upload limit to the actual file being uploaded, after compression.
+ if(uploadFile.size>25*1024*1024)throw Error("File must be under 25 MB after compression.");
+ const path=folder+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,9)+"-"+String(uploadFile.name||"upload").replace(/[^a-zA-Z0-9._-]/g,"_");
+ const r=await ssSupabase.storage.from(ssBucket).upload(path,uploadFile,{contentType:uploadFile.type||"application/octet-stream"});
+ if(r.error)throw r.error;
+ return {path,url:ssSupabase.storage.from(ssBucket).getPublicUrl(path).data.publicUrl,originalSize:file.size,uploadedSize:uploadFile.size,compressed:uploadFile!==file};
+}
 async function ssDelete(path){if(path){const r=await ssSupabase.storage.from(ssBucket).remove([path]);if(r.error)throw r.error}}
 async function ssPersistNow(){
  if(!ssReady||ssRemote)return false;
