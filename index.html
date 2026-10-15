@@ -956,8 +956,43 @@ init();
  function renderSnapshot(){const s=snapshot(),el=$('coachSnapshot');if(!el)return;if(activeLearner==='Sona'){const branches=Object.entries(s.branchCounts||{}).map(([k,v])=>`<div class="branch-card"><strong>${escCoach(k)}</strong><small>${v} tracked topic${v===1?'':'s'}</small></div>`).join('');const avg=s.averageRecordedAccuracy===null?'Not enough scored data':s.averageRecordedAccuracy+'%';el.innerHTML=`<div class="branch-card"><small>Geography topics in tracker</small><strong>${s.topicCount}</strong><small>${s.topicsWithScores} have recorded question scores</small></div><div class="branch-card"><small>Average recorded accuracy</small><strong>${escCoach(avg)}</strong><small>Only calculated from entries with valid scores</small></div>${branches||'<div class="empty">No Geography topics yet. Add topics in Sona · Geography to personalise revision.</div>'}`;return;}const avg=s.averageMockScorePercent===null?'Not enough data':s.averageMockScorePercent+'%';el.innerHTML=`<div class="branch-card"><small>Lectures completed</small><strong>${s.lectureProgress.completed} / ${s.lectureProgress.total}</strong><div class="track"><div class="fill" style="width:${s.lectureProgress.percent}%"></div></div><small>${s.lectureProgress.percent}% completion</small></div><div class="branch-card"><small>Revision checks</small><strong>${s.revisionChecks}</strong></div><div class="branch-card"><small>Mock tests logged</small><strong>${s.mockCount}</strong><small>Average score: ${escCoach(avg)}</small></div>${Object.entries(s.subjects).map(([k,v])=>`<div class="branch-card"><strong>${escCoach(k)}</strong><small>${v.completed}/${v.total} lectures · ${v.revisionChecks} revision checks</small></div>`).join('')}`;}
  function setLearner(){const next=$('coachLearner')?.value||'Priyanshu';if(next!==activeLearner){conversation=[];transcript.innerHTML='<div class="empty"><strong>New mentor session</strong>Your previous chat is not saved. Choose a prompt or ask a question.</div>';}activeLearner=next;const sona=activeLearner==='Sona';$('sonaCoachIntro')?.classList.toggle('hidden',!sona);$('priyanshuCoachPrompts')?.classList.toggle('hidden',sona);$('sonaCoachPrompts')?.classList.toggle('hidden',!sona);$('priyanshuCoachLimit')?.classList.toggle('hidden',sona);$('sonaCoachTips')?.classList.toggle('hidden',!sona);$('coachPanelTitle').textContent=sona?'Sona’s CUET Geography mentor':'Ask your coach';$('coachPanelDesc').textContent=sona?'Learn in simple language, practise CUET-style MCQs and build confidence one question at a time.':'Ask about a study plan, weak areas, mock analysis, revisions or HOC workflow.';$('coachSnapshotTitle').textContent=sona?'Sona’s Geography snapshot':'Current study snapshot';$('coachSnapshotDesc').textContent=sona?'Based on topic records already in Sona’s Geography tracker.':'Calculated from existing local/cloud-synced tracker data.';question.placeholder=sona?'e.g. Explain monsoon in very easy English and then test me with one CUET-style question.':'e.g. I keep making mistakes in arithmetic. How should I structure practice and revision?';send.textContent=sona?'Ask Geography Mentor ↗':'Ask AI Coach ↗';status.textContent=sona?'Only Sona’s Geography topic summary will be sent.':'Only Priyanshu’s study summary will be sent.';renderSnapshot();}
  function addBubble(role,text){if(transcript.querySelector('.empty'))transcript.innerHTML='';const d=document.createElement('article');d.className='record';const title=document.createElement('strong');title.textContent=role==='user'?(activeLearner==='Sona'?'Sona':'You'):(activeLearner==='Sona'?'CUET Geography Mentor':'AI Study Coach');const body=document.createElement('div');body.style.whiteSpace='pre-wrap';body.style.marginTop='8px';body.textContent=text;d.append(title,body);transcript.appendChild(d);transcript.scrollTop=transcript.scrollHeight;return body;}
- async function ask(prompt){if(busy)return;const q=String(prompt||'').trim();if(!q)return;if(q.length>1200){status.textContent='Keep your question under 1,200 characters.';return;}busy=true;send.disabled=true;status.textContent='Preparing a compact study snapshot…';addBubble('user',q);question.value='';const answer=addBubble('assistant','Thinking…');try{const context=snapshot();const priorConversation=conversation.slice(-10);const {data,error}=await ssSupabase.functions.invoke('ai-coach',{body:{message:q,context,person:activeLearner,mode:activeLearner==='Sona'?'cuet-geography':'hoc-performance',conversation:priorConversation}});if(error)throw error;const text=data?.answer;if(!text)throw new Error(data?.error||'The AI endpoint returned no answer.');answer.textContent=text;conversation.push({role:'user',text:q},{role:'assistant',text});conversation=conversation.slice(-12);status.textContent='Response received. For tests, answer before asking for the explanation.';}catch(e){answer.textContent='AI is not connected yet or the free-tier limit was reached. Your tracker is unchanged. Setup: follow README.md in the AI Coach integration package.\n\nDetails: '+String(e?.message||e).slice(0,300);status.textContent='AI request failed; existing StudySprint features remain available.';}finally{busy=false;send.disabled=false;}}
- $('coachForm')?.addEventListener('submit',e=>{e.preventDefault();ask(question.value)});
+ async function ask(prompt){
+    if(busy)return;
+    const q=String(prompt||'').trim();
+    if(!q)return;
+    if(q.length>1200){status.textContent='Keep your question under 1,200 characters.';return;}
+    busy=true;send.disabled=true;status.textContent='Preparing a compact study snapshot…';
+    addBubble('user',q);question.value='';
+    const answer=addBubble('assistant','Thinking…');
+    try{
+      const learner=String($('coachLearner')?.value||activeLearner||'Priyanshu').trim();
+      const sona=learner.toLowerCase()==='sona';
+      const context=snapshot();
+      const priorConversation=conversation.slice(-10);
+      const requestBody={message:q,person:sona?'Sona':'Priyanshu',learner:sona?'Sona':'Priyanshu',mode:sona?'cuet-geography':'hoc-performance',context,conversation:priorConversation};
+      const result=await ssSupabase.functions.invoke('ai-coach',{body:requestBody});
+      if(result.error){
+        let detail=result.error.message||String(result.error);
+        try{const ctx=result.error.context;if(ctx&&typeof ctx.json==='function'){const payload=await ctx.json();if(payload?.error)detail=payload.error;}}catch(_){}
+        throw new Error(detail);
+      }
+      const data=result.data;
+      if(!data||typeof data!=='object')throw new Error('The AI endpoint returned an unreadable response.');
+      if(data.error)throw new Error(data.error);
+      if(data.person&&String(data.person).toLowerCase()!==(sona?'sona':'priyanshu'))throw new Error('The backend selected '+data.person+' instead of '+(sona?'Sona':'Priyanshu')+'. Redeploy the latest ai-coach Edge Function, then retry.');
+      const text=typeof data.answer==='string'?data.answer.trim():'';
+      if(!text)throw new Error('The AI endpoint returned no answer. Check the Edge Function logs and Gemini API quota.');
+      answer.textContent=text;
+      conversation.push({role:'user',text:q},{role:'assistant',text});
+      conversation=conversation.slice(-12);
+      status.textContent=(sona?'Sona’s CUET Geography mentor':'Priyanshu’s HOC coach')+' responded successfully.';
+    }catch(e){
+      const detail=String(e?.message||e).slice(0,700);
+      answer.textContent='AI request failed. Your tracker data is unchanged.\n\nReason: '+detail;
+      status.textContent='AI request failed — check the reason shown below.';
+    }finally{busy=false;send.disabled=false;}
+  }
+  $('coachForm')?.addEventListener('submit',e=>{e.preventDefault();ask(question.value)});
  document.querySelectorAll('[data-coach-prompt]').forEach(b=>b.addEventListener('click',()=>{if((activeLearner==='Sona'&&b.closest('#sonaCoachPrompts'))||(activeLearner==='Priyanshu'&&b.closest('#priyanshuCoachPrompts')))ask(b.dataset.coachPrompt)}));
  $('coachRefresh')?.addEventListener('click',renderSnapshot);$('coachLearner')?.addEventListener('change',setLearner);
  document.querySelector('[data-page="ai-coach"]')?.addEventListener('click',setLearner);
