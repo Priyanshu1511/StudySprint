@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101828">
+<title>StudySprint — Exam Tracker</title>
+<style>
+:root{--bg:#f5f7fb;--panel:#fff;--ink:#172033;--muted:#687386;--line:#e5e9f1;--nav:#111a2e;--blue:#4169e1;--blue-soft:#edf2ff;--green:#16835d;--green-soft:#e6f7ef;--orange:#bd6b13;--orange-soft:#fff2df;--red:#c33e52;--shadow:0 10px 35px rgba(21,34,61,.06);--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}.sidebar{background:var(--nav);color:#eef2ff;padding:26px 16px;display:flex;flex-direction:column;gap:24px}.brand{display:flex;align-items:center;gap:12px;padding:0 10px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#8ca6ff,#536de8);display:grid;place-items:center;font-weight:900;color:white;font-size:20px}.brand strong{font-size:18px;letter-spacing:-.5px}.brand small{display:block;color:#aab5cb;font-size:12px}.nav-label{color:#7f8da8;font-size:10px;letter-spacing:1.4px;font-weight:800;padding:0 12px;margin-bottom:7px}.navbtn{width:100%;display:flex;align-items:center;gap:12px;text-align:left;border:0;background:transparent;color:#b9c4d9;padding:12px;border-radius:12px;margin:2px 0}.navbtn .ico{width:22px;text-align:center;font-size:17px}.navbtn.active,.navbtn:hover{background:#25314b;color:white}.sidebar-foot{margin-top:auto;border:1px solid #34415c;border-radius:14px;padding:14px;color:#b8c3d7;font-size:12px}.sidebar-foot strong{color:white;display:block;margin-bottom:4px}.main{min-width:0}.topbar{height:78px;background:rgba(255,255,255,.86);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px;gap:15px;position:sticky;top:0;z-index:5;backdrop-filter:blur(14px)}.crumb{color:var(--muted);font-size:13px}.topbar h1{font-size:18px;margin:2px 0 0;letter-spacing:-.4px}.top-actions{display:flex;gap:8px;align-items:center}.content{padding:30px 34px 50px;max-width:1500px;margin:auto}.welcome{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px}.eyebrow{font-size:11px;color:var(--blue);font-weight:800;letter-spacing:1.4px;text-transform:uppercase}.welcome h2{font-size:29px;letter-spacing:-1px;margin:5px 0}.welcome p{color:var(--muted);margin:0}.date-chip{background:white;border:1px solid var(--line);border-radius:12px;padding:10px 14px;color:var(--muted);font-size:13px;white-space:nowrap}.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);min-width:0}.stat-head{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px}.stat-icon{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--blue-soft);font-size:18px}.stat-value{font-size:30px;font-weight:800;letter-spacing:-1px;margin:12px 0 3px}.stat-note{font-size:12px;color:var(--muted)}.dashboard-grid{grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr)}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}.section-title h3{font-size:16px;margin:0;letter-spacing:-.3px}.section-title p{font-size:12px;color:var(--muted);margin:3px 0 0}.btn{border:1px solid var(--line);border-radius:10px;padding:9px 13px;background:white;color:var(--ink);font-weight:650;font-size:13px}.btn:hover{border-color:#b5c4e7;background:#f9faff}.btn.primary{background:var(--blue);color:white;border-color:var(--blue)}.btn.dark{background:var(--nav);color:white;border-color:var(--nav)}.btn.danger{color:var(--red)}.btn.small{padding:6px 9px;font-size:12px}.progress-row{margin:17px 0}.progress-top{display:flex;justify-content:space-between;gap:12px;font-size:13px;margin-bottom:8px}.progress-top span:last-child{color:var(--muted)}.track{height:9px;background:#edf0f6;border-radius:99px;overflow:hidden}.fill{height:100%;border-radius:99px;background:var(--blue);transition:width .2s}.fill.green{background:#21a675}.fill.orange{background:#e5a23a}.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:14px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}.empty{padding:26px;text-align:center;color:var(--muted);background:#fafbfe;border:1px dashed #d8dfeb;border-radius:14px}.empty strong{display:block;color:var(--ink);margin-bottom:5px}.platforms{display:grid;grid-template-columns:1fr 1fr;gap:12px}.platform{border:1px solid var(--line);border-radius:14px;padding:16px}.platform .name{font-weight:750}.platform .num{font-size:25px;font-weight:800;margin:8px 0 1px}.platform small{color:var(--muted)}.tag{display:inline-flex;align-items:center;padding:4px 9px;border-radius:99px;font-size:11px;font-weight:750;background:#eef1f7;color:#526078}.tag.blue{background:var(--blue-soft);color:#3456c5}.tag.green{background:var(--green-soft);color:var(--green)}.tag.orange{background:var(--orange-soft);color:var(--orange)}.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:20px}.page-head h2{font-size:27px;letter-spacing:-.8px;margin:4px 0}.page-head p{color:var(--muted);margin:0}.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:15px}.field, .filters input,.filters select{border:1px solid #dce2ed;border-radius:10px;padding:10px 11px;background:white;color:var(--ink);min-width:0}.filters input{flex:1;min-width:180px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:white}table{width:100%;border-collapse:collapse;min-width:850px;font-size:13px}th{background:#f8f9fc;text-align:left;color:#657086;font-size:11px;text-transform:uppercase;letter-spacing:.6px;padding:13px 14px;white-space:nowrap}td{padding:12px 14px;border-top:1px solid #edf0f5;vertical-align:middle}tr:hover td{background:#fcfdff}td input[type=text],td input[type=number],td input[type=date],td select,td textarea{width:100%;min-width:100px;border:1px solid transparent;background:transparent;padding:7px;border-radius:7px;color:var(--ink)}td input:focus,td select:focus,td textarea:focus{outline:2px solid #cdd8ff;background:white}.check{width:18px;height:18px;accent-color:var(--blue)}.link{color:var(--blue);text-decoration:none;font-weight:700;white-space:nowrap}.link:hover{text-decoration:underline}.table-note{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px;padding:12px 2px}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.form-field{display:flex;flex-direction:column;gap:6px}.form-field label{font-size:12px;color:var(--muted);font-weight:700}.form-field input,.form-field select,.form-field textarea{width:100%;padding:11px 12px;border:1px solid #dce2ed;border-radius:10px;background:white;color:var(--ink)}.form-field.full{grid-column:1/-1}.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}.hidden{display:none!important}.toast{position:fixed;bottom:20px;right:20px;background:#172033;color:white;padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);z-index:20;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translateY(0)}.callout{border:1px solid #d8e3ff;background:#f2f6ff;border-radius:14px;padding:14px 16px;color:#41537e;font-size:13px;margin-bottom:16px}.callout strong{color:#203e95}.branch-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:16px}.branch-card{padding:16px;border-radius:14px;border:1px solid var(--line);background:white}.branch-card .emoji{font-size:22px}.branch-card strong{display:block;margin:7px 0 2px}.branch-card small{color:var(--muted)}.mobile-menu{display:none}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.branch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){#page-habits .grid[style*="grid-template-columns:repeat(2"]{grid-template-columns:1fr!important}.app{grid-template-columns:1fr}.sidebar{display:none;position:fixed;inset:0 auto 0 0;width:260px;height:100vh;height:100dvh;max-height:100dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;align-items:stretch;padding-bottom:calc(26px + env(safe-area-inset-bottom));z-index:15;box-shadow:20px 0 50px #0003}.sidebar.open{display:flex}.mobile-menu{display:inline-flex}.topbar{height:68px;padding:0 16px}.content{padding:22px 15px 40px}.welcome{align-items:flex-start;flex-direction:column}.welcome h2{font-size:25px}.date-chip{display:none}.stats{gap:10px}.card{padding:16px}.stat-value{font-size:25px}.page-head{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}.branch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.top-actions .desktop-only{display:none}.platforms{gap:8px}.platform{padding:12px}.platform .num{font-size:21px}}
+
+/* Personal-life modules */
+.module-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.72fr);gap:16px;margin-bottom:18px}
+.form-card h3{margin:0 0 15px;font-size:16px}.records{display:grid;gap:10px}.record{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff}.record-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.record h4{margin:0 0 4px;font-size:14px}.record p{margin:6px 0 0;color:var(--muted);font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.record-meta{font-size:11px;color:var(--muted)}.record-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.habit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.habit-check{display:flex;align-items:center;gap:9px;padding:11px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:13px}.habit-check input{accent-color:var(--green);width:17px;height:17px}.mood{display:flex;gap:8px;flex-wrap:wrap}.mood label{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}.voice-panel{background:linear-gradient(135deg,#eff3ff,#f8f5ff);border:1px solid #dfe5ff;border-radius:16px;padding:18px}.voice-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.audio-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.audio-row audio{max-width:100%;height:34px}.privacy-note{font-size:12px;color:var(--muted);padding:12px 14px;background:#f8f9fc;border-radius:12px;margin-top:12px}.rec-indicator{color:var(--red);font-weight:800;display:none}.rec-indicator.on{display:inline}.habit-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.habit-summary .mini{padding:13px;border:1px solid var(--line);border-radius:13px}.habit-summary strong{font-size:22px;display:block}.habit-summary span{font-size:11px;color:var(--muted)}
+@media(max-width:1100px){.module-grid{grid-template-columns:1fr}.habit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.habit-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.habit-grid{grid-template-columns:1fr}.habit-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+/* Cloud status lives inside the top bar flow; never floats over action buttons. */
+.cloud-status{display:inline-flex;align-items:center;justify-content:center;max-width:180px;min-width:96px;padding:6px 9px;border:1px solid #dce9df;border-radius:999px;background:#f0faf3;color:#16835d;font-size:12px;font-weight:650;line-height:1.25;white-space:normal;text-align:center;overflow-wrap:anywhere}
+@media(max-width:760px){.cloud-status{max-width:120px;min-width:0;font-size:11px;padding:5px 7px}.top-actions{gap:6px}}
+</style>
+</head>
+<body><div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">S</div><div><strong>StudySprint</strong><small>Exam prep workspace</small></div></div>
+  <div><div class="nav-label">WORKSPACE</div>
+    <button class="navbtn active" data-page="dashboard"><span class="ico">▦</span>Dashboard</button>
+    <button class="navbtn" data-page="lectures"><span class="ico">▤</span>Priyanshu · Lectures</button>
+    <button class="navbtn" data-page="mocks"><span class="ico">◷</span>Priyanshu · Mock tests</button>
+    <button class="navbtn" data-page="ai-coach"><span class="ico">✦</span>AI Study Coach</button>
+    <button class="navbtn" data-page="sona"><span class="ico">◎</span>Sona · Geography</button>
+    <button class="navbtn" data-page="calls"><span class="ico">☎</span>Call records</button>
+    <button class="navbtn" data-page="meetups"><span class="ico">▣</span>Meetups & Google Meet</button>
+    <button class="navbtn" data-page="diary"><span class="ico">✎</span>Diary & messages</button>
+    <button class="navbtn" data-page="library"><span class="ico">📚</span>Library check-in/out</button>
+    <button class="navbtn" data-page="manifestation"><span class="ico">✨</span>Daily manifestation</button>
+    <button class="navbtn" data-page="voice"><span class="ico">♫</span>Daily voice notes</button>
+    <button class="navbtn" data-page="habits"><span class="ico">☀</span>Daily wellness</button>
+    <button class="navbtn" data-page="expenses"><span class="ico">₹</span>Daily expenses</button>
+    <button class="navbtn" data-page="social"><span class="ico">♡</span>Thoughts & posts</button>
+  </div>
+  <div><div class="nav-label">DATA & SETTINGS</div>
+    <button class="navbtn" id="exportBtn"><span class="ico">⇩</span>Export backup</button>
+    <button class="navbtn" id="importBtn"><span class="ico">⇧</span>Import backup</button>
+    <button class="navbtn" id="printBtn"><span class="ico">▧</span>Print / Save PDF</button>
+    <input type="file" id="importFile" accept=".json,application/json" class="hidden">
+  </div>
+  <div class="sidebar-foot"><strong>Private by default</strong>Your entries stay in this browser. Export a backup before switching devices or clearing browser data.</div>
+</aside>
+<main class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px"><button class="btn mobile-menu" id="menuBtn">☰</button><div><div class="crumb">Study workspace / <span id="crumb">Dashboard</span></div><h1 id="topTitle">Your preparation at a glance</h1></div></div>
+    <div class="top-actions"><span id="cloudStatus" class="cloud-status" role="status" aria-live="polite">Connecting cloud…</span><button class="btn desktop-only" id="topExport">Export backup</button><button class="btn primary" id="quickAdd">＋ Quick add</button></div>
+  </header>
+  <div class="content">
+    <section id="page-dashboard">
+      <div class="welcome"><div><div class="eyebrow">Your study command center</div><h2>Small steps. Strong results.</h2><p>Track lectures, revisions and mock-test performance in one visual workspace.</p></div><div class="date-chip" id="today"></div></div>
+      <div class="grid stats">
+        <div class="card"><div class="stat-head">Lectures completed <span class="stat-icon">✓</span></div><div class="stat-value" id="statCompleted">0 <span style="font-size:15px;color:#8b95a7">/ 150</span></div><div class="stat-note" id="statCompletedNote">Across Reasoning, Maths & English</div></div>
+        <div class="card"><div class="stat-head">Revision sessions <span class="stat-icon" style="background:var(--green-soft)">↻</span></div><div class="stat-value" id="statRevisions">0</div><div class="stat-note">Date entries recorded by Priyanshu</div></div>
+        <div class="card"><div class="stat-head">Mock tests logged <span class="stat-icon" style="background:var(--orange-soft)">◷</span></div><div class="stat-value" id="statMocks">0</div><div class="stat-note">Testbook + Oliveboard</div></div>
+        <div class="card"><div class="stat-head">Geography topics <span class="stat-icon" style="background:#f4eaff">◎</span></div><div class="stat-value" id="statTopics">0</div><div class="stat-note">Topics added to Sona's tracker</div></div>
+      </div>
+      <div class="card" id="rewardsCard" style="margin:0 0 18px">
+        <div class="section-title"><div><h3>🏆 Separate reward scoreboards</h3><p>Healthy progress game: earn points, hit targets, and take breaks when needed.</p></div><span class="tag blue">Rewards</span></div>
+        <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:14px" id="rewardPeople">
+          <div class="branch-card">
+            <div style="font-size:18px">🌷 <strong>Sona</strong></div>
+            <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px">
+              <div><small>Today</small><strong id="sonaPointsDaily">0 pts</strong></div>
+              <div><small>This week</small><strong id="sonaPointsWeekly">0 pts</strong><small id="sonaWeeklyTargetLabel">Target: 250 pts</small></div>
+              <div><small>This month</small><strong id="sonaPointsMonthly">0 pts</strong><small id="sonaMonthlyTargetLabel">Target: 1000 pts</small></div>
+              <div><small>Lifetime</small><strong id="sonaPointsTotal">0 pts</strong></div>
+              <div><small>Daily average</small><strong id="sonaPointsAverage">0 pts</strong></div>
+            </div>
+            <div class="track" style="margin-top:12px"><div class="fill green" id="sonaDailyTargetBar" style="width:0%"></div></div>
+            <small id="sonaTargetLabel">Daily target: 40 pts</small>
+          </div>
+          <div class="branch-card">
+            <div style="font-size:18px">⚡ <strong>Priyanshu</strong></div>
+            <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px">
+              <div><small>Today</small><strong id="priyanshuPointsDaily">0 pts</strong></div>
+              <div><small>This week</small><strong id="priyanshuPointsWeekly">0 pts</strong><small id="priyanshuWeeklyTargetLabel">Target: 250 pts</small></div>
+              <div><small>This month</small><strong id="priyanshuPointsMonthly">0 pts</strong><small id="priyanshuMonthlyTargetLabel">Target: 1000 pts</small></div>
+              <div><small>Lifetime</small><strong id="priyanshuPointsTotal">0 pts</strong></div>
+              <div><small>Daily average</small><strong id="priyanshuPointsAverage">0 pts</strong></div>
+            </div>
+            <div class="track" style="margin-top:12px"><div class="fill" id="priyanshuDailyTargetBar" style="width:0%"></div></div>
+            <small id="priyanshuTargetLabel">Daily target: 40 pts</small>
+          </div>
+        </div>
+        <div class="section-title" style="margin-top:16px"><div><h3>Recent rewards</h3><p>Who earned what, and when</p></div></div>
+        <div id="rewardHistory" class="records"></div>
+        <div class="privacy-note"><strong>Study-first points:</strong> lecture +10; revision +5; mock test +20; Geography topic +10; library check-in +5 and check-out +10; each checked wellness habit +2; completed manifestation activity +5. Photos, voice notes, calls, messages and meetups earn no points. Old study/library/wellness records are backfilled once; records without dates count toward lifetime totals only.</div>
+      </div>
+      <div class="grid dashboard-grid">
+        <div class="card"><div class="section-title"><div><h3>Lecture completion</h3><p>Progress by bank-exam subject</p></div><button class="btn small" data-go="lectures">Open tracker ↗</button></div><div id="subjectProgress"></div><div class="legend"><span><i class="dot" style="background:var(--blue)"></i>Completed</span><span><i class="dot" style="background:#edf0f6"></i>Remaining</span></div></div>
+        <div class="card"><div class="section-title"><div><h3>Mock platform comparison</h3><p>Average score percentage</p></div><button class="btn small" data-go="mocks">View tests ↗</button></div><div class="platforms" id="platformStats"></div><div class="callout" style="margin:14px 0 0">Compare <strong>score percentage</strong> rather than raw marks when test maximums differ.</div></div>
+        <div class="card"><div class="section-title"><div><h3>Latest activity</h3><p>Recently recorded study items</p></div></div><div id="activity"></div></div>
+        <div class="card"><div class="section-title"><div><h3>📚 Library attendance today</h3><p>Separate daily check-in and check-out for both</p></div><button class="btn small" data-go="library">Open attendance ↗</button></div><div id="dashboardLibraryAttendance"></div></div>
+        <div class="card"><div class="section-title"><div><h3>☀ Daily wellness today</h3><p>Separate habit logs for Sona and Priyanshu</p></div><button class="btn small" data-go="habits">Open wellness ↗</button></div><div id="dashboardWellness"></div></div>
+        <div class="card"><div class="section-title"><div><h3>Sona's Geography branches</h3><p>Topics and revision status</p></div><button class="btn small" data-go="sona">Open Geography ↗</button></div><div id="branchProgress"></div></div>
+      </div>
+    </section>
+
+    <section id="page-lectures" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Priyanshu · Bank exam preparation</div><h2>Lecture tracker</h2><p>150 planned lecture slots across Reasoning, Maths and English.</p></div><button class="btn primary" id="addLecture">＋ Add topic</button></div>
+      <div class="callout"><strong>How to use:</strong> Tick completion when you finish the first study session. Add real dates for each revision. Paste a permanent Google Drive PDF link. After saving, wait for the cloud status to say “Cloud synced”. Set Drive sharing to anyone with the link if you want the other device to open it.</div>
+      <div class="filters"><input id="lectureSearch" placeholder="Search topic or lecture number…"><select id="subjectFilter"><option value="">All subjects</option><option>Reasoning</option><option>Maths</option><option>English</option></select><select id="completionFilter"><option value="">All completion states</option><option value="done">Completed</option><option value="todo">Not completed</option></select><select id="revisionFilter"><option value="">All revision states</option><option value="revised">Revised at least once</option><option value="pending">No revisions yet</option></select></div>
+      <div class="table-wrap"><table><thead><tr><th>Subject</th><th>#</th><th>Topic</th><th>PDF notes</th><th>Done</th><th>Revision 1</th><th>Revision 2</th><th>Revision 3</th><th>Revisions</th><th></th></tr></thead><tbody id="lectureRows"></tbody></table></div><div class="table-note"><span id="lectureCount">150 lecture slots</span><span>Changes save automatically in this browser.</span></div>
+    </section>
+
+    <section id="page-mocks" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Priyanshu · Performance</div><h2>Mock test tracker</h2><p>Log test scores, percentile and weak areas to plan your next revision.</p></div><button class="btn primary" id="addMock">＋ Add mock test</button></div>
+      <div class="grid stats" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="card"><div class="stat-head">Tests logged</div><div class="stat-value" id="mockTotal">0</div></div>
+        <div class="card"><div class="stat-head">Average score %</div><div class="stat-value" id="mockAverage">—</div></div>
+        <div class="card"><div class="stat-head">Best score %</div><div class="stat-value" id="mockBest">—</div></div>
+      </div>
+      <div class="filters"><input id="mockSearch" placeholder="Search test name or weak area…"><select id="mockPlatformFilter"><option value="">All platforms</option><option>Testbook</option><option>Oliveboard</option></select></div>
+      <div class="table-wrap"><table style="min-width:900px"><thead><tr><th>Platform</th><th>Test name</th><th>Score</th><th>Total marks</th><th>Score %</th><th>Percentile</th><th>Weak areas to revise</th><th></th></tr></thead><tbody id="mockRows"></tbody></table></div><div class="table-note"><span>Score percentage is calculated as score ÷ total marks.</span><span>Enter portal percentile as a number, e.g. 86.4.</span></div>
+    </section>
+
+    <section id="page-sona" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Sona · Geography preparation</div><h2>Geography tracker</h2><p>Organize branches, PDF notes, mock accuracy and revision status.</p></div><button class="btn primary" id="addTopic">＋ Add Geography topic</button></div>
+      <div class="grid branch-grid" id="branchCards"></div>
+      <div class="filters"><input id="sonaSearch" placeholder="Search branch or topic…"><select id="sonaBranchFilter"><option value="">All branches</option><option>Physical Geography</option><option>Climatology</option><option>Oceanography</option><option>Human Geography</option><option>Indian Geography</option><option>World Geography</option><option>Economic Geography</option><option>Environmental Geography</option><option>Biogeography</option></select><select id="sonaPlatformFilter"><option value="">All platforms</option><option>Testbook</option><option>Oliveboard</option></select><select id="sonaStatusFilter"><option value="">All revision statuses</option><option>Not Started</option><option>In Progress</option><option>Revised</option></select></div>
+      <div class="table-wrap"><table style="min-width:850px"><thead><tr><th>Branch</th><th>Topic</th><th>Subject PDF</th><th>Platform</th><th>Correct</th><th>Questions</th><th>Accuracy</th><th>Revision status</th><th></th></tr></thead><tbody id="sonaRows"></tbody></table></div><div class="table-note"><span id="sonaCount">0 topics</span><span>Accuracy = correct answers ÷ total questions.</span></div>
+    </section>
+
+    <section id="page-calls" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Personal records · Calls</div><h2>Phone call sessions</h2><p>Keep a private log of calls, duration, follow-ups and important notes.</p></div></div>
+      <div class="callout"><strong>Privacy:</strong> this logs call details you enter; it does not record cellular calls automatically. Only record or store conversations with the knowledge and consent of everyone involved.</div>
+      <div class="module-grid">
+        <div class="card form-card"><h3>＋ Log a call</h3><form id="callForm" class="form-grid">
+          <div class="form-field"><label>Person / contact *</label><input name="person" required placeholder="Name or nickname"></div>
+          <div class="form-field"><label>Date & time *</label><input name="when" type="datetime-local" required></div>
+          <div class="form-field"><label>Duration (minutes)</label><input name="duration" type="number" min="0" step="1" placeholder="e.g. 18"></div>
+          <div class="form-field"><label>Call type</label><select name="kind"><option>Personal</option><option>Study check-in</option><option>Meetup planning</option><option>Family</option><option>Other</option></select></div>
+          <div class="form-field"><label>Follow-up needed?</label><select name="follow"><option>No</option><option>Yes</option></select></div>
+          <div class="form-field full"><label>Personal notes / follow-up</label><textarea name="notes" rows="3" placeholder="Key points, commitments, next call…"></textarea></div>
+          <div class="form-field full"><button class="btn primary" type="submit">Save call record</button></div>
+        </form></div>
+        <div class="card"><div class="section-title"><div><h3>Call overview</h3><p>Based on saved call logs</p></div></div><div class="habit-summary" id="callSummary"></div><div class="privacy-note">This is a personal log, not an automatic phone-call history importer.</div></div>
+      </div>
+      <div class="section-title"><div><h3>Call history</h3><p>Search, review or remove entries.</p></div><input class="field" id="callSearch" placeholder="Search contact / notes…" style="max-width:260px"></div>
+      <div class="records" id="callRecords"></div>
+    </section>
+
+    <section id="page-meetups" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Plans · Shared time</div><h2>Meetups & Google Meet</h2><p>Plan in-person meetups or online study sessions and keep the meeting link handy.</p></div></div>
+      <div class="callout"><strong>Google Meet note:</strong> this page can save a Meet URL and schedule details, but it cannot create a calendar event or generate a Meet link automatically without Google account/API integration. Create the meeting in Google Calendar/Meet, then paste its link here.</div>
+      <div class="module-grid">
+        <div class="card form-card"><h3>＋ Schedule a meetup</h3><form id="meetForm" class="form-grid">
+          <div class="form-field"><label>Meeting title *</label><input name="title" required placeholder="Sunday study catch-up"></div>
+          <div class="form-field"><label>Date & time *</label><input name="when" type="datetime-local" required></div>
+          <div class="form-field"><label>Type</label><select name="kind"><option>Google Meet</option><option>In person</option><option>Phone call</option></select></div>
+          <div class="form-field"><label>People</label><input name="people" placeholder="Priyanshu, Sona…"></div>
+          <div class="form-field"><label>Place / time zone</label><input name="place" placeholder="Cafe / online / local time"></div>
+          <div class="form-field"><label>Meet URL</label><input name="url" type="url" placeholder="https://meet.google.com/…"></div>
+          <div class="form-field full"><label>Agenda / notes</label><textarea name="notes" rows="3" placeholder="Topics to discuss, what to bring…"></textarea></div>
+          <div class="form-field full"><button class="btn primary" type="submit">Save meetup</button> <a class="btn" href="https://meet.google.com/" target="_blank" rel="noopener">Open Google Meet ↗</a> <a class="btn" href="https://calendar.google.com/" target="_blank" rel="noopener">Google Calendar ↗</a></div>
+        </form></div>
+        <div class="card"><div class="section-title"><div><h3>Upcoming plans</h3><p>Saved schedule</p></div></div><div id="upcomingMeetups" class="records"></div></div>
+      </div>
+      <div class="section-title"><div><h3>All meetups</h3><p>Keep plans and links in one place.</p></div></div><div class="records" id="meetRecords"></div>
+    </section>
+
+    <section id="page-diary" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Memories · Words that matter</div><h2>Diary & messages</h2><p>Write daily reflections, appreciation notes, and messages for one another.</p></div></div>
+      <div class="module-grid">
+        <div class="card form-card"><h3>✎ Daily diary entry</h3><form id="diaryForm" class="form-grid">
+          <div class="form-field"><label>Date *</label><input name="date" type="date" required></div>
+          <div class="form-field"><label>Written by</label><select name="author"><option>Priyanshu</option><option>Sona</option></select></div>
+          <div class="form-field"><label>Mood</label><select name="mood"><option>😊 Good</option><option>😌 Calm</option><option>🥰 Grateful</option><option>😐 Okay</option><option>😔 Low</option><option>😣 Stressed</option></select></div>
+          <div class="form-field full"><label>Today's reflection *</label><textarea name="text" required rows="5" placeholder="What happened today? What did you learn, appreciate or want to remember?"></textarea></div>
+          <div class="form-field full"><button class="btn primary" type="submit">Save diary entry</button></div>
+        </form></div>
+        <div class="card form-card"><h3>♡ Leave a message</h3><form id="messageForm" class="form-grid">
+          <div class="form-field"><label>From</label><select name="from"><option>Priyanshu</option><option>Sona</option></select></div>
+          <div class="form-field"><label>To</label><select name="to"><option>Sona</option><option>Priyanshu</option><option>Both</option></select></div>
+          <div class="form-field"><label>Message type</label><select name="kind"><option>Encouragement</option><option>Appreciation</option><option>Reminder</option><option>Just because</option></select></div>
+          <div class="form-field full"><label>Message *</label><textarea name="text" required rows="5" placeholder="A kind message, a reminder, or something you want them to read…"></textarea></div>
+          <div class="form-field full"><button class="btn primary" type="submit">Leave message</button></div>
+        </form></div>
+      </div>
+      <div class="section-title"><div><h3>Diary timeline</h3><p>Reflections worth keeping.</p></div><select id="diaryFilter" class="field"><option value="">All authors</option><option>Priyanshu</option><option>Sona</option></select></div><div class="records" id="diaryRecords"></div>
+      <div class="section-title" style="margin-top:24px"><div><h3>Messages for one another</h3><p>A small space for kindness and encouragement.</p></div></div><div class="records" id="messageRecords"></div>
+    </section>
+
+    <section id="page-voice" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Hear it in their own voice</div><h2>Daily voice messages</h2><p>Record a short voice note for the other person, or save an audio file from your device.</p></div></div>
+      <div class="callout"><strong>Voice notes are personal:</strong> recording requires microphone permission. This website saves recordings on this browser only; use Export backup for text records, and download audio files separately to keep or share them.</div>
+      <div class="module-grid">
+        <div class="card">
+          <div class="voice-panel"><div class="eyebrow">Voice note studio</div><h3 style="margin:5px 0 4px">Leave a little voice message ♡</h3><p style="margin:0;color:var(--muted);font-size:13px">Choose who is speaking and who should hear it.</p>
+            <div class="form-grid" style="margin-top:14px">
+              <div class="form-field"><label>From</label><select id="voiceFrom"><option>Priyanshu</option><option>Sona</option></select></div>
+              <div class="form-field"><label>To</label><select id="voiceTo"><option>Sona</option><option>Priyanshu</option><option>Both</option></select></div>
+              <div class="form-field"><label>Caption</label><input id="voiceCaption" placeholder="Good luck today ♡"></div>
+            </div>
+            <div class="voice-actions"><button class="btn primary" id="recordVoice">● Start recording</button><button class="btn" id="stopVoice" disabled>■ Stop & save</button><span id="recordingState" class="rec-indicator">● Recording…</span></div>
+            <div class="privacy-note">Use the browser's microphone permission prompt. Do not record other people without their consent.</div>
+          </div>
+        </div>
+        <div class="card"><h3 style="margin-top:0">Upload an existing audio message</h3><p style="font-size:13px;color:var(--muted)">Choose an audio file to download/share. Audio is not uploaded to a server.</p><div class="form-field"><label>Audio file</label><input id="voiceUpload" type="file" accept="audio/*"></div><button class="btn" id="saveUploadedVoice" style="margin-top:12px">Add selected audio</button><div class="privacy-note">To send an audio note to another device, download it and share it separately (for example, via Drive or messaging).</div></div>
+      </div>
+      <div class="card" style="margin:18px 0"><h3>📸 Shared photos</h3><p>Upload a photo for both of you to see.</p><input id="sharedPhotoUpload" type="file" accept="image/*"><button class="btn primary" id="uploadSharedPhoto" style="margin:10px 0">Upload photo</button><div id="sharedMediaGallery" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px"></div><p class="privacy-note">This no-login bucket is public. Upload only photos you are comfortable sharing publicly.</p></div><div class="section-title"><div><h3>Voice message library</h3><p>Voice recordings are uploaded to cloud storage and shared across devices.</p></div></div><div class="records" id="voiceRecords"></div>
+    </section>
+
+
+    <section id="page-manifestation" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Mindset · Small daily practice</div><h2>✨ Daily manifestation practice</h2><p>Write a positive feeling, connect it to one realistic action, and upload a photo of your written page. This is a reflection habit—not a promise that thoughts alone cause outcomes.</p></div></div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="section-title"><div><h3 id="manifestPromptTitle">Today's activity</h3><p id="manifestPromptMeta">A fresh prompt each day</p></div><span class="tag blue">+5 points</span></div>
+        <div class="callout" style="margin-bottom:14px;padding:18px;border:2px solid var(--accent,#6c63ff);border-radius:14px">
+          <div style="font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">TODAY'S PROMPT</div>
+          <strong id="manifestPromptText" style="display:block;font-size:18px;line-height:1.5"></strong>
+          <div style="font-size:15px;font-weight:800;margin-top:16px">👇 KYA KARNA HAI? (STEP-BY-STEP)</div>
+          <p id="manifestHowTo" style="margin:8px 0 0;line-height:1.7;white-space:pre-line"></p>
+          <ol style="margin:12px 0 0;padding-left:22px;line-height:1.8">
+            <li>Apni notebook mein aaj ke prompt par 3–5 honest sentences likho.</li>
+            <li>Ek real, chhota action likho jo aaj apne goal ke liye kar sakte ho.</li>
+            <li>Likhe hue page ki clear photo upload karo.</li>
+            <li>Sona ya Priyanshu select karke submit karo. Ek person ko ek din mein ek hi reward milega.</li>
+          </ol>
+        </div>
+        <form id="manifestationForm">
+          <div class="form-field"><label for="manifestPerson">Whose activity?</label><select id="manifestPerson" required><option value="Sona">Sona</option><option value="Priyanshu">Priyanshu</option></select></div>
+          <div class="form-field"><label for="manifestWriting">Your positive-feeling writing</label><textarea id="manifestWriting" rows="5" required minlength="20" placeholder="Write 3–5 honest sentences: what you feel, what you appreciate, and one action you can take today."></textarea></div>
+          <div class="form-field"><label for="manifestPhoto">Photo of your written activity (required to complete)</label><input id="manifestPhoto" type="file" accept="image/*" required><small>Upload a photo of your notebook/page. Avoid including private information.</small></div>
+          <button class="btn primary" type="submit" id="completeManifestation">Upload photo & complete activity (+5 points)</button>
+        </form>
+        <p class="privacy-note">One reward per person per day. No penalties for missed days. Keep goals realistic; this practice supports motivation and reflection, not guaranteed outcomes.</p>
+      </div>
+      <div class="card"><div class="section-title"><div><h3>Manifestation history</h3><p>Completed writing activities and photo proof</p></div></div><div id="manifestationHistory" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px"></div></div>
+    </section>
+
+    <section id="page-library" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Daily attendance · Study routine</div><h2>Library check-in / check-out</h2><p>One record per person per day. Check-in and check-out times are saved and shared across devices.</p></div></div>
+      <div class="grid stats" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div class="card"><div class="stat-head">Priyanshu · Today's attendance</div><div class="stat-value" id="libraryPriyanshuStatus" style="font-size:20px">Not checked in</div><div class="stat-note" id="libraryPriyanshuTimes">Check-in — · Check-out —</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn primary" data-library-action="checkin" data-person="Priyanshu">Check in</button><button class="btn" data-library-action="checkout" data-person="Priyanshu">Check out</button></div></div>
+        <div class="card"><div class="stat-head">Sona · Today's attendance</div><div class="stat-value" id="librarySonaStatus" style="font-size:20px">Not checked in</div><div class="stat-note" id="librarySonaTimes">Check-in — · Check-out —</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn primary" data-library-action="checkin" data-person="Sona">Check in</button><button class="btn" data-library-action="checkout" data-person="Sona">Check out</button></div></div>
+      </div>
+      <div class="card" style="margin:18px 0"><h3 style="margin-top:0">Attendance history</h3><div class="filters"><input id="libraryDateFilter" type="date" aria-label="Filter attendance by date"><select id="libraryPersonFilter"><option value="">Both people</option><option>Priyanshu</option><option>Sona</option></select></div><div class="table-wrap"><table style="min-width:650px"><thead><tr><th>Date</th><th>Person</th><th>Check-in</th><th>Check-out</th><th>Hours at library</th></tr></thead><tbody id="libraryAttendanceRows"></tbody></table></div><div class="table-note"><span>One record per person per calendar day; multiple check-outs are kept.</span><span>Times use this device's local time.</span></div></div>
+    </section>
+
+    <section id="page-expenses" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Student budget · Daily spending</div><h2>Daily expense tracker</h2><p>Separate expense records for Sona and Priyanshu, with daily, weekly and monthly totals.</p></div></div>
+      <div class="callout"><strong>Student-friendly guide:</strong> ₹200/day is a starting target for variable personal spending such as snacks, local travel and small purchases—not rent, tuition, major bills or emergencies. Adjust it to your city, commute and actual needs; don't skip essentials just to stay under budget.</div>
+      <div class="card form-card" style="margin-bottom:16px"><h3>＋ Add an expense</h3><form id="expenseForm" class="form-grid">
+        <div class="form-field"><label>Who spent? *</label><select name="person" required><option value="Sona">Sona</option><option value="Priyanshu">Priyanshu</option></select></div>
+        <div class="form-field"><label>Date *</label><input name="date" id="expenseDate" type="date" required></div>
+        <div class="form-field"><label>Amount (₹) *</label><input name="amount" type="number" min="0.01" step="0.01" required placeholder="e.g. 45"></div>
+        <div class="form-field"><label>Category *</label><select name="category" required><option>Food / snacks</option><option>Travel</option><option>Study material</option><option>Mobile / internet</option><option>Personal care</option><option>Entertainment</option><option>Shopping</option><option>Other</option><option>Essential bill</option></select></div>
+        <div class="form-field full"><label>What was it for? *</label><input name="description" required maxlength="180" placeholder="e.g. Bus fare, tea, notebook"></div>
+        <div class="form-field full"><button class="btn primary" type="submit">Save expense</button></div>
+      </form></div>
+      <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:16px">
+        <div class="card"><div class="section-title"><div><h3>🌷 Sona</h3><p>Variable spending summary</p></div></div><div class="habit-summary"><div class="mini"><strong id="sonaExpenseToday">₹0</strong><span>Today</span></div><div class="mini"><strong id="sonaExpenseWeek">₹0</strong><span>This week</span></div><div class="mini"><strong id="sonaExpenseMonth">₹0</strong><span>This month</span></div><div class="mini"><strong id="sonaExpenseBudget">₹200</strong><span>Daily guide</span></div></div><div id="sonaExpenseBudgetNote" class="privacy-note">Today's spending compared with the ₹200 guide.</div></div>
+        <div class="card"><div class="section-title"><div><h3>⚡ Priyanshu</h3><p>Variable spending summary</p></div></div><div class="habit-summary"><div class="mini"><strong id="priyanshuExpenseToday">₹0</strong><span>Today</span></div><div class="mini"><strong id="priyanshuExpenseWeek">₹0</strong><span>This week</span></div><div class="mini"><strong id="priyanshuExpenseMonth">₹0</strong><span>This month</span></div><div class="mini"><strong id="priyanshuExpenseBudget">₹200</strong><span>Daily guide</span></div></div><div id="priyanshuExpenseBudgetNote" class="privacy-note">Today's spending compared with the ₹200 guide.</div></div>
+      </div>
+      <div class="card"><div class="section-title"><div><h3>Expense history</h3><p>Filter by person or date; delete a mistaken entry.</p></div></div><div class="filters"><select id="expensePersonFilter"><option value="">Both people</option><option>Sona</option><option>Priyanshu</option></select><input id="expenseDateFilter" type="date" aria-label="Filter expenses by date"></div><div class="table-wrap"><table style="min-width:700px"><thead><tr><th>Date</th><th>Person</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead><tbody id="expenseRows"></tbody></table></div><div class="table-note"><span id="expenseFilteredTotal">Filtered total: ₹0</span><span>Weekly totals run Monday–Sunday; monthly totals use the calendar month.</span></div></div>
+    </section>
+
+    <section id="page-social" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">A shared little corner</div><h2>Thoughts & daily posts</h2><p>Write a thought, share a small win, or leave encouragement for one another.</p></div></div>
+      <div class="card form-card" style="margin-bottom:16px"><h3>＋ Create a post</h3><form id="socialPostForm" class="form-grid">
+        <div class="form-field"><label>Who is posting? *</label><select name="author" required><option value="">Choose person…</option><option>Sona</option><option>Priyanshu</option></select></div>
+        <div class="form-field"><label>Post date *</label><input name="date" id="socialPostDate" type="date" required></div>
+        <div class="form-field full"><label>Write a thought (optional if you add an image)</label><textarea name="text" rows="4" maxlength="2000" placeholder="What's on your mind today? You can post text, an image, or both."></textarea></div>
+        <div class="form-field full"><label for="socialPostImage">Add an image (optional)</label><input id="socialPostImage" name="image" type="file" accept="image/*"><small class="record-meta">Text only, image only, or text + image. Images are compressed before upload when possible (max 25 MB after compression).</small><div id="socialPostImagePreview" class="hidden" style="margin-top:8px"><img id="socialPostImagePreviewImg" alt="Post image preview" style="max-width:100%;max-height:240px;border-radius:12px;object-fit:contain"><button type="button" class="btn small" id="clearSocialPostImage" style="display:block;margin-top:6px">Remove image</button></div></div>
+        <div class="form-field full"><button class="btn primary" id="socialPostSubmit" type="submit">Share post</button><span id="socialPostUploadStatus" class="record-meta" role="status"></span></div>
+      </form></div>
+      <div class="card" style="margin-bottom:16px"><div class="section-title"><div><h3>Shared feed</h3><p>Both people can like and comment on posts.</p></div><select id="socialFeedFilter" class="field"><option value="">All posts</option><option>Sona</option><option>Priyanshu</option></select></div><div class="form-field" style="max-width:240px;margin-bottom:14px"><label for="socialLikeAs">Like as</label><select id="socialLikeAs"><option>Sona</option><option>Priyanshu</option></select></div><div id="socialFeed" class="records"></div></div>
+      <div class="privacy-note">This is a private-style shared space inside StudySprint, not a public Instagram account. Anyone who can access this shared app may be able to see its posts; don't write sensitive personal information.</div>
+    </section>
+
+    <section id="page-habits" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">Daily rhythm · Mind & body</div><h2>Daily wellness tracker</h2><p>Track routines with flexibility, without turning self-care into pressure.</p></div></div>
+      <div class="callout"><strong>Use your own judgement:</strong> this is a habit log, not medical advice. Aloe vera juice is optional and may not suit everyone; skip it if it causes symptoms or conflicts with medical advice. Hydration, sleep, balanced meals and movement can be tracked without perfection.</div>
+      <div class="callout"><strong>Every save asks who this routine belongs to.</strong> Your existing routine history stays under Sona. New entries can be saved separately for Sona or Priyanshu.</div>
+      <div class="card form-card" style="margin-bottom:18px"><h3>☀ Log today's routine</h3><form id="habitForm">
+        <div class="form-grid">
+          <div class="form-field"><label>Date *</label><input name="date" id="habitDate" type="date" required></div>
+          <div class="form-field"><label>Wake-up time</label><input name="wake" type="time"></div>
+          <div class="form-field"><label>Sleep time (last night)</label><input name="sleep" type="time"></div>
+        </div>
+        <div class="section-title" style="margin-top:20px"><div><h3>Daily habits</h3><p>Tick what you did today — every day doesn't need to be perfect.</p></div></div>
+        <div class="habit-grid">
+          <label class="habit-check"><input type="checkbox" name="aloe"> Aloe vera juice (optional)</label>
+          <label class="habit-check"><input type="checkbox" name="yoga"> Yoga / stretching</label>
+          <label class="habit-check"><input type="checkbox" name="meditation"> Meditation / breathing</label>
+          <label class="habit-check"><input type="checkbox" name="sunwater"> Offered water to Surya Bhagwan</label>
+          <label class="habit-check"><input type="checkbox" name="temple"> Temple visit / prayer</label>
+          <label class="habit-check"><input type="checkbox" name="balanced"> Balanced meals</label>
+          <label class="habit-check"><input type="checkbox" name="water"> Drank enough water</label>
+          <label class="habit-check"><input type="checkbox" name="revision"> Study / revision session</label>
+          <label class="habit-check"><input type="checkbox" name="walk"> Walk / physical activity</label>
+        </div>
+        <div class="form-grid" style="margin-top:16px">
+          <div class="form-field"><label>Outside food today?</label><select name="outside"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+          <div class="form-field"><label>Revision time (minutes)</label><input name="revisionMins" type="number" min="0" step="5" placeholder="e.g. 90"></div>
+          <div class="form-field"><label>Energy / mood</label><select name="mood"><option>Good</option><option>Calm</option><option>Average</option><option>Tired</option><option>Stressed</option></select></div>
+          <div class="form-field full"><label>Diet / notes / gratitude</label><textarea name="notes" rows="3" placeholder="Meals, what went well, tomorrow's intention…"></textarea></div>
+        </div>
+        <div class="form-actions"><button class="btn" type="reset">Clear form</button><button class="btn primary" type="submit">Save daily routine</button></div>
+      </form></div>
+      <div class="section-title"><div><h3>Daily wellness records</h3><p>Separate history for each person. Existing history is preserved in Sona's section.</p></div><input class="field" id="habitSearch" type="date" style="max-width:190px"></div>
+      <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start">
+        <div class="card"><div class="section-title"><div><h3>☀ Sona</h3><p><span id="sonaHabitSummary">0 days logged</span></p></div></div><div class="records" id="sonaHabitRecords"></div></div>
+        <div class="card"><div class="section-title"><div><h3>☀ Priyanshu</h3><p><span id="priyanshuHabitSummary">0 days logged</span></p></div></div><div class="records" id="priyanshuHabitRecords"></div></div>
+      </div>
+    </section>
+
+    <section id="page-ai-coach" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">HOC · Performance · Daily action</div><h2>AI Study Coach</h2><p>Two focused mentors: Priyanshu’s exam-performance coach and Sona’s CUET Geography learning mentor.</p></div><span class="tag blue">Free-tier AI</span></div>
+      <div class="callout"><strong>Privacy & cost:</strong> Select whose coach you are using. Only the selected learner’s relevant study summary is sent to the secured AI endpoint. Chat history is not saved in StudySprint. Free-tier availability and quotas depend on Google AI Studio limits.</div>
+      <div class="card" style="margin-bottom:16px"><div class="form-field" style="max-width:420px"><label for="coachLearner">Choose mentor</label><select id="coachLearner" class="field"><option value="Priyanshu">Priyanshu · HOC & exam performance</option><option value="Sona">Sona · CUET Geography mentor</option></select></div><div id="sonaCoachIntro" class="callout hidden" style="margin-top:12px"><strong>Sona’s learning-first mode:</strong> questions in simple language, difficult words explained, step-by-step reasoning, daily CUET-style practice, mistake review and spaced revision. The coach should ask one question at a time when she requests interactive practice and should never shame her for a wrong answer.</div></div>
+      <div class="grid" style="grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:16px;align-items:start">
+        <div class="card">
+          <div class="section-title"><div><h3 id="coachPanelTitle">Ask your coach</h3><p id="coachPanelDesc">Ask about a study plan, weak areas, mock analysis, revisions or HOC workflow.</p></div></div>
+          <div id="priyanshuCoachPrompts" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+            <button class="btn small" type="button" data-coach-prompt="Analyse my current preparation and give me the three highest-impact next actions.">Analyse my prep</button>
+            <button class="btn small" type="button" data-coach-prompt="Make a realistic study plan for today based on my current progress.">Today's plan</button>
+            <button class="btn small" type="button" data-coach-prompt="Analyse my mock test trend and explain what data is missing for a reliable diagnosis.">Mock analysis</button>
+            <button class="btn small" type="button" data-coach-prompt="Help me apply the HOC progression without promoting me to a stage automatically.">HOC review</button>
+          </div>
+          <div id="sonaCoachPrompts" class="hidden" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+            <button class="btn small" type="button" data-coach-prompt="Give me today's CUET UG Geography practice test with 10 syllabus-relevant MCQs. Ask one question at a time, wait for my answer, then explain why the answer is correct in very easy language.">Start today's CUET test</button>
+            <button class="btn small" type="button" data-coach-prompt="Look at the Geography topics I have added. Choose one topic and teach it in very easy English, define difficult words, give a real-life example, then ask me 3 quick questions one at a time.">Teach one topic simply</button>
+            <button class="btn small" type="button" data-coach-prompt="Help me understand how to read CUET Geography MCQs. Show me how to identify what the question is asking, explain difficult words, eliminate options, and solve one example step by step.">Understand questions</button>
+            <button class="btn small" type="button" data-coach-prompt="Create a short revision session from my Geography topics: key concepts, easy memory cues, 5 active-recall questions and answers with explanations after I attempt them.">Revision & memory</button>
+            <button class="btn small" type="button" data-coach-prompt="Review my Geography topic tracker, identify topics with missing or low accuracy data, and suggest a gentle 30-minute study plan for today. Do not assume a blank score means I performed badly.">Today's study plan</button>
+          </div>
+          <div id="coachTranscript" aria-live="polite" style="display:grid;gap:12px;max-height:440px;overflow:auto;margin-bottom:14px"><div class="empty"><strong>Your coach is ready</strong>Choose a prompt above or type a question. Suggestions are advisory; you decide what to implement.</div></div>
+          <form id="coachForm" style="display:grid;gap:10px">
+            <label for="coachQuestion" style="font-weight:700;font-size:13px">Your question</label>
+            <textarea id="coachQuestion" class="field" rows="3" maxlength="1200" required placeholder="e.g. I keep making mistakes in arithmetic. How should I structure practice and revision?"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><small id="coachStatus" class="record-meta" role="status">Connect the Edge Function to enable AI responses.</small><button id="coachSend" class="btn primary" type="submit">Ask AI Coach ↗</button></div>
+          </form>
+        </div>
+        <div class="card">
+          <div class="section-title"><div><h3 id="coachSnapshotTitle">Current study snapshot</h3><p id="coachSnapshotDesc">Calculated from existing local/cloud-synced tracker data.</p></div><button class="btn small" id="coachRefresh" type="button">Refresh</button></div>
+          <div id="coachSnapshot" class="records"></div>
+          <div id="priyanshuCoachLimit" class="callout" style="margin-top:14px"><strong>Data limitation:</strong> current mock entries store score, maximum marks, percentile and free-text weak areas. The coach will not invent missing metrics.</div>
+          <div id="sonaCoachTips" class="callout hidden" style="margin-top:14px"><strong>How Sona’s mentor helps:</strong><ul style="margin:8px 0 0 18px;padding:0"><li>Simple-English explanations and glossary of difficult words.</li><li>CUET-style MCQs with why each option is right or wrong.</li><li>One-question-at-a-time practice to build confidence.</li><li>Topic-wise revision, memory cues and spaced recall.</li><li>Gentle review of mistakes and a manageable daily plan.</li><li>Uses only the Geography topics in the tracker; asks before assuming an unlisted syllabus topic.</li></ul></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<dialog id="editor" style="border:0;border-radius:18px;padding:0;width:min(680px,calc(100% - 28px));box-shadow:0 25px 80px #11182740">
+  <form id="editorForm" style="padding:24px">
+    <div class="section-title"><div><div class="eyebrow" id="formEyebrow">Add record</div><h3 id="formTitle" style="font-size:22px;margin:4px 0">New record</h3></div><button type="button" class="btn" id="closeEditor">✕</button></div>
+    <div id="formFields" class="form-grid"></div><div class="form-actions"><button type="button" class="btn" id="cancelEditor">Cancel</button><button type="submit" class="btn primary">Save record</button></div>
+  </form>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const ssSupabase=window.supabase.createClient("https://vukqgbafhdsbtwozqpti.supabase.co","sb_publishable_lpCqw9VbhinOjVvr8j9otA_nCrN0qqC");
+const ssBucket="studysprint-media";
+let ssReady=false, ssRemote=false, ssTimer, ssSaveQueue=Promise.resolve();
+let ssRevision=0, ssPersistedRevision=0, ssSaving=false, ssChannelReady=false;
+const ssArrayKeys=["lectures","mocks","topics","activity","calls","meetups","diary","messages","habits","priyanshuHabits","voiceMeta","mediaMeta","libraryAttendance","rewardEvents","manifestationLogs","expenses","socialPosts"];
+function ssNormalizeState(value){
+ const out=value&&typeof value==="object"&&!Array.isArray(value)?value:{};
+ ssArrayKeys.forEach(k=>{if(!Array.isArray(out[k]))out[k]=[]});
+ return out;
+}
+function ssRecordKey(x,index){
+ if(x&&x.id!=null)return `${x.id}`;
+ if(x&&x.key)return `key:${x.key}`;
+ if(x&&x.date&&x.person)return `${x.person}:${x.date}`;
+ if(x&&x.date&&x.branch&&x.topic)return `${x.date}:${x.branch}:${x.topic}`;
+ if(x&&x.subject&&x.num!=null)return `${x.subject}:${x.num}`;
+ if(x&&x.time&&x.text)return `${x.time}:${x.text}`;
+ return `fallback:${index}:${JSON.stringify(x)}`;
+}
+function ssMergeStates(cloud,local){
+ const merged={...(cloud||{}),...(local||{})};
+ ssArrayKeys.forEach(k=>{
+  const c=Array.isArray(cloud?.[k])?cloud[k]:[];
+  const l=Array.isArray(local?.[k])?local[k]:[];
+  const map=new Map();
+  c.forEach((x,i)=>map.set(ssRecordKey(x,i),x));
+  l.forEach((x,i)=>{const key=ssRecordKey(x,i);if(map.has(key)){const prior=map.get(key),combined={...prior,...x};if(k==="libraryAttendance"){const checkouts=[...(prior.checkOuts||[]),prior.checkOut,x.checkOut,...(x.checkOuts||[])].filter(Boolean);combined.checkOuts=[...new Set(checkouts)].sort((a,b)=>new Date(a)-new Date(b));if(combined.checkOuts.length)combined.checkOut=combined.checkOuts[combined.checkOuts.length-1];combined.checkIn=prior.checkIn&&x.checkIn?(new Date(prior.checkIn)>new Date(x.checkIn)?prior.checkIn:x.checkIn):(prior.checkIn||x.checkIn||null)}if(k==="manifestationLogs"&&(prior.photoDeleted||x.photoDeleted)){combined.photoDeleted=true;combined.path=null;combined.url=null}if(k==="socialPosts"){combined.likes=[...new Set([...(prior.likes||[]),...(x.likes||[])])];const cm=new Map();[...(prior.comments||[]),...(x.comments||[])].forEach((comment,ci)=>cm.set(comment.id||`${comment.author||""}:${comment.created||ci}:${comment.text||""}`,comment));combined.comments=Array.from(cm.values()).sort((a,b)=>(a.created||"").localeCompare(b.created||""))}map.set(key,combined)}else map.set(key,x)});
+  merged[k]=Array.from(map.values());
+ });
+ // Preserve the higher migration version/true flags from either copy.
+ Object.keys({...cloud,...local}).filter(k=>/^rewardMigrationV\d+$/.test(k)).forEach(k=>merged[k]=Boolean(cloud?.[k]||local?.[k]));
+ return merged;
+}
+async function ssCompressImage(file){
+ // Compress large photos in the browser before sending them to Supabase.
+ // Leave SVG and animated GIF files untouched to avoid changing their behaviour.
+ if(!file||!file.type||!file.type.startsWith('image/')||/image\/(svg\+xml|gif)/i.test(file.type)||file.size<250*1024)return file;
+ let objectUrl;
+ try{
+  let bitmap;
+  if('createImageBitmap' in window){bitmap=await createImageBitmap(file)}
+  else{
+   objectUrl=URL.createObjectURL(file);
+   bitmap=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Could not read this image'));img.src=objectUrl});
+  }
+  const maxSide=1600,scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));
+  const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+  const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas is unavailable');ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+  if(typeof bitmap.close==='function')bitmap.close();
+  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Image compression failed')),'image/webp',0.78));
+  // Keep the original if conversion would make the file larger.
+  if(blob.size>=file.size)return file;
+  // Some browsers may fall back to PNG if WebP encoding is unavailable.
+  const outputType=blob.type||'image/png';
+  const extension=outputType==='image/webp'?'.webp':outputType==='image/jpeg'?'.jpg':outputType==='image/png'?'.png':'.img';
+  const base=String(file.name||'photo').replace(/\.[^.]+$/,'')||'photo';
+  return new File([blob],base+extension,{type:outputType,lastModified:Date.now()});
+ }catch(err){console.warn('Photo compression skipped; uploading original file.',err);return file}
+ finally{if(objectUrl)URL.revokeObjectURL(objectUrl)}
+}
+async function ssUpload(file,folder){
+ const uploadFile=await ssCompressImage(file);
+ // Apply the storage upload limit to the actual file being uploaded, after compression.
+ if(uploadFile.size>25*1024*1024)throw Error("File must be under 25 MB after compression.");
+ const path=folder+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,9)+"-"+String(uploadFile.name||"upload").replace(/[^a-zA-Z0-9._-]/g,"_");
+ const r=await ssSupabase.storage.from(ssBucket).upload(path,uploadFile,{contentType:uploadFile.type||"application/octet-stream"});
+ if(r.error)throw r.error;
+ return {path,url:ssSupabase.storage.from(ssBucket).getPublicUrl(path).data.publicUrl,originalSize:file.size,uploadedSize:uploadFile.size,compressed:uploadFile!==file};
+}
+async function ssDelete(path){if(path){const r=await ssSupabase.storage.from(ssBucket).remove([path]);if(r.error)throw r.error}}
+async function ssPersistNow(){
+ if(!ssReady||ssRemote)return false;
+ clearTimeout(ssTimer);
+ const badge=document.getElementById("cloudStatus");
+ const job=async()=>{
+  ssSaving=true;
+  try{
+   let attempts=0;
+   do{
+    const version=ssRevision;
+    const snapshot=JSON.parse(JSON.stringify(state));
+    if(badge)badge.textContent="Saving to cloud…";
+    const r=await ssSupabase.from("shared_content").upsert({id:1,content:snapshot},{onConflict:"id"});
+    if(r.error)throw r.error;
+    ssPersistedRevision=version;
+    attempts++;
+    if(version===ssRevision){if(badge)badge.textContent="Cloud synced";break}
+    if(badge)badge.textContent="Saving latest changes…";
+   }while(attempts<10);
+   if(ssPersistedRevision!==ssRevision){if(badge)badge.textContent="Changes still pending — retrying";ssSave()}
+   return ssPersistedRevision===ssRevision;
+  }catch(err){
+   console.error("[StudySprint] Cloud save failed",err);
+   if(badge)badge.textContent="Cloud sync error — export backup";
+   return false;
+  }finally{ssSaving=false}
+ };
+ ssSaveQueue=ssSaveQueue.then(job,job);
+ return ssSaveQueue;
+}
+function ssSave(){
+ if(!ssReady||ssRemote)return;
+ ssRevision++;
+ try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.error("[StudySprint] Local backup failed",e)}
+ clearTimeout(ssTimer);
+ const badge=document.getElementById("cloudStatus");
+ if(badge)badge.textContent="Changes pending…";
+ ssTimer=setTimeout(()=>{ssPersistNow()},300);
+}
+async function ssRenderAll(){localStorage.setItem(KEY,JSON.stringify(state));renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderManifestation==='function')renderManifestation();if(typeof renderPersonal==="function")renderPersonal();if(typeof renderVoiceList==="function")renderVoiceList();if(typeof renderMediaGallery==="function")renderMediaGallery()}
+function ssAcceptRemote(incoming){
+ if(!incoming||typeof incoming!=="object")return;
+ // Never replace local edits while a debounce or cloud write is pending.
+ if(ssRevision!==ssPersistedRevision||ssSaving){
+  console.warn("[StudySprint] Incoming cloud update deferred; local edits are pending.");
+  ssSave();return;
+ }
+ const before=JSON.stringify(state);
+ ssRemote=true;
+ // Merge remote and local records instead of replacing the entire local state.
+ state=ssNormalizeState(ssMergeStates(incoming,state));
+ ensureLegacyRewards();
+ const mergedDiffersFromCloud=JSON.stringify(state)!==JSON.stringify(ssNormalizeState(JSON.parse(JSON.stringify(incoming))));
+ ssRenderAll().catch(e=>console.error("[StudySprint] Render remote state failed",e)).finally(()=>{
+  ssRemote=false;
+  if(document.getElementById("cloudStatus"))document.getElementById("cloudStatus").textContent="Cloud synced";
+  if(mergedDiffersFromCloud||JSON.stringify(state)!==before)ssSave();
+ });
+}
+async function ssStart(){
+ const badge=document.getElementById("cloudStatus");
+ try{
+  const r=await ssSupabase.from("shared_content").select("id,content").eq("id",1).maybeSingle();
+  if(r.error)throw r.error;
+  const local=(()=>{try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch{return null}})();
+  if(r.data?.content){
+   const cloud=ssNormalizeState(r.data.content);
+   const merged=ssMergeStates(cloud,local);
+   ssRemote=true;state=ssNormalizeState(merged);ensureLegacyRewards();await ssRenderAll();ssRemote=false;
+   ssReady=true;ssRevision++;await ssPersistNow();
+  }else{
+   state=ssNormalizeState(state);ensureLegacyRewards();
+   const w=await ssSupabase.from("shared_content").upsert({id:1,content:state},{onConflict:"id"});
+   if(w.error)throw w.error;
+   ssReady=true;ssRevision=0;ssPersistedRevision=0;
+  }
+  if(badge)badge.textContent="Cloud connected";
+  if(!ssChannelReady){
+   ssChannelReady=true;
+   ssSupabase.channel("ss-shared").on("postgres_changes",{event:"*",schema:"public",table:"shared_content",filter:"id=eq.1"},p=>{
+    if(!p.new?.content)return;
+    const incoming=p.new.content;
+    // Ignore the realtime echo of our own just-persisted snapshot.
+    if(ssSaving||ssRevision!==ssPersistedRevision){console.warn("[StudySprint] Ignored cloud echo while local changes are pending.");return}
+    const current=JSON.stringify(state),remote=JSON.stringify(incoming);
+    if(current===remote)return;
+    ssAcceptRemote(incoming);
+   }).subscribe(status=>{if(status==="SUBSCRIBED"&&badge&&ssRevision===ssPersistedRevision)badge.textContent="Cloud synced"});
+  }
+ }catch(e){
+  ssRemote=false;console.error("[StudySprint] Supabase setup/sync failed",e);
+  if(badge)badge.textContent="Cloud error — local data retained";
+ }
+}
+</script>
+
+<script>
+const KEY='studysprint_exam_tracker_v1';
+const subjects=['Reasoning','Maths','English'];
+const branches=['Physical Geography','Climatology','Oceanography','Human Geography','Indian Geography','World Geography','Economic Geography','Environmental Geography','Biogeography'];
+const platforms=['Testbook','Oliveboard'];
+let state=loadState(), currentPage='dashboard', editorKind='', editId=null;
+['calls','meetups','diary','messages','habits','priyanshuHabits','voiceMeta','mediaMeta','libraryAttendance','rewardEvents','expenses','socialPosts'].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[];});
+let voiceRecorder=null, voiceChunks=[], voiceStream=null;
+function uid(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36)}
+function freshState(){let lectures=[];subjects.forEach(subject=>{for(let n=1;n<=50;n++)lectures.push({id:uid(),subject,num:n,topic:'',pdf:'',done:false,r1:'',r2:'',r3:''})});return {lectures,mocks:[],topics:[],activity:[]}}
+function loadState(){try{let s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.lectures)&&Array.isArray(s.mocks)&&Array.isArray(s.topics))return s}catch(e){}return freshState()}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));if(window.ssSave)ssSave();renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderManifestation==='function')renderManifestation();if(typeof renderPersonal==='function')renderPersonal();if(typeof renderMediaGallery==='function')renderMediaGallery();if(typeof renderExpenses==='function')renderExpenses();if(typeof renderSocialFeed==='function')renderSocialFeed();}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function notify(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+const REWARD_TARGETS={Sona:{daily:40,weekly:250,monthly:1000},Priyanshu:{daily:40,weekly:250,monthly:1000}};
+function rewardOwnerFromText(text){
+ const t=String(text||'');
+ if(/\bSona\b/i.test(t)) return 'Sona';
+ if(/\bPriyanshu\b/i.test(t)) return 'Priyanshu';
+ if(/^Completed .+ lecture /i.test(t)||/^Completed revision /i.test(t)||/^Logged mock test:/i.test(t)||/^Added Geography topic:/i.test(t)) return /^Added Geography topic:/i.test(t)?'Sona':'Priyanshu';
+ return 'Priyanshu';
+}
+function pointsForActivity(text){
+ const t=String(text||'');
+ if(/^Completed .+ lecture /i.test(t)) return 10;
+ if(/^Completed revision /i.test(t)) return 5;
+ if(/^Logged mock test:/i.test(t)) return 20;
+ if(/^Added Geography topic:/i.test(t)) return 10;
+ if(/checked in at the library/i.test(t)) return 5;
+ if(/checked out of the library/i.test(t)) return 10;
+ if(/^Saved daily wellness log /i.test(t)){const m=t.match(/\((\d+) habits\)/i);return m?Number(m[1])*2:0}
+ if(/^Completed manifestation activity/i.test(t)) return 5;
+ return 0;
+}
+function awardPoints(owner,text,points,time=new Date().toISOString(),sourceKey=''){
+ if(!['Sona','Priyanshu'].includes(owner)||!Number(points))return;
+ state.rewardEvents=state.rewardEvents||[];
+ const key=sourceKey||`event:${owner}:${text}:${time}`;
+ if(state.rewardEvents.some(x=>x.key===key))return;
+ state.rewardEvents.unshift({id:uid(),key,owner,text,points:Number(points),time:time||null,legacy:!time});
+}
+function addActivity(text, ownerOverride=null, sourceKey=''){
+ const time=new Date().toISOString();
+ state.activity.unshift({text,time});state.activity=state.activity.slice(0,8);
+ const points=pointsForActivity(text);
+ const owner=ownerOverride||rewardOwnerFromText(text);
+ if(points>0)awardPoints(owner,text,points,time,sourceKey||`activity:${uid()}`);
+}
+function ensureLegacyRewards(){
+ // V7 is deliberately idempotent: preserve live awards, rebuild legacy awards from source records.
+ if(!Array.isArray(state.rewardEvents))state.rewardEvents=[];
+ if(state.rewardMigrationV7)return;
+ state.rewardEvents=state.rewardEvents.filter(e=>!e.legacy);
+ const checked=v=>v===true||v===1||String(v).toLowerCase()==='true'||String(v).toLowerCase()==='yes'||String(v)==='1';
+ const stamp=v=>{if(!v)return null;const d=new Date(v);return Number.isNaN(d.getTime())?null:d.toISOString()};
+ const addLegacy=(owner,source,id,text,points,date)=>{
+   if(!['Sona','Priyanshu'].includes(owner)||!Number(points))return;
+   const key=`legacy:v7:${source}:${String(id)}`;
+   if(state.rewardEvents.some(e=>e.key===key))return;
+   state.rewardEvents.push({id:uid(),key,owner,text,points:Number(points),time:stamp(date),legacy:true});
+ };
+ (state.lectures||[]).forEach((x,i)=>{
+   const id=x.id??`${x.subject||'subject'}:${x.num??i}`;
+   if(checked(x.done))addLegacy('Priyanshu','lecture',id,`Existing completed lecture: ${x.subject||''} ${x.num??''}`.trim(),10,x.completedAt||x.doneAt||x.updatedAt||null);
+   ['r1','r2','r3'].forEach(k=>{if(checked(x[k])||(typeof x[k]==='string'&&/^\d{4}-\d{2}-\d{2}/.test(x[k])))addLegacy('Priyanshu','revision',`${id}:${k}`,`Existing revision ${k.toUpperCase()}: ${x.subject||''} ${x.num??''}`.trim(),5,typeof x[k]==='string'&&/^\d{4}-\d{2}-\d{2}/.test(x[k])?x[k]:null)});
+ });
+ (state.mocks||[]).forEach((x,i)=>addLegacy('Priyanshu','mock',x.id??`${x.name||'mock'}:${x.date||x.createdAt||i}`,`Existing mock test: ${x.name||'Mock test'}`,20,x.createdAt||x.date||null));
+ (state.topics||[]).forEach((x,i)=>addLegacy('Sona','geography',x.id??`${x.branch||''}:${x.topic||i}:${x.date||''}`,`Existing Geography topic: ${x.topic||'Geography topic'}`,10,x.createdAt||x.date||x.updatedAt||null));
+ const habitKeys=['aloe','yoga','meditation','sunwater','temple','balanced','water','revision','walk'];
+ (state.habits||[]).forEach((x,i)=>{const n=habitKeys.filter(k=>checked(x[k])).length;if(n)addLegacy('Sona','wellness',x.id??`${x.date||'undated'}:${i}`,`Existing wellness: ${n}/9 habits`,n*2,x.date||x.createdAt||x.updatedAt||null)});
+ (state.priyanshuHabits||[]).forEach((x,i)=>{const n=habitKeys.filter(k=>checked(x[k])).length;if(n)addLegacy('Priyanshu','wellness',x.id??`${x.date||'undated'}:${i}`,`Existing wellness: ${n}/9 habits`,n*2,x.date||x.createdAt||x.updatedAt||null)});
+ (state.libraryAttendance||[]).forEach((x,i)=>{const raw=String(x.person||'').trim().toLowerCase();const owner=raw==='sona'?'Sona':raw==='priyanshu'?'Priyanshu':null;if(!owner)return;const id=x.id??`${owner}:${x.date||''}:${x.checkIn||''}:${x.checkOut||''}:${i}`;if(x.checkIn)addLegacy(owner,'library-in',id,`Existing library check-in`,5,x.checkIn||x.date||null);if(x.checkOut)addLegacy(owner,'library-out',id,`Existing library check-out`,10,x.checkOut||x.date||null)});
+ (state.manifestationLogs||[]).forEach((x,i)=>{if(checked(x.completed)){const owner=String(x.person||'').toLowerCase()==='sona'?'Sona':'Priyanshu';addLegacy(owner,'manifestation',x.id??`${owner}:${x.date||i}`,`Existing manifestation activity`,5,x.completedAt||x.date||null)}});
+ // Older data may have study actions only in activity. Use these only if the matching source collection is absent,
+ // preventing a source record and its activity log from earning twice.
+ (state.activity||[]).forEach((x,i)=>{
+   const text=String(x.text||''), points=pointsForActivity(text);if(!points)return;
+   let owner=rewardOwnerFromText(text),source='activity';
+   if(/^Completed .+ lecture /i.test(text)&&!(state.lectures||[]).some(v=>checked(v.done)))source='activity-lecture';
+   else if(/^Completed revision /i.test(text)&&!(state.lectures||[]).some(v=>['r1','r2','r3'].some(k=>checked(v[k]))))source='activity-revision';
+   else if(/^Logged mock test:/i.test(text)&&!(state.mocks||[]).length)source='activity-mock';
+   else if(/^Added Geography topic:/i.test(text)&&!(state.topics||[]).length)source='activity-geography';
+   else if(/checked in at the library/i.test(text)&&!(state.libraryAttendance||[]).length)source='activity-library-in';
+   else if(/checked out of the library/i.test(text)&&!(state.libraryAttendance||[]).length)source='activity-library-out';
+   else if(/^Saved daily wellness log /i.test(text)&&!(state.habits||[]).length&&!(state.priyanshuHabits||[]).length)source='activity-wellness';
+   else if(/^Completed manifestation activity/i.test(text)&&!(state.manifestationLogs||[]).length)source='activity-manifestation';
+   else return;
+   addLegacy(owner,source,`${i}:${x.time||text}`,text,points,x.time||null);
+ });
+ state.rewardMigrationV7=true;
+}
+function revCount(x){return [x.r1,x.r2,x.r3].filter(Boolean).length}
+function pct(a,b){return Number(b)>0&&a!==''?Number(a)/Number(b)*100:null}
+function avg(arr){let nums=arr.filter(v=>Number.isFinite(v));return nums.length?nums.reduce((a,b)=>a+b,0)/nums.length:null}
+function fmt(v){return v===null||!Number.isFinite(v)?'—':v.toFixed(1)+'%'}
+function dateLabel(d){try{return new Date(d).toLocaleDateString(undefined,{day:'numeric',month:'short'})}catch(e){return ''}}
+function dateTimeLabel(d){try{return new Date(d).toLocaleString(undefined,{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return ''}}
+function renderRewards(){
+ const events=Array.isArray(state.rewardEvents)?state.rewardEvents:[];
+ const today=localDateISO();
+ const now=new Date();
+ const weekStart=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+ const dow=(weekStart.getDay()+6)%7;weekStart.setDate(weekStart.getDate()-dow);weekStart.setHours(0,0,0,0);
+ const monthStart=new Date(now.getFullYear(),now.getMonth(),1);monthStart.setHours(0,0,0,0);
+ const eventDate=e=>{if(!e.time)return null;const d=new Date(e.time);return Number.isNaN(d.getTime())?null:d};
+ const sum=(person,pred=()=>true)=>events.filter(e=>e.owner===person&&pred(e)).reduce((n,e)=>n+(Number(e.points)||0),0);
+ for(const person of ['Sona','Priyanshu']){
+   const key=person==='Sona'?'sona':'priyanshu';
+   const daily=sum(person,e=>{const d=eventDate(e);return d&&localDateISO(d)===today});
+   const weekly=sum(person,e=>{const d=eventDate(e);return d&&d>=weekStart&&d<=now});
+   const monthly=sum(person,e=>{const d=eventDate(e);return d&&d>=monthStart&&d<=now});
+   const total=sum(person);
+   const dated=events.filter(e=>e.owner===person&&eventDate(e));
+   const first=dated.length?Math.min(...dated.map(e=>eventDate(e).getTime())):now.getTime();
+   const days=Math.max(1,Math.floor((now.getTime()-first)/86400000)+1);
+   const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val};
+   set(key+'PointsDaily',`${daily} pts`);set(key+'PointsWeekly',`${weekly} pts`);set(key+'PointsMonthly',`${monthly} pts`);set(key+'PointsTotal',`${total} pts`);set(key+'PointsAverage',`${(total/days).toFixed(1)} pts`);
+   const targets=REWARD_TARGETS[person]||{daily:40,weekly:250,monthly:1000};
+   set(key+'WeeklyTargetLabel',`Target: ${targets.weekly} pts`);set(key+'MonthlyTargetLabel',`Target: ${targets.monthly} pts`);set(key+'TargetLabel',`Daily target: ${targets.daily} pts`);
+   const bar=document.getElementById(key+'DailyTargetBar');if(bar)bar.style.width=`${Math.min(100,daily/targets.daily*100)}%`;
+ }
+ const history=document.getElementById('rewardHistory');
+ if(history){const recent=events.slice().sort((a,b)=>(eventDate(b)?.getTime()||0)-(eventDate(a)?.getTime()||0)).slice(0,12);history.innerHTML=recent.length?recent.map(e=>`<div class="record" style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)"><div><strong>${esc(e.owner||'')}</strong><div class="record-meta">${esc(e.text||'Reward')} · ${e.time?esc(dateLabel(e.time)):'Date not saved'}</div></div><span class="tag green">+${Number(e.points)||0} pts</span></div>`).join(''):'<div class="empty">No reward points yet. Existing eligible study, library and wellness records will appear here after migration.</div>'}
+}
+function renderDashboard(){
+ let completed=state.lectures.filter(x=>x.done).length,revisions=state.lectures.reduce((a,x)=>a+revCount(x),0);
+ document.getElementById('statCompleted').innerHTML=`${completed} <span style="font-size:15px;color:#8b95a7">/ ${state.lectures.length}</span>`;
+ document.getElementById('statRevisions').textContent=revisions;document.getElementById('statMocks').textContent=state.mocks.length;document.getElementById('statTopics').textContent=state.topics.length;
+ document.getElementById('subjectProgress').innerHTML=subjects.map((s,i)=>{let arr=state.lectures.filter(x=>x.subject===s),n=arr.filter(x=>x.done).length,p=arr.length?n/arr.length*100:0;return `<div class="progress-row"><div class="progress-top"><strong>${s}</strong><span>${n} of ${arr.length} · ${Math.round(p)}%</span></div><div class="track"><div class="fill ${i===1?'green':i===2?'orange':''}" style="width:${p}%"></div></div></div>`}).join('');
+ document.getElementById('platformStats').innerHTML=platforms.map((p,i)=>{let arr=state.mocks.filter(x=>x.platform===p).map(x=>pct(x.score,x.total)).filter(x=>x!==null),a=avg(arr);return `<div class="platform"><span class="tag ${i?'orange':'blue'}">${p}</span><div class="num">${fmt(a)}</div><small>${arr.length} test${arr.length===1?'':'s'} recorded</small></div>`}).join('');
+ const branchEmoji={'Physical Geography':'⛰️','Climatology':'🌦️','Oceanography':'🌊','Human Geography':'🏙️','Indian Geography':'🇮🇳','World Geography':'🌍','Economic Geography':'📈','Environmental Geography':'🌱','Biogeography':'🌿'};
+ let known=branches.map(b=>({b,n:state.topics.filter(t=>t.branch===b).length})).filter(x=>x.n>0);
+ document.getElementById('branchProgress').innerHTML=known.length?known.slice(0,6).map(x=>`<div class="progress-row"><div class="progress-top"><strong>${branchEmoji[x.b]||'◎'} ${esc(x.b)}</strong><span>${x.n} topic${x.n===1?'':'s'}</span></div><div class="track"><div class="fill green" style="width:${Math.min(100,x.n*10)}%"></div></div></div>`).join(''):'<div class="empty"><strong>No Geography topics yet</strong>Add Sona’s first topic to see branch progress here.</div>';
+ document.getElementById('activity').innerHTML=state.activity.length?state.activity.slice(0,5).map(a=>`<div style="padding:11px 0;border-bottom:1px solid var(--line);display:flex;gap:10px"><span style="color:var(--blue)">●</span><div><div style="font-size:13px">${esc(a.text)}</div><small style="color:var(--muted)">${dateLabel(a.time)}</small></div></div>`).join(''):'<div class="empty"><strong>Your activity will appear here</strong>Tick a lecture, log a mock or add a Geography topic.</div>';
+ renderLibraryAttendance();
+ renderRewards();
+}
+function localDateISO(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function clockLabel(iso){if(!iso)return '—';try{return new Date(iso).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})}catch(e){return '—'}}
+function attendanceFor(person,date=localDateISO()){return (state.libraryAttendance||[]).find(x=>x.person===person&&x.date===date)}
+function renderLibraryAttendance(){
+ const today=localDateISO();
+ for(const person of ['Priyanshu','Sona']){
+  const item=attendanceFor(person,today),prefix=person==='Priyanshu'?'libraryPriyanshu':'librarySona';
+  const status=document.getElementById(prefix+'Status'),times=document.getElementById(prefix+'Times');
+  if(status)status.textContent=!item?.checkIn?'Not checked in':item?.checkOut?'Checked out':'Checked in';
+  if(times)times.textContent=`Check-in ${clockLabel(item?.checkIn)} · Check-out ${clockLabel(item?.checkOut)}`;
+  document.querySelectorAll(`[data-library-action][data-person="${person}"]`).forEach(btn=>{const action=btn.dataset.libraryAction;btn.disabled=action==='checkin'?!!item?.checkIn:!item?.checkIn;});
+ }
+ const dashboard=document.getElementById('dashboardLibraryAttendance');
+ if(dashboard){dashboard.innerHTML=['Priyanshu','Sona'].map(person=>{const item=attendanceFor(person,today);const status=!item?.checkIn?'Not checked in':item?.checkOut?'Checked out':'Checked in';return `<div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)"><div><strong>${esc(person)}</strong><div class="record-meta">In: ${esc(clockLabel(item?.checkIn))} · Out: ${esc(clockLabel(item?.checkOut))}</div></div><span class="tag ${item?.checkOut?'green':item?.checkIn?'blue':''}">${status}</span></div>`}).join('')}
+ const dateFilter=document.getElementById('libraryDateFilter')?.value||'',personFilter=document.getElementById('libraryPersonFilter')?.value||'';
+ const rows=(state.libraryAttendance||[]).filter(x=>(!dateFilter||x.date===dateFilter)&&(!personFilter||x.person===personFilter)).slice().sort((a,b)=>b.date.localeCompare(a.date)||a.person.localeCompare(b.person));
+ const tbody=document.getElementById('libraryAttendanceRows');
+ if(tbody)tbody.innerHTML=rows.map(x=>{const outs=[...(x.checkOuts||[]),x.checkOut].filter(Boolean);const latestOut=outs.sort((a,b)=>new Date(a)-new Date(b)).at(-1)||null;let mins=x.checkIn&&latestOut?Math.max(0,Math.round((new Date(latestOut)-new Date(x.checkIn))/60000)):null;let duration=mins===null?'—':`${Math.floor(mins/60)}h ${mins%60}m`;const outLabel=outs.length>1?outs.map(clockLabel).join(', '):clockLabel(latestOut);return `<tr><td>${esc(x.date)}</td><td><strong>${esc(x.person)}</strong></td><td>${esc(clockLabel(x.checkIn))}</td><td>${esc(outLabel)}</td><td>${duration}</td></tr>`}).join('')||'<tr><td colspan="5"><div class="empty">No library attendance records for this filter.</div></td></tr>';
+}
+document.addEventListener('click',e=>{const btn=e.target.closest('[data-library-action]');if(!btn)return;const person=btn.dataset.person,action=btn.dataset.libraryAction,date=localDateISO();state.libraryAttendance=state.libraryAttendance||[];let item=attendanceFor(person,date);if(!item){item={id:uid(),person,date,checkIn:null,checkOut:null,checkOuts:[]};state.libraryAttendance.unshift(item)}if(action==='checkin'){if(item.checkIn){notify(`${person} is already checked in today`);return}item.checkIn=new Date().toISOString();addActivity(`${person} checked in at the library`,person,`library:${person}:${date}:in`)}else{if(!item.checkIn){notify(`Check in ${person} first`);return}const stamp=new Date().toISOString();item.checkOuts=[...new Set([...(item.checkOuts||[]),item.checkOut,stamp].filter(Boolean))].sort((a,b)=>new Date(a)-new Date(b));item.checkOut=stamp;addActivity(`${person} checked out of the library`,person,`library:${person}:${date}:out`)}save();renderLibraryAttendance();notify(`${person}: ${action==='checkin'?'check-in':'check-out'} saved`)});
+document.getElementById('libraryDateFilter')?.addEventListener('change',renderLibraryAttendance);
+document.getElementById('libraryPersonFilter')?.addEventListener('change',renderLibraryAttendance);
+
+function renderLectures(){
+ const q=(document.getElementById('lectureSearch')?.value||'').toLowerCase(),sub=document.getElementById('subjectFilter')?.value||'',done=document.getElementById('completionFilter')?.value||'',rev=document.getElementById('revisionFilter')?.value||'';
+ const rows=state.lectures.filter(x=>(!sub||x.subject===sub)&&(!done||(done==='done'?x.done:!x.done))&&(!rev||(rev==='revised'?revCount(x)>0:revCount(x)===0))&&(`${x.subject} ${x.num} ${x.topic}`.toLowerCase().includes(q)));
+ document.getElementById('lectureRows').innerHTML=rows.map(x=>`<tr><td><span class="tag ${x.subject==='Maths'?'green':x.subject==='English'?'orange':'blue'}">${esc(x.subject)}</span></td><td>${x.num}</td><td><input type="text" aria-label="Topic name" data-edit="lecture" data-id="${x.id}" data-key="topic" value="${esc(x.topic)}" placeholder="Add topic…"></td><td>${x.pdf?`<a class="link" href="${esc(x.pdf)}" target="_blank" rel="noopener">Open PDF ↗</a>`:'<span style="color:#9aa3b2">No link</span>'}<button class="btn small" data-pdf="${x.id}" style="margin-left:6px">Add/edit</button></td><td style="text-align:center"><input class="check" type="checkbox" data-edit="lecture" data-id="${x.id}" data-key="done" ${x.done?'checked':''} aria-label="Lecture completed"></td>${['r1','r2','r3'].map(k=>`<td><input type="date" data-edit="lecture" data-id="${x.id}" data-key="${k}" value="${esc(x[k])}" aria-label="${k}"></td>`).join('')}<td><span class="tag ${revCount(x)>0?'green':''}">${revCount(x)}</span></td><td><button class="btn small danger" data-delete="lecture" data-id="${x.id}">Delete</button></td></tr>`).join('')||'<tr><td colspan="10"><div class="empty">No lecture slots match these filters.</div></td></tr>';
+ document.getElementById('lectureCount').textContent=`Showing ${rows.length} of ${state.lectures.length} lecture slots`;
+}
+function renderMocks(){
+ const q=(document.getElementById('mockSearch')?.value||'').toLowerCase(),pf=document.getElementById('mockPlatformFilter')?.value||'';
+ const filtered=state.mocks.filter(x=>(!pf||x.platform===pf)&&(`${x.name} ${x.weak}`.toLowerCase().includes(q)));
+ let scores=state.mocks.map(x=>pct(x.score,x.total)).filter(x=>x!==null);
+ document.getElementById('mockTotal').textContent=state.mocks.length;document.getElementById('mockAverage').textContent=fmt(avg(scores));document.getElementById('mockBest').textContent=fmt(scores.length?Math.max(...scores):null);
+ document.getElementById('mockRows').innerHTML=filtered.map(x=>`<tr><td><span class="tag ${x.platform==='Testbook'?'blue':'orange'}">${esc(x.platform)}</span></td><td>${esc(x.name)}</td><td>${esc(x.score)}</td><td>${esc(x.total)}</td><td><strong>${fmt(pct(x.score,x.total))}</strong></td><td>${x.percentile===''?'—':esc(x.percentile)}</td><td style="min-width:220px">${esc(x.weak||'—')}</td><td><button class="btn small" data-edit-record="mock" data-id="${x.id}">Edit</button> <button class="btn small danger" data-delete="mock" data-id="${x.id}">Delete</button></td></tr>`).join('')||'<tr><td colspan="8"><div class="empty">No mock tests yet. Add your first test result.</div></td></tr>';
+}
+function renderSona(){
+ const q=(document.getElementById('sonaSearch')?.value||'').toLowerCase(),br=document.getElementById('sonaBranchFilter')?.value||'',pf=document.getElementById('sonaPlatformFilter')?.value||'',st=document.getElementById('sonaStatusFilter')?.value||'';
+ const filtered=state.topics.filter(x=>(!br||x.branch===br)&&(!pf||x.platform===pf)&&(!st||x.status===st)&&(`${x.branch} ${x.topic}`.toLowerCase().includes(q)));
+ const em={'Physical Geography':'⛰️','Climatology':'🌦️','Oceanography':'🌊','Human Geography':'🏙️','Indian Geography':'🇮🇳','World Geography':'🌍','Economic Geography':'📈','Environmental Geography':'🌱','Biogeography':'🌿'};
+ document.getElementById('branchCards').innerHTML=branches.slice(0,4).map(b=>`<div class="branch-card"><div class="emoji">${em[b]}</div><strong>${b}</strong><small>${state.topics.filter(x=>x.branch===b).length} topics added</small></div>`).join('');
+ document.getElementById('sonaRows').innerHTML=filtered.map(x=>`<tr><td>${esc(x.branch)}</td><td>${esc(x.topic)}</td><td>${x.pdf?`<a class="link" href="${esc(x.pdf)}" target="_blank" rel="noopener">Open PDF ↗</a>`:'<span style="color:#9aa3b2">No link</span>'}</td><td><span class="tag ${x.platform==='Testbook'?'blue':x.platform==='Oliveboard'?'orange':''}">${esc(x.platform||'Not set')}</span></td><td>${x.correct===''?'—':esc(x.correct)}</td><td>${x.total===''?'—':esc(x.total)}</td><td><strong>${fmt(pct(x.correct,x.total))}</strong></td><td><span class="tag ${x.status==='Revised'?'green':x.status==='In Progress'?'orange':''}">${esc(x.status)}</span></td><td><button class="btn small" data-edit-record="topic" data-id="${x.id}">Edit</button> <button class="btn small danger" data-delete="topic" data-id="${x.id}">Delete</button></td></tr>`).join('')||'<tr><td colspan="9"><div class="empty">No topics match. Add a Geography topic to get started.</div></td></tr>';
+ document.getElementById('sonaCount').textContent=`Showing ${filtered.length} of ${state.topics.length} topics`;
+}
+function go(page){currentPage=page;document.querySelectorAll('[id^="page-"]').forEach(s=>s.classList.toggle('hidden',s.id!==`page-${page}`));document.querySelectorAll('.navbtn[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let names={dashboard:'Dashboard',lectures:'Priyanshu · Lectures',mocks:'Priyanshu · Mock tests',sona:'Sona · Geography',calls:'Call records',meetups:'Meetups & Google Meet',diary:'Diary & messages',library:'Library check-in/out',voice:'Daily voice notes',habits:'Daily wellness',expenses:'Daily expenses',social:'Thoughts & posts','ai-coach':'AI Study Coach'};document.getElementById('crumb').textContent=names[page];document.getElementById('topTitle').textContent=page==='dashboard'?'Your preparation at a glance':names[page];document.getElementById('sidebar').classList.remove('open');}
+function field(name,label,type='text',value='',opts=[],required=false,full=false,placeholder=''){let input='';if(type==='select')input=`<select name="${name}" ${required?'required':''}>${opts.map(o=>`<option value="${esc(o)}" ${o===value?'selected':''}>${esc(o||'Choose…')}</option>`).join('')}</select>`;else if(type==='textarea')input=`<textarea name="${name}" rows="3" placeholder="${esc(placeholder)}">${esc(value)}</textarea>`;else input=`<input name="${name}" type="${type}" value="${esc(value)}" placeholder="${esc(placeholder)}" ${required?'required':''} ${type==='number'?'min="0" step="any"':''}>`;return `<div class="form-field ${full?'full':''}"><label>${label}${required?' *':''}</label>${input}</div>`}
+function openEditor(kind,id=null){editorKind=kind;editId=id;let old=id?(kind==='mock'?state.mocks:state.topics).find(x=>x.id===id):{};old=old||{};let fields='',title='',eyebrow='';
+ if(kind==='mock'){title=id?'Edit mock test':'Add mock test';eyebrow='Priyanshu · Bank exam';fields=field('platform','Platform','select',old.platform||'Testbook',['Testbook','Oliveboard'],true)+field('name','Test name','text',old.name||'','',true)+field('score','Score','number',old.score??'',[],true)+field('total','Total marks','number',old.total??'',[],true)+field('percentile','Percentile (as reported)','number',old.percentile??'',[],false)+field('weak','Weak areas to revise','textarea',old.weak||'',[],false,true,'e.g. syllogism, time & work');}
+ else if(kind==='topic'){title=id?'Edit Geography topic':'Add Geography topic';eyebrow='Sona · Geography';fields=field('branch','Branch','select',old.branch||'Physical Geography',['Physical Geography',...branches.filter(x=>x!=='Physical Geography')],true)+field('topic','Topic name','text',old.topic||'',[],true)+field('pdf','Google Drive PDF link','url',old.pdf||'',[],false)+field('platform','Mock test platform','select',old.platform||'', ['',...platforms],false)+field('correct','Correct answers','number',old.correct??'',[],false)+field('total','Total questions','number',old.total??'',[],false)+field('status','Revision status','select',old.status||'Not Started',['Not Started','In Progress','Revised'],true);}
+ else {title='Add lecture topic';eyebrow='Priyanshu · Lecture tracker';fields=field('subject','Subject','select','Reasoning',subjects,true)+field('num','Lecture number (1–50)','number','1',[],true)+field('topic','Topic name','text','',[],false)+field('pdf','Google Drive PDF link','url','',[],false);}
+ document.getElementById('formTitle').textContent=title;document.getElementById('formEyebrow').textContent=eyebrow;document.getElementById('formFields').innerHTML=fields;document.getElementById('editor').showModal();}
+function closeEditor(){document.getElementById('editor').close()}
+document.getElementById('editorForm').addEventListener('submit',async e=>{e.preventDefault();let fd=new FormData(e.target),v=Object.fromEntries(fd.entries());
+ if(editorKind==='mock'){let obj={id:editId||uid(),platform:v.platform,name:v.name.trim(),score:v.score===''?'':Number(v.score),total:v.total===''?'':Number(v.total),percentile:v.percentile===''?'':Number(v.percentile),weak:v.weak.trim()};if(editId)state.mocks=state.mocks.map(x=>x.id===editId?obj:x);else state.mocks.unshift(obj);addActivity(`${editId?'Updated':'Logged'} mock test: ${obj.name}`);}
+ else if(editorKind==='topic'){let obj={id:editId||uid(),branch:v.branch,topic:v.topic.trim(),pdf:v.pdf.trim(),platform:v.platform,correct:v.correct===''?'':Number(v.correct),total:v.total===''?'':Number(v.total),status:v.status};if(editId)state.topics=state.topics.map(x=>x.id===editId?obj:x);else state.topics.unshift(obj);if(!editId)addActivity(`Added Geography topic: ${obj.topic}`,'Sona',`geography:${obj.id}`);}
+ else {let num=Math.max(1,Math.min(50,Number(v.num)||1)),found=state.lectures.find(x=>x.subject===v.subject&&x.num===num);if(found){found.topic=v.topic.trim();found.pdf=v.pdf.trim()}else state.lectures.push({id:uid(),subject:v.subject,num,topic:v.topic.trim(),pdf:v.pdf.trim(),done:false,r1:'',r2:'',r3:''});addActivity(`Updated ${v.subject} lecture ${num}`);}
+ closeEditor();save();const cloudOK=await ssPersistNow();notify(cloudOK?'Saved locally and synced to cloud': 'Saved on this device; cloud sync failed — export a backup');});
+document.getElementById('closeEditor').onclick=closeEditor;document.getElementById('cancelEditor').onclick=closeEditor;
+document.addEventListener('change',e=>{let t=e.target;if(t.dataset.edit==='lecture'){
+ let x=state.lectures.find(x=>x.id===t.dataset.id);if(!x)return;
+ const key=t.dataset.key,previous=x[key],next=t.type==='checkbox'?t.checked:t.value;
+ x[key]=next;
+ if(key==='done'&&next===true&&previous!==true)addActivity(`Completed ${x.subject} lecture ${x.num}`,'Priyanshu',`lecture:${x.id}:done`);
+ else if(['r1','r2','r3'].includes(key)&&next&& !previous)addActivity(`Completed revision ${key.toUpperCase()} for ${x.subject} lecture ${x.num}`,'Priyanshu',`lecture:${x.id}:${key}`);
+ else if(key!=='done'&&!['r1','r2','r3'].includes(key))addActivity(`Updated ${x.subject} lecture ${x.num}`);
+ save();notify('Change saved');
+}});
+document.addEventListener('click',e=>{let b=e.target.closest('button');if(!b)return;if(b.dataset.page)go(b.dataset.page);if(b.dataset.go)go(b.dataset.go);if(b.id==='addMock')openEditor('mock');if(b.id==='addTopic')openEditor('topic');if(b.id==='addLecture')openEditor('lecture');if(b.id==='quickAdd')openEditor(currentPage==='sona'?'topic':currentPage==='mocks'?'mock':'lecture');if(b.dataset.pdf){let x=state.lectures.find(x=>x.id===b.dataset.pdf);let val=prompt('Paste the Google Drive PDF URL:',x?.pdf||'');if(val!==null&&x){x.pdf=val.trim();addActivity(`Updated PDF link for ${x.subject} lecture ${x.num}`);save();notify('PDF link saved')}}if(b.dataset.delete){let kind=b.dataset.delete,id=b.dataset.id;if(confirm('Delete this record? This cannot be undone unless you have a backup.')){if(kind==='lecture')state.lectures=state.lectures.filter(x=>x.id!==id);if(kind==='mock')state.mocks=state.mocks.filter(x=>x.id!==id);if(kind==='topic')state.topics=state.topics.filter(x=>x.id!==id);save();notify('Record deleted')}}if(b.dataset.editRecord){openEditor(b.dataset.editRecord,b.dataset.id)}});
+['lectureSearch','subjectFilter','completionFilter','revisionFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderLectures));
+['mockSearch','mockPlatformFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderMocks));
+['sonaSearch','sonaBranchFilter','sonaPlatformFilter','sonaStatusFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderSona));
+function exportData(){let blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),state},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='studysprint-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);notify('Backup exported')}
+document.getElementById('exportBtn').onclick=exportData;document.getElementById('topExport').onclick=exportData;
+document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+document.getElementById('importFile').addEventListener('change',async e=>{let f=e.target.files[0];if(!f)return;try{let raw=JSON.parse(await f.text()),s=raw.state||raw;if(!Array.isArray(s.lectures)||!Array.isArray(s.mocks)||!Array.isArray(s.topics))throw Error('Invalid backup');if(confirm('Import this backup and replace the data currently in this browser?')){state=s;save();notify('Backup imported')}}catch(err){alert('Could not import this file. Please choose a StudySprint JSON backup.')}e.target.value=''});
+document.getElementById('printBtn').onclick=()=>window.print();document.getElementById('menuBtn').onclick=()=>document.getElementById('sidebar').classList.toggle('open');
+document.getElementById('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+
+// Personal-life tracker modules
+const todayISO=()=>new Date().toISOString().slice(0,10);
+function recordCard(title,meta,body,actions=''){return `<article class="record"><div class="record-head"><div><h4>${esc(title)}</h4><div class="record-meta">${esc(meta||'')}</div></div></div>${body?`<p>${esc(body)}</p>`:''}${actions?`<div class="record-actions">${actions}</div>`:''}</article>`}
+function deleteRecord(arrName,id){if(!confirm('Delete this record?'))return;state[arrName]=state[arrName].filter(x=>x.id!==id);save();notify('Record deleted')}
+function renderPersonal(){
+ const cs=state.calls||[],ms=state.meetups||[],ds=state.diary||[],msgs=state.messages||[],hs=state.habits||[];
+ const cq=(document.getElementById('callSearch')?.value||'').toLowerCase();
+ const cfiltered=cs.filter(x=>(`${x.person} ${x.notes} ${x.kind}`.toLowerCase()).includes(cq)).sort((a,b)=>b.when.localeCompare(a.when));
+ const totalMins=cs.reduce((n,x)=>n+(Number(x.duration)||0),0);
+ document.getElementById('callSummary').innerHTML=`<div class="mini"><strong>${cs.length}</strong><span>Calls logged</span></div><div class="mini"><strong>${totalMins}</strong><span>Minutes logged</span></div><div class="mini"><strong>${cs.filter(x=>x.follow==='Yes').length}</strong><span>Follow-ups</span></div><div class="mini"><strong>${new Set(cs.map(x=>x.person)).size}</strong><span>Contacts</span></div>`;
+ document.getElementById('callRecords').innerHTML=cfiltered.map(x=>recordCard('☎ '+x.person,`${x.when.replace('T',' · ')} · ${x.kind} · ${x.duration||0} min · Follow-up: ${x.follow}`,x.notes,`<button class="btn small danger" data-pdelete="calls" data-id="${x.id}">Delete</button>`)).join('')||'<div class="empty"><strong>No calls logged yet</strong>Add a call session to keep track of important conversations and follow-ups.</div>';
+ const future=ms.filter(x=>new Date(x.when)>=new Date(Date.now()-3600000)).sort((a,b)=>a.when.localeCompare(b.when));
+ document.getElementById('upcomingMeetups').innerHTML=future.slice(0,4).map(x=>recordCard('▣ '+x.title,`${x.when.replace('T',' · ')} · ${x.kind}`,`${x.people||''}${x.place?' · '+x.place:''}${x.notes?' — '+x.notes:''}`,`${x.url?`<a class="btn small primary" href="${esc(x.url)}" target="_blank" rel="noopener">Open Meet ↗</a>`:''}<button class="btn small danger" data-pdelete="meetups" data-id="${x.id}">Delete</button>`)).join('')||'<div class="empty">No upcoming plans yet.</div>';
+ document.getElementById('meetRecords').innerHTML=ms.slice().sort((a,b)=>b.when.localeCompare(a.when)).map(x=>recordCard(x.title,`${x.when.replace('T',' · ')} · ${x.kind}`,`${x.people||''}${x.place?' · '+x.place:''}${x.notes?' — '+x.notes:''}`,`${x.url?`<a class="btn small primary" href="${esc(x.url)}" target="_blank" rel="noopener">Open link ↗</a>`:''}<button class="btn small danger" data-pdelete="meetups" data-id="${x.id}">Delete</button>`)).join('')||'<div class="empty"><strong>No meetups scheduled</strong>Save a Google Meet link or in-person plan above.</div>';
+ const df=document.getElementById('diaryFilter')?.value||'';
+ document.getElementById('diaryRecords').innerHTML=ds.filter(x=>!df||x.author===df).slice().sort((a,b)=>b.date.localeCompare(a.date)).map(x=>recordCard(`${x.mood} · ${x.author}`,x.date,x.text,`<button class="btn small danger" data-pdelete="diary" data-id="${x.id}">Delete</button>`)).join('')||'<div class="empty">No diary entries yet. Start with one small thing you want to remember.</div>';
+ document.getElementById('messageRecords').innerHTML=msgs.slice().sort((a,b)=>b.created.localeCompare(a.created)).map(x=>recordCard(`♡ ${x.from} → ${x.to}`,`${x.kind} · Sent ${dateTimeLabel(x.created)}`,x.text,`<button class="btn small danger" data-pdelete="messages" data-id="${x.id}">Delete</button>`)).join('')||'<div class="empty">No messages yet. Leave a kind note for one another.</div>';
+ const dateFilter=document.getElementById('habitSearch')?.value||'';
+ const priyanshuHs=state.priyanshuHabits||[];
+ const habitKeys=['aloe','yoga','meditation','sunwater','temple','balanced','water','revision','walk'];
+ const renderHabitSection=(arr,person,containerId,summaryId)=>{
+   const filtered=arr.filter(x=>!dateFilter||x.date===dateFilter).slice().sort((a,b)=>b.date.localeCompare(a.date));
+   document.getElementById(summaryId).textContent=`${arr.length} days logged · ${arr.filter(x=>x.outside==='Yes').length} outside-food days`;
+   document.getElementById(containerId).innerHTML=filtered.map(x=>{let done=habitKeys.filter(k=>x[k]).length;return recordCard(`☀ ${x.date} · ${done}/9 habits`, `Wake ${x.wake||'—'} · Sleep ${x.sleep||'—'} · Outside food: ${x.outside||'No'} · Revision: ${x.revisionMins||0} min · Mood: ${x.mood||'—'}`,`${habitKeys.filter(k=>x[k]).join(', ')}${x.notes?'\n'+x.notes:''}`,`<button class="btn small" data-habitedit="${x.date}" data-habitperson="${person}">Load to edit</button> <button class="btn small danger" data-pdelete="${person==='Sona'?'habits':'priyanshuHabits'}" data-id="${x.id}">Delete</button>`)}).join('')||'<div class="empty">No daily routine logged for this date yet.</div>';
+ };
+ renderHabitSection(hs,'Sona','sonaHabitRecords','sonaHabitSummary');
+ renderHabitSection(priyanshuHs,'Priyanshu','priyanshuHabitRecords','priyanshuHabitSummary');
+ const dashboardWellness=document.getElementById('dashboardWellness');
+ if(dashboardWellness){dashboardWellness.innerHTML=['Sona','Priyanshu'].map(person=>{const arr=person==='Sona'?hs:priyanshuHs;const t=arr.find(x=>x.date===todayISO());const done=t?habitKeys.filter(k=>t[k]).length:0;return `<div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)"><strong>${person}</strong><span>${t?`${done}/9 habits · ${t.mood||'Mood not set'}`:'No log today'}</span></div>`}).join('')}
+ renderVoiceList();
+}
+function formObj(form){return Object.fromEntries(new FormData(form).entries())}
+document.getElementById('callForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.calls.unshift({id:uid(),person:v.person.trim(),when:v.when,duration:v.duration,kind:v.kind,follow:v.follow,notes:v.notes.trim()});addActivity(`Logged call with ${v.person}`,'Priyanshu');e.target.reset();save();notify('Call record saved')});
+document.getElementById('meetForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.meetups.push({id:uid(),title:v.title.trim(),when:v.when,kind:v.kind,people:v.people,place:v.place,url:v.url,notes:v.notes});state.meetups.sort((a,b)=>a.when.localeCompare(b.when));addActivity(`Scheduled ${v.title}`,'Priyanshu');e.target.reset();save();notify('Meetup saved')});
+document.getElementById('diaryForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.diary.unshift({id:uid(),date:v.date,author:v.author,mood:v.mood,text:v.text.trim()});addActivity(`Added diary entry (${v.author})`,v.author);e.target.reset();e.target.elements.date.value=todayISO();save();notify('Diary entry saved')});
+document.getElementById('messageForm').addEventListener('submit',e=>{e.preventDefault();let v=formObj(e.target);state.messages.unshift({id:uid(),from:v.from,to:v.to,kind:v.kind,text:v.text.trim(),created:new Date().toISOString()});addActivity(`${v.from} left a message for ${v.to}`,v.from);e.target.reset();save();notify('Message saved')});
+document.getElementById('habitForm').addEventListener('submit',e=>{e.preventDefault();const person=prompt('Whose habit record are you saving? Type Sona or Priyanshu.','Sona');if(person===null)return;const owner=person.trim().toLowerCase();if(!['sona','priyanshu'].includes(owner)){alert('Please type exactly Sona or Priyanshu. No record was saved.');return}const personName=owner==='sona'?'Sona':'Priyanshu';const arrName=owner==='sona'?'habits':'priyanshuHabits';if(!Array.isArray(state[arrName]))state[arrName]=[];let f=e.target,v=formObj(f),date=v.date;let item={id:uid(),person:personName,date,wake:v.wake,sleep:v.sleep,aloe:f.elements.aloe.checked,yoga:f.elements.yoga.checked,meditation:f.elements.meditation.checked,sunwater:f.elements.sunwater.checked,temple:f.elements.temple.checked,balanced:f.elements.balanced.checked,water:f.elements.water.checked,revision:f.elements.revision.checked,walk:f.elements.walk.checked,outside:v.outside,revisionMins:v.revisionMins,mood:v.mood,notes:v.notes,updatedAt:new Date().toISOString()};let old=state[arrName].findIndex(x=>x.date===date);if(old>=0){item.id=state[arrName][old].id;state[arrName][old]=item}else state[arrName].unshift(item);const completedHabitCount=['aloe','yoga','meditation','sunwater','temple','balanced','water','revision','walk'].filter(k=>f.elements[k].checked).length;if(old<0)addActivity(`Saved daily wellness log for ${personName} on ${date} (${completedHabitCount} habits)`,personName,`wellness:${personName}:${date}`);else state.activity.unshift({text:`Updated daily wellness log for ${personName} on ${date}`,time:new Date().toISOString()});save();notify(`${personName}'s routine saved`)});
+document.getElementById('callSearch').addEventListener('input',renderPersonal);
+document.getElementById('diaryFilter').addEventListener('change',renderPersonal);
+document.getElementById('habitSearch').addEventListener('change',renderPersonal);
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.pdelete){deleteRecord(b.dataset.pdelete,b.dataset.id)}if(b.dataset.habitedit){const owner=b.dataset.habitperson||'Sona';const arr=owner==='Priyanshu'?(state.priyanshuHabits||[]):(state.habits||[]);let x=arr.find(x=>x.date===b.dataset.habitedit);if(!x)return;let f=document.getElementById('habitForm');for(let k of ['date','wake','sleep','outside','revisionMins','mood','notes'])if(f.elements[k])f.elements[k].value=x[k]??'';for(let k of ['aloe','yoga','meditation','sunwater','temple','balanced','water','revision','walk'])f.elements[k].checked=!!x[k];f.scrollIntoView({behavior:'smooth',block:'start'});notify(`Loaded ${owner}'s routine — saving will ask whose record to update`)}});
+/* Voice recordings are stored in IndexedDB, not localStorage, to allow larger audio blobs. */
+let voiceDbPromise=null;
+function voiceDb(){if(voiceDbPromise)return voiceDbPromise;voiceDbPromise=new Promise((resolve,reject)=>{let req=indexedDB.open('StudySprintVoiceDB',1);req.onupgradeneeded=()=>req.result.createObjectStore('audio',{keyPath:'id'});req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});return voiceDbPromise}
+async function putAudio(record){let db=await voiceDb();return new Promise((resolve,reject)=>{let tx=db.transaction('audio','readwrite');tx.objectStore('audio').put(record);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
+async function getAudio(id){let db=await voiceDb();return new Promise((resolve,reject)=>{let req=db.transaction('audio','readonly').objectStore('audio').get(id);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+async function deleteAudio(id){let db=await voiceDb();return new Promise((resolve,reject)=>{let tx=db.transaction('audio','readwrite');tx.objectStore('audio').delete(id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
+
+const manifestationPrompts=[
+ ["Gratitude and calm","Write 3 things you appreciate today and describe the feeling each brings.","Write one sentence per item, then add: “Today I can build on this by…” Keep it honest and specific."],
+ ["Future-self encouragement","Write a supportive note from your future self after a week of steady effort.","Mention one small study habit, one obstacle you handled, and one encouraging sentence to present-you."],
+ ["Confidence before study","Write how you want to feel before your next study session.","Name the feeling, why it matters, and the first 10-minute action that supports it."],
+ ["A peaceful study space","Imagine a calm, focused study session and write what it looks and feels like.","Describe your desk, breathing, attention and one distraction you will put away."],
+ ["Progress over perfection","Write about one small win you can create today.","Choose a task small enough to finish in 20–30 minutes. Write how you will feel after completing it."],
+ ["Kindness to yourself","Write 3 kind sentences you would say to a friend who is learning.","Now write those sentences to yourself. Avoid perfection language; focus on effort and learning."],
+ ["Exam-day composure","Describe how you want to respond when a difficult question appears.","Write: pause, breathe, mark it, move on. Add one practice step you can do today."],
+ ["Visualise the process","Write about the process—not just the result—of reaching your study goal.","Picture opening your notes, solving questions, checking mistakes and returning after a break."],
+ ["A brave first step","Name one task you have been avoiding and write the smallest first step.","Make the first step take under 10 minutes. Write when you will start it today."],
+ ["Learning mindset","Complete: “I can improve at ___ by practising ___.”","Pick Geography, Maths, Reasoning or English. Name one practice action, not a guaranteed result."],
+ ["Thank your body","Write a short note appreciating what your body helps you do.","Mention rest, water, movement or breathing. Choose one caring action for today."],
+ ["Focus intention","Write one clear intention for your next 25-minute study block.","Choose one topic, silence one distraction, and define what “done” means."],
+ ["Handling setbacks","Write about a setback as information, not a verdict on you.","Note what happened, what you learned, and one adjustment to try next time."],
+ ["Self-belief with evidence","List 3 pieces of evidence that you can learn or improve.","Use real examples such as a completed lesson, corrected mistake or returning after a break."],
+ ["Supportive relationships","Write a positive message you would like to give yourself or someone you care about.","Keep it specific, kind and free of pressure. You may write it in your notebook."],
+ ["A day of balance","Describe a balanced day that includes study, food, movement and rest.","Write a realistic plan with one study priority and one proper break."],
+ ["Geography curiosity","Write about one place or geography concept you are curious to understand.","Name the concept and one question you will answer in a 15-minute study session."],
+ ["Maths confidence","Write how you will react when a maths problem feels difficult.","Commit to showing steps, trying one method and checking the solution calmly."],
+ ["Reasoning patience","Describe the patient, systematic approach you want to use in reasoning questions.","Write a 3-step plan: identify pattern, test possibilities, verify answer."],
+ ["English expression","Write 3 positive sentences about becoming clearer in English.","Choose one word or sentence pattern to practise today."],
+ ["Celebrate consistency","Write about a time you kept going even when progress was slow.","Name what helped you continue and how you can reuse it today."],
+ ["Let go of comparison","Write a reminder that your progress is your own.","Choose a personal measure for today: questions attempted, concepts understood or mistakes reviewed."],
+ ["Ask for help","Write one question you can ask when you get stuck.","Make it precise and choose a resource, teacher or person to ask."],
+ ["Make the goal concrete","Write one goal for the next 7 days and the action behind it.","Make it measurable and realistic; break it into small sessions."],
+ ["Positive environment","Write what you want your study environment to remind you of.","Create a short phrase for your notebook and remove one distraction."],
+ ["Recovery is productive","Write why rest helps you return with attention.","Schedule one real break and one reasonable study block; no guilt for resting."],
+ ["Mistakes are data","Write about one mistake you can learn from.","Record the error, the correct method and how you will recognise it next time."],
+ ["Values and goals","Write why your education goal matters to you personally.","Focus on your values and choices, not on controlling outcomes you cannot guarantee."],
+ ["Notice today's effort","Write 3 efforts you made today, however small.","Include one action, one lesson and one thing you will try tomorrow."],
+ ["Monthly reflection","Write what you are proud of learning this month and what you want to practise next.","Pick one strength to keep and one small improvement for the coming month."]
+];
+function todayPromptIndex(){const d=new Date();const start=new Date(d.getFullYear(),0,0);return Math.floor((d-start)/86400000)%manifestationPrompts.length}
+function renderManifestation(){
+ const idx=todayPromptIndex(),p=manifestationPrompts[idx],today=localDateISO();
+ const title=document.getElementById('manifestPromptTitle'),meta=document.getElementById('manifestPromptMeta'),txt=document.getElementById('manifestPromptText'),how=document.getElementById('manifestHowTo');
+ if(title)title.textContent=`Day ${idx+1}: ${p[0]}`;if(meta)meta.textContent=`${today} · Today's prompt`;
+ if(txt)txt.textContent=p[1];if(how)how.textContent=p[2];
+ const hist=document.getElementById('manifestationHistory');
+ if(hist){const items=(state.manifestationLogs||[]).slice().sort((a,b)=>(b.completedAt||'').localeCompare(a.completedAt||''));hist.innerHTML=items.length?items.map(x=>`<div class="record"><div><strong>${esc(x.person)} · ${esc(x.title)}</strong><div class="record-meta">${esc(x.date||'')} · +5 points</div><p>${esc(x.writing||'')}</p>${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener"><img src="${esc(x.url)}" alt="Manifestation writing photo" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px"></a><div class="record-actions"><button class="btn small danger" data-manifest-photo-delete="${esc(x.id)}">Delete photo</button></div>`:'<div class="record-meta">Photo deleted</div>'}</div></div>`).join(''):'<div class="empty">No completed activities yet. Start with today’s prompt.</div>'}
+}
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-manifest-photo-delete]');if(!b)return;const id=b.dataset.manifestPhotoDelete;const item=(state.manifestationLogs||[]).find(x=>String(x.id)===String(id));if(!item||!item.url)return;if(!confirm('Delete only this photo? The written note and earned points will remain.'))return;try{if(item.path)await ssDelete(item.path);item.path=null;item.url=null;item.photoDeleted=true;save();renderManifestation();notify('Photo deleted; note and points kept')}catch(err){console.error('Manifestation photo delete failed',err);alert('Photo delete failed: '+(err.message||'Unknown error'))}});
+document.getElementById('manifestationForm')?.addEventListener('submit',async e=>{
+ e.preventDefault();
+ const person=document.getElementById('manifestPerson').value,writing=document.getElementById('manifestWriting').value.trim(),file=document.getElementById('manifestPhoto').files[0],date=localDateISO();
+ if(writing.length<20){alert('Write at least 20 characters, ideally 3–5 honest sentences.');return}
+ if(!file||!file.type.startsWith('image/')){alert('Choose a photo of your written activity first.');return}
+ if((state.manifestationLogs||[]).some(x=>x.person===person&&x.date===date)){alert(`${person} has already completed today's manifestation activity. You can review it in the history.`);return}
+ const btn=document.getElementById('completeManifestation');if(btn){btn.disabled=true;btn.textContent='Uploading…'}
+ try{
+  const promptData=manifestationPrompts[todayPromptIndex()];
+  const up=await ssUpload(file,'manifestation');
+  const record={id:uid(),person,date,title:promptData[0],prompt:promptData[1],writing,path:up.path,url:up.url,completed:true,completedAt:new Date().toISOString()};
+  state.manifestationLogs=state.manifestationLogs||[];state.manifestationLogs.unshift(record);
+  addActivity('Completed manifestation activity: '+promptData[0],person,'manifestation:'+person+':'+date);
+  save();renderManifestation();notify(`${person} completed today's practice (+5 points)`);
+  e.target.reset();
+ }catch(err){console.error(err);alert('Could not upload the photo or save the activity: '+(err.message||'Unknown error'))}
+ finally{if(btn){btn.disabled=false;btn.textContent='Upload photo & complete activity (+5 points)'}}
+});
+
+function renderMediaGallery(){const el=document.getElementById('sharedMediaGallery');if(!el)return;const items=(state.mediaMeta||[]).slice().sort((a,b)=>b.created.localeCompare(a.created));el.innerHTML=items.length?items.map(x=>`<div class="record"><a href="${esc(x.url)}" target="_blank" rel="noopener"><img src="${esc(x.url)}" alt="${esc(x.name||"Shared photo")}" style="width:100%;height:150px;object-fit:cover;border-radius:10px"></a><div>${esc(x.name||"Photo")}</div><button class="btn small danger" data-ss-photo-delete="${esc(x.path)}">Delete</button></div>`).join(''):'<div class="empty">No shared photos yet.</div>'}
+document.getElementById('uploadSharedPhoto')?.addEventListener('click',async()=>{const i=document.getElementById('sharedPhotoUpload'),f=i.files[0];if(!f){alert('Choose a photo first');return}if(!f.type.startsWith('image/')){alert('Choose an image');return}try{const u=await ssUpload(f,'photos');state.mediaMeta=state.mediaMeta||[];state.mediaMeta.unshift({id:uid(),name:f.name,path:u.path,url:u.url,created:new Date().toISOString()});addActivity('Shared a photo',null);save();i.value='';renderMediaGallery();notify('Photo shared')}catch(e){console.error('Photo upload failed',e);alert('Photo upload failed: '+(e.message||e.error||'Unknown error')+'. Check Storage policies and make the bucket public if using public URLs.')}});
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-ss-photo-delete]');if(!b)return;if(!confirm('Delete this photo for everyone?'))return;try{await ssDelete(b.dataset.ssPhotoDelete);state.mediaMeta=(state.mediaMeta||[]).filter(x=>x.path!==b.dataset.ssPhotoDelete);save();renderMediaGallery()}catch(e){alert('Delete failed: '+e.message)}});
+async function renderVoiceList(){let el=document.getElementById('voiceRecords');if(!el)return;let list=(state.voiceMeta||[]).slice().sort((a,b)=>b.created.localeCompare(a.created));if(!list.length){el.innerHTML='<div class="empty"><strong>No voice notes yet</strong>Record or upload a voice note to start your library.</div>';return}el.innerHTML='';for(let x of list){let article=document.createElement('article');article.className='record';article.innerHTML=`<div class="record-head"><div><h4>♫ ${esc(x.caption||'Voice message')} · ${esc(x.from)} → ${esc(x.to)}</h4><div class="record-meta">${dateLabel(x.created)} · ${esc(x.source||'Recorded audio')}</div></div></div><div class="audio-row" style="margin-top:12px"><audio controls></audio><a class="btn small" download="${esc((x.caption||'voice-message').replace(/[^a-z0-9-_]/gi,'_'))}.webm">Download audio</a><button class="btn small danger">Delete</button></div>`;el.appendChild(article);try{let aud=null,url=x.url||'';if(!url){aud=await getAudio(x.id);if(aud&&aud.blob)url=URL.createObjectURL(aud.blob)}if(url){article.querySelector('audio').src=url;article.querySelector('a').href=url;article.querySelector('button').onclick=async()=>{if(confirm('Delete this voice message?')){if(x.path)await ssDelete(x.path);await deleteAudio(x.id).catch(()=>{});state.voiceMeta=state.voiceMeta.filter(y=>y.id!==x.id);save();notify('Voice note deleted')}}}else{article.querySelector('audio').remove();article.querySelector('a').remove();article.querySelector('button').disabled=true;article.querySelector('button').textContent='Audio unavailable'}}catch(err){article.querySelector('audio').remove()}}}
+async function saveVoiceBlob(blob,source='Recorded audio'){let id=uid(),caption=document.getElementById('voiceCaption').value.trim()||'Daily voice message',from=document.getElementById('voiceFrom').value,to=document.getElementById('voiceTo').value;await putAudio({id,blob});const file=new File([blob],id+'.webm',{type:blob.type||'audio/webm'});const u=await ssUpload(file,'voice');state.voiceMeta.unshift({id,caption,from,to,source,path:u.path,url:u.url,created:new Date().toISOString()});addActivity(`${from} saved a voice message for ${to}`,from);save();if(typeof renderVoiceList==='function')await renderVoiceList();notify('Voice recording uploaded and shared')}
+document.getElementById('recordVoice').onclick=async()=>{try{if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)throw Error('This browser does not support audio recording. Try a recent Chrome or Edge version on localhost/HTTPS.');voiceStream=await navigator.mediaDevices.getUserMedia({audio:true});voiceChunks=[];voiceRecorder=new MediaRecorder(voiceStream);voiceRecorder.ondataavailable=e=>{if(e.data.size)voiceChunks.push(e.data)};voiceRecorder.onstop=async()=>{let blob=new Blob(voiceChunks,{type:voiceRecorder.mimeType||'audio/webm'});voiceStream?.getTracks().forEach(t=>t.stop());voiceStream=null;try{await saveVoiceBlob(blob)}catch(err){alert('Could not save this audio. Please download a shorter recording or check browser storage.')}document.getElementById('recordVoice').disabled=false;document.getElementById('stopVoice').disabled=true;document.getElementById('recordingState').classList.remove('on')};voiceRecorder.start();document.getElementById('recordVoice').disabled=true;document.getElementById('stopVoice').disabled=false;document.getElementById('recordingState').classList.add('on')}catch(err){alert(err.message||'Microphone permission was not granted.')}}; 
+document.getElementById('stopVoice').onclick=()=>{if(voiceRecorder&&voiceRecorder.state!=='inactive')voiceRecorder.stop()};
+document.getElementById('saveUploadedVoice').onclick=async()=>{let f=document.getElementById('voiceUpload').files[0];if(!f){alert('Choose an audio file first.');return}try{await saveVoiceBlob(f,'Uploaded audio');document.getElementById('voiceUpload').value=''}catch(e){console.error('Audio upload failed',e);alert('Audio upload failed: '+(e.message||e.error||'Unknown error')+'. Check Storage policies and bucket visibility.')}};
+
+// Read-only diagnostics for DevTools Console. Does not mutate or delete app records.
+window.StudySprintTests={
+ async runFourRounds(){
+  const results=[];
+  const checks=async(round)=>{
+   const out=[];
+   const check=(name,ok,detail="")=>out.push({round,name,status:ok?"PASS":"FAIL",detail});
+   check("local state exists",!!state&&typeof state==="object");
+   ["lectures","mocks","topics","activity","calls","meetups","diary","messages","habits","priyanshuHabits","libraryAttendance","rewardEvents","manifestationLogs","expenses","socialPosts"].forEach(k=>check(`state.${k} is an array`,Array.isArray(state[k]),`count=${Array.isArray(state[k])?state[k].length:"not-array"}`));
+   check("reward owners are valid",(state.rewardEvents||[]).every(x=>["Sona","Priyanshu"].includes(x.owner)),`events=${(state.rewardEvents||[]).length}`);
+   const keys=(state.rewardEvents||[]).map(x=>x.key).filter(Boolean);
+   check("reward keys are unique",keys.length===new Set(keys).size,`keys=${keys.length}`);
+   check("reward dashboard nodes exist",!!document.getElementById("sonaPointsTotal")&&!!document.getElementById("priyanshuPointsTotal"));
+   check("localStorage parses",(()=>{try{const x=JSON.parse(localStorage.getItem(KEY)||"null");return !!x&&typeof x==="object"}catch{return false}})());
+   try{
+    const r=await ssSupabase.from("shared_content").select("id,content").eq("id",1).maybeSingle();
+    check("Supabase read succeeds",!r.error,r.error?.message||"read-only query");
+    check("cloud row id=1 exists",!!r.data?.content,`row=${r.data?.id??"missing"}`);
+    if(r.data?.content){
+     const cloud=ssNormalizeState(r.data.content);
+     ["lectures","topics","habits","priyanshuHabits","libraryAttendance","rewardEvents","manifestationLogs","expenses","socialPosts"].forEach(k=>check(`cloud ${k} is an array`,Array.isArray(cloud[k]),`count=${cloud[k].length}`));
+     check("cloud reward owners are valid",(cloud.rewardEvents||[]).every(x=>["Sona","Priyanshu"].includes(x.owner)),`events=${cloud.rewardEvents.length}`);
+    }
+   }catch(e){check("Supabase read succeeds",false,e.message||String(e))}
+   return out;
+  };
+  for(let round=1;round<=4;round++){results.push(...await checks(round));await new Promise(resolve=>setTimeout(resolve,150))}
+  console.table(results);
+  const failed=results.filter(x=>x.status==="FAIL");
+  console.info(`[StudySprint tests] ${results.length-failed.length}/${results.length} checks passed across 4 rounds; failures=${failed.length}`);
+  return {passed:results.length-failed.length,failed:failed.length,results};
+ }
+};
+// Daily expenses: independent entries per person with daily, Monday-Sunday and calendar-month totals.
+const STUDENT_DAILY_GUIDE=200;
+function moneyINR(n){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(n)||0)}
+function expenseWeekStart(dateStr){const d=new Date((dateStr||localDateISO())+'T12:00:00');const day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return localDateISO(d)}
+function renderExpenses(){
+ const arr=state.expenses||[],today=localDateISO(),weekStart=expenseWeekStart(today),weekEnd=new Date(weekStart+'T12:00:00');weekEnd.setDate(weekEnd.getDate()+6);const weekEndStr=localDateISO(weekEnd),month=today.slice(0,7);
+ for(const person of ['Sona','Priyanshu']){const mine=arr.filter(x=>x.person===person),todaySum=mine.filter(x=>x.date===today).reduce((n,x)=>n+Number(x.amount||0),0),weekSum=mine.filter(x=>x.date>=weekStart&&x.date<=weekEndStr).reduce((n,x)=>n+Number(x.amount||0),0),monthSum=mine.filter(x=>(x.date||'').startsWith(month)).reduce((n,x)=>n+Number(x.amount||0),0),prefix=person==='Sona'?'sona':'priyanshu';document.getElementById(prefix+'ExpenseToday').textContent=moneyINR(todaySum);document.getElementById(prefix+'ExpenseWeek').textContent=moneyINR(weekSum);document.getElementById(prefix+'ExpenseMonth').textContent=moneyINR(monthSum);document.getElementById(prefix+'ExpenseBudget').textContent=moneyINR(STUDENT_DAILY_GUIDE);document.getElementById(prefix+'ExpenseBudgetNote').textContent=todaySum<=STUDENT_DAILY_GUIDE?`Today: ${moneyINR(todaySum)} spent · ${moneyINR(STUDENT_DAILY_GUIDE-todaySum)} below the suggested guide.`:`Today: ${moneyINR(todaySum)} spent · ${moneyINR(todaySum-STUDENT_DAILY_GUIDE)} above the suggested guide. This is a guide, not a strict limit.`}
+ const pf=document.getElementById('expensePersonFilter')?.value||'',df=document.getElementById('expenseDateFilter')?.value||'',filtered=arr.filter(x=>(!pf||x.person===pf)&&(!df||x.date===df)).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.created||'').localeCompare(a.created||''));
+ const tbody=document.getElementById('expenseRows');if(tbody)tbody.innerHTML=filtered.map(x=>`<tr><td>${esc(x.date||'')}</td><td>${esc(x.person||'')}</td><td>${esc(x.category||'Other')}</td><td>${esc(x.description||'')}</td><td><strong>${moneyINR(x.amount)}</strong></td><td><button class="btn small danger" data-expense-delete="${esc(x.id)}">Delete</button></td></tr>`).join('')||'<tr><td colspan="6"><div class="empty">No expenses match this filter yet.</div></td></tr>';
+ const total=filtered.reduce((n,x)=>n+Number(x.amount||0),0);const totalEl=document.getElementById('expenseFilteredTotal');if(totalEl)totalEl.textContent=`Filtered total: ${moneyINR(total)}`;
+}
+document.getElementById('expenseForm')?.addEventListener('submit',e=>{e.preventDefault();const v=formObj(e.target),amount=Number(v.amount);if(!Number.isFinite(amount)||amount<=0){alert('Enter an amount greater than ₹0.');return}state.expenses=state.expenses||[];state.expenses.unshift({id:uid(),person:v.person,date:v.date,amount,category:v.category,description:v.description.trim(),created:new Date().toISOString()});save();e.target.reset();document.getElementById('expenseDate').value=localDateISO();notify('Expense saved')});
+document.getElementById('expensePersonFilter')?.addEventListener('change',renderExpenses);document.getElementById('expenseDateFilter')?.addEventListener('change',renderExpenses);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-expense-delete]');if(!b)return;const id=b.dataset.expenseDelete;if(!confirm('Delete this expense record?'))return;state.expenses=(state.expenses||[]).filter(x=>String(x.id)!==String(id));save();notify('Expense deleted')});
+
+// Shared daily thought feed. The author is explicitly chosen before a post is saved.
+function renderSocialFeed(){const el=document.getElementById('socialFeed');if(!el)return;const filter=document.getElementById('socialFeedFilter')?.value||'',likeAs=document.getElementById('socialLikeAs')?.value||'Sona';const posts=(state.socialPosts||[]).filter(x=>!filter||x.author===filter).slice().sort((a,b)=>(b.created||'').localeCompare(a.created||''));el.innerHTML=posts.length?posts.map(p=>{const likes=Array.isArray(p.likes)?p.likes:[],comments=Array.isArray(p.comments)?p.comments:[],liked=likes.includes(likeAs),body=p.text?`<p style="font-size:15px;color:var(--ink);margin:14px 0;white-space:pre-wrap">${esc(p.text)}</p>`:'',photo=p.imageUrl?`<img src="${esc(p.imageUrl)}" alt="Image shared by ${esc(p.author||'user')}" loading="lazy" style="display:block;width:auto;max-width:100%;max-height:520px;object-fit:contain;border-radius:14px;margin:12px 0;border:1px solid var(--line)">`:'';return `<article class="record" style="padding:18px"><div class="record-head"><div><h4>💭 ${esc(p.author||'Unknown')}</h4><div class="record-meta">${esc(p.date||'')} · ${esc(dateTimeLabel(p.created||''))}</div></div><button class="btn small danger" data-social-delete="${esc(p.id)}">Delete post</button></div>${body}${photo}<div class="record-actions"><button class="btn small ${liked?'primary':''}" data-social-like="${esc(p.id)}">${liked?'♥ Liked':'♡ Like'} · ${likes.length}</button><span class="record-meta">${comments.length} comment${comments.length===1?'':'s'}</span></div><div style="margin-top:12px;display:grid;gap:8px">${comments.map(c=>`<div style="background:#f7f8fc;border-radius:10px;padding:9px 11px"><strong>${esc(c.author||'')}</strong><div style="font-size:13px;white-space:pre-wrap">${esc(c.text||'')}</div><small class="record-meta">${esc(dateTimeLabel(c.created||''))}</small></div>`).join('')}<form class="social-comment-form" data-social-comment-form="${esc(p.id)}" style="display:grid;grid-template-columns:minmax(100px,.45fr) minmax(0,1fr) auto;gap:7px;align-items:start"><select name="author" aria-label="Commenting as" required><option>Sona</option><option>Priyanshu</option></select><input name="text" maxlength="600" required placeholder="Write a comment…" aria-label="Comment"><button class="btn small" type="submit">Comment</button></form></div></article>`}).join(''):'<div class="empty"><strong>No posts yet</strong>Share a thought, an image, or both.</div>'}
+const socialImageInput=document.getElementById('socialPostImage');
+function clearSocialImagePreview(){if(socialImageInput)socialImageInput.value='';const box=document.getElementById('socialPostImagePreview'),img=document.getElementById('socialPostImagePreviewImg');if(box)box.classList.add('hidden');if(img){if(img.src.startsWith('blob:'))URL.revokeObjectURL(img.src);img.removeAttribute('src')}}
+socialImageInput?.addEventListener('change',()=>{const file=socialImageInput.files?.[0],box=document.getElementById('socialPostImagePreview'),img=document.getElementById('socialPostImagePreviewImg');if(!file){clearSocialImagePreview();return}if(!file.type.startsWith('image/')){alert('Please choose an image file.');clearSocialImagePreview();return}if(img.src.startsWith('blob:'))URL.revokeObjectURL(img.src);img.src=URL.createObjectURL(file);box.classList.remove('hidden')});
+document.getElementById('clearSocialPostImage')?.addEventListener('click',clearSocialImagePreview);
+document.getElementById('socialPostForm')?.addEventListener('submit',async e=>{e.preventDefault();const form=e.target,v=formObj(form),text=(v.text||'').trim(),file=socialImageInput?.files?.[0]||null;if(!['Sona','Priyanshu'].includes(v.author)){alert('Please choose who is posting.');return}if(!text&&!file){alert('Write a thought or choose an image before sharing.');return}const btn=document.getElementById('socialPostSubmit'),status=document.getElementById('socialPostUploadStatus');btn.disabled=true;status.textContent=file?'Uploading image…':'Sharing post…';try{let image=null;if(file)image=await ssUpload(file,'thought-posts');state.socialPosts=state.socialPosts||[];state.socialPosts.unshift({id:uid(),author:v.author,date:v.date,text, imagePath:image?.path||null,imageUrl:image?.url||null,created:new Date().toISOString(),likes:[],comments:[]});save();form.reset();document.getElementById('socialPostDate').value=localDateISO();clearSocialImagePreview();renderSocialFeed();notify(`Post shared as ${v.author}`)}catch(err){console.error('Thought post failed',err);alert('Could not share post: '+(err.message||err.error||'Unknown error')+'. Check your internet connection and Supabase Storage policies.');}finally{btn.disabled=false;status.textContent=''}});
+document.getElementById('socialFeedFilter')?.addEventListener('change',renderSocialFeed);document.getElementById('socialLikeAs')?.addEventListener('change',renderSocialFeed);
+document.addEventListener('click',e=>{const like=e.target.closest('[data-social-like]');if(like){const post=(state.socialPosts||[]).find(x=>String(x.id)===String(like.dataset.socialLike));if(!post)return;post.likes=Array.isArray(post.likes)?post.likes:[];const person=document.getElementById('socialLikeAs')?.value||'Sona';if(post.likes.includes(person)){notify(`${person} has already liked this post`);return}post.likes=[...post.likes,person];save();return}const del=e.target.closest('[data-social-delete]');if(del){if(!confirm('Delete this post and its comments?'))return;state.socialPosts=(state.socialPosts||[]).filter(x=>String(x.id)!==String(del.dataset.socialDelete));save();notify('Post deleted')}});
+document.addEventListener('submit',e=>{const form=e.target.closest('[data-social-comment-form]');if(!form)return;e.preventDefault();const post=(state.socialPosts||[]).find(x=>String(x.id)===String(form.dataset.socialCommentForm));if(!post)return;const v=formObj(form),text=v.text.trim();if(!text)return;post.comments=Array.isArray(post.comments)?post.comments:[];post.comments.push({id:uid(),author:v.author,text,created:new Date().toISOString()});save();notify('Comment added')});
+
+function init(){if(!Array.isArray(state.manifestationLogs))state.manifestationLogs=[];if(!Array.isArray(state.expenses))state.expenses=[];if(!Array.isArray(state.socialPosts))state.socialPosts=[];ensureLegacyRewards();document.getElementById('diaryForm').elements.date.value=todayISO();document.getElementById('habitDate').value=todayISO();document.getElementById('expenseDate').value=todayISO();document.getElementById('socialPostDate').value=todayISO();renderDashboard();renderLectures();renderMocks();renderSona();renderPersonal();renderManifestation();renderExpenses();renderSocialFeed();if(window.ssStart)ssStart();if(typeof renderMediaGallery==="function")renderMediaGallery()}
+init();
+</script>
+<style>
+@media print{.sidebar,.topbar,.btn,.filters,.callout{display:none!important}.app{display:block}.content{padding:0}.hidden{display:none!important}.card{box-shadow:none;break-inside:avoid}.table-wrap{overflow:visible}body{background:white}}
+</style>
+<script>
+// AI Coach integration: sends only the selected learner's minimal study context; does not modify tracker records.
+(function(){
+ const $=id=>document.getElementById(id);
+ const transcript=$('coachTranscript'), status=$('coachStatus'), send=$('coachSend'), question=$('coachQuestion');
+ let busy=false, activeLearner='Priyanshu', conversation=[];
+ function escCoach(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+ function sonaSnapshot(){
+  const topics=Array.isArray(state.topics)?state.topics:[];
+  const recent=topics.slice(0,60).map(x=>({branch:String(x.branch||'Unspecified'),topic:String(x.topic||'Untitled topic').slice(0,160),correct:x.correct===''||x.correct==null?null:Number(x.correct),total:x.total===''||x.total==null?null:Number(x.total),accuracy:(x.correct!==''&&x.correct!=null&&x.total!==''&&x.total!=null&&Number(x.total)>0)?Math.round(Number(x.correct)/Number(x.total)*1000)/10:null,revisionStatus:x.status||'Not Started',platform:x.platform||null}));
+  const scored=recent.filter(x=>x.accuracy!==null);
+  const branchesSummary={};for(const x of recent){branchesSummary[x.branch]=(branchesSummary[x.branch]||0)+1;}
+  return {person:'Sona',examFocus:'CUET UG Geography',generatedAt:new Date().toISOString(),topicCount:topics.length,topicsWithScores:scored.length,averageRecordedAccuracy:scored.length?Math.round(scored.reduce((n,x)=>n+x.accuracy,0)/scored.length*10)/10:null,branchCounts:branchesSummary,geographyTopics:recent,dataLimitations:['Tracker records topic names and optional correct/total counts; blank scores are unknown, not zero.','The app does not store question-level answers or a verified current CUET syllabus version.','Use only the supplied topic list as her studied-topic history; do not claim she has mastered a topic from its presence in the list.']};
+ }
+ function snapshot(){
+  if(activeLearner==='Sona')return sonaSnapshot();
+  const lectures=Array.isArray(state.lectures)?state.lectures:[], mocks=Array.isArray(state.mocks)?state.mocks:[];
+  const done=lectures.filter(x=>x.done===true).length,total=lectures.length;
+  const revisions=lectures.reduce((n,x)=>n+['r1','r2','r3'].filter(k=>!!x[k]).length,0);
+  const scored=mocks.filter(x=>Number.isFinite(Number(x.score))&&Number.isFinite(Number(x.total))&&Number(x.total)>0);
+  const avg=scored.length?scored.reduce((n,x)=>n+Number(x.score)/Number(x.total)*100,0)/scored.length:null;
+  const subjectsSummary={};for(const sub of ['Reasoning','Maths','English']){const rows=lectures.filter(x=>x.subject===sub);subjectsSummary[sub]={completed:rows.filter(x=>x.done===true).length,total:rows.length,revisionChecks:rows.reduce((n,x)=>n+['r1','r2','r3'].filter(k=>!!x[k]).length,0)};}
+  const recent=mocks.slice(0,10).map(x=>({platform:x.platform||'Not set',name:x.name||'Unnamed mock',score:Number.isFinite(Number(x.score))?Number(x.score):null,total:Number.isFinite(Number(x.total))?Number(x.total):null,scorePercent:Number.isFinite(Number(x.score))&&Number(x.total)>0?Math.round(Number(x.score)/Number(x.total)*1000)/10:null,percentile:x.percentile===''||x.percentile==null?null:Number(x.percentile),weakAreas:String(x.weak||'').slice(0,300)}));
+  return {person:'Priyanshu',generatedAt:new Date().toISOString(),lectureProgress:{completed:done,total,percent:total?Math.round(done/total*1000)/10:0},revisionChecks:revisions,mockCount:mocks.length,mocksWithValidMarks:scored.length,averageMockScorePercent:avg===null?null:Math.round(avg*10)/10,subjects:subjectsSummary,recentMocks:recent,hocStages:['Starting','Basic Learning','Learning and Implementation','Learning, Implementation and Accuracy','Creativity','Speed','Scaling','Multiple-Exam Focus','Final Result'],dataLimitations:['Question-level attempted/correct/wrong counts not available in existing mock schema','Per-question time and structured mistake categories not available','Exam targets and official HOC readiness thresholds are not configured']};
+ }
+ function renderSnapshot(){const s=snapshot(),el=$('coachSnapshot');if(!el)return;if(activeLearner==='Sona'){const branches=Object.entries(s.branchCounts||{}).map(([k,v])=>`<div class="branch-card"><strong>${escCoach(k)}</strong><small>${v} tracked topic${v===1?'':'s'}</small></div>`).join('');const avg=s.averageRecordedAccuracy===null?'Not enough scored data':s.averageRecordedAccuracy+'%';el.innerHTML=`<div class="branch-card"><small>Geography topics in tracker</small><strong>${s.topicCount}</strong><small>${s.topicsWithScores} have recorded question scores</small></div><div class="branch-card"><small>Average recorded accuracy</small><strong>${escCoach(avg)}</strong><small>Only calculated from entries with valid scores</small></div>${branches||'<div class="empty">No Geography topics yet. Add topics in Sona · Geography to personalise revision.</div>'}`;return;}const avg=s.averageMockScorePercent===null?'Not enough data':s.averageMockScorePercent+'%';el.innerHTML=`<div class="branch-card"><small>Lectures completed</small><strong>${s.lectureProgress.completed} / ${s.lectureProgress.total}</strong><div class="track"><div class="fill" style="width:${s.lectureProgress.percent}%"></div></div><small>${s.lectureProgress.percent}% completion</small></div><div class="branch-card"><small>Revision checks</small><strong>${s.revisionChecks}</strong></div><div class="branch-card"><small>Mock tests logged</small><strong>${s.mockCount}</strong><small>Average score: ${escCoach(avg)}</small></div>${Object.entries(s.subjects).map(([k,v])=>`<div class="branch-card"><strong>${escCoach(k)}</strong><small>${v.completed}/${v.total} lectures · ${v.revisionChecks} revision checks</small></div>`).join('')}`;}
+ function setLearner(){const next=$('coachLearner')?.value||'Priyanshu';if(next!==activeLearner){conversation=[];transcript.innerHTML='<div class="empty"><strong>New mentor session</strong>Your previous chat is not saved. Choose a prompt or ask a question.</div>';}activeLearner=next;const sona=activeLearner==='Sona';$('sonaCoachIntro')?.classList.toggle('hidden',!sona);$('priyanshuCoachPrompts')?.classList.toggle('hidden',sona);$('sonaCoachPrompts')?.classList.toggle('hidden',!sona);$('priyanshuCoachLimit')?.classList.toggle('hidden',sona);$('sonaCoachTips')?.classList.toggle('hidden',!sona);$('coachPanelTitle').textContent=sona?'Sona’s CUET Geography mentor':'Ask your coach';$('coachPanelDesc').textContent=sona?'Learn in simple language, practise CUET-style MCQs and build confidence one question at a time.':'Ask about a study plan, weak areas, mock analysis, revisions or HOC workflow.';$('coachSnapshotTitle').textContent=sona?'Sona’s Geography snapshot':'Current study snapshot';$('coachSnapshotDesc').textContent=sona?'Based on topic records already in Sona’s Geography tracker.':'Calculated from existing local/cloud-synced tracker data.';question.placeholder=sona?'e.g. Explain monsoon in very easy English and then test me with one CUET-style question.':'e.g. I keep making mistakes in arithmetic. How should I structure practice and revision?';send.textContent=sona?'Ask Geography Mentor ↗':'Ask AI Coach ↗';status.textContent=sona?'Only Sona’s Geography topic summary will be sent.':'Only Priyanshu’s study summary will be sent.';renderSnapshot();}
+ function addBubble(role,text){if(transcript.querySelector('.empty'))transcript.innerHTML='';const d=document.createElement('article');d.className='record';const title=document.createElement('strong');title.textContent=role==='user'?(activeLearner==='Sona'?'Sona':'You'):(activeLearner==='Sona'?'CUET Geography Mentor':'AI Study Coach');const body=document.createElement('div');body.style.whiteSpace='pre-wrap';body.style.marginTop='8px';body.textContent=text;d.append(title,body);transcript.appendChild(d);transcript.scrollTop=transcript.scrollHeight;return body;}
+ async function ask(prompt){
+    if(busy)return;
+    const q=String(prompt||'').trim();
+    if(!q)return;
+    if(q.length>1200){status.textContent='Keep your question under 1,200 characters.';return;}
+    busy=true;send.disabled=true;status.textContent='Preparing a compact study snapshot…';
+    addBubble('user',q);question.value='';
+    const answer=addBubble('assistant','Thinking…');
+    try{
+      const learner=String($('coachLearner')?.value||activeLearner||'Priyanshu').trim();
+      const sona=learner.toLowerCase()==='sona';
+      const context=snapshot();
+      const priorConversation=conversation.slice(-10);
+      const requestBody={message:q,person:sona?'Sona':'Priyanshu',learner:sona?'Sona':'Priyanshu',mode:sona?'cuet-geography':'hoc-performance',context,conversation:priorConversation};
+      const result=await ssSupabase.functions.invoke('ai-coach',{body:requestBody});
+      if(result.error){
+        let detail=result.error.message||String(result.error);
+        try{const ctx=result.error.context;if(ctx&&typeof ctx.json==='function'){const payload=await ctx.json();if(payload?.error)detail=payload.error;}}catch(_){}
+        throw new Error(detail);
+      }
+      const data=result.data;
+      if(!data||typeof data!=='object')throw new Error('The AI endpoint returned an unreadable response.');
+      if(data.error)throw new Error(data.error);
+      if(data.person&&String(data.person).toLowerCase()!==(sona?'sona':'priyanshu'))throw new Error('The backend selected '+data.person+' instead of '+(sona?'Sona':'Priyanshu')+'. Redeploy the latest ai-coach Edge Function, then retry.');
+      const text=typeof data.answer==='string'?data.answer.trim():'';
+      if(!text)throw new Error('The AI endpoint returned no answer. Check the Edge Function logs and Gemini API quota.');
+      answer.textContent=text;
+      conversation.push({role:'user',text:q},{role:'assistant',text});
+      conversation=conversation.slice(-12);
+      status.textContent=(sona?'Sona’s CUET Geography mentor':'Priyanshu’s HOC coach')+' responded successfully.';
+    }catch(e){
+      const detail=String(e?.message||e).slice(0,700);
+      answer.textContent='AI request failed. Your tracker data is unchanged.\n\nReason: '+detail;
+      status.textContent='AI request failed — check the reason shown below.';
+    }finally{busy=false;send.disabled=false;}
+  }
+  $('coachForm')?.addEventListener('submit',e=>{e.preventDefault();ask(question.value)});
+ document.querySelectorAll('[data-coach-prompt]').forEach(b=>b.addEventListener('click',()=>{if((activeLearner==='Sona'&&b.closest('#sonaCoachPrompts'))||(activeLearner==='Priyanshu'&&b.closest('#priyanshuCoachPrompts')))ask(b.dataset.coachPrompt)}));
+ $('coachRefresh')?.addEventListener('click',renderSnapshot);$('coachLearner')?.addEventListener('change',setLearner);
+ document.querySelector('[data-page="ai-coach"]')?.addEventListener('click',setLearner);
+ setLearner();
+})();
+</script>
+
+</body>
+</html>
