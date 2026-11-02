@@ -30,6 +30,7 @@
     <button class="navbtn active" data-page="dashboard"><span class="ico">▦</span>Dashboard</button>
     <button class="navbtn" data-page="lectures"><span class="ico">▤</span>Priyanshu · Lectures</button>
     <button class="navbtn" data-page="mocks"><span class="ico">◷</span>Priyanshu · Mock tests</button>
+    <button class="navbtn" data-page="ai-coach"><span class="ico">✦</span>AI Study Coach</button>
     <button class="navbtn" data-page="sona"><span class="ico">◎</span>Sona · Geography</button>
     <button class="navbtn" data-page="calls"><span class="ico">☎</span>Call records</button>
     <button class="navbtn" data-page="meetups"><span class="ico">▣</span>Meetups & Google Meet</button>
@@ -314,6 +315,42 @@
         <div class="card"><div class="section-title"><div><h3>☀ Priyanshu</h3><p><span id="priyanshuHabitSummary">0 days logged</span></p></div></div><div class="records" id="priyanshuHabitRecords"></div></div>
       </div>
     </section>
+
+    <section id="page-ai-coach" class="hidden">
+      <div class="page-head"><div><div class="eyebrow">HOC · Performance · Daily action</div><h2>AI Study Coach</h2><p>Two focused mentors: Priyanshu’s exam-performance coach and Sona’s CUET Geography learning mentor.</p></div><span class="tag blue">Free-tier AI</span></div>
+      <div class="callout"><strong>Privacy & cost:</strong> Select whose coach you are using. Only the selected learner’s relevant study summary is sent to the secured AI endpoint. Chat history is not saved in StudySprint. Free-tier availability and quotas depend on Google AI Studio limits.</div>
+      <div class="card" style="margin-bottom:16px"><div class="form-field" style="max-width:420px"><label for="coachLearner">Choose mentor</label><select id="coachLearner" class="field"><option value="Priyanshu">Priyanshu · HOC & exam performance</option><option value="Sona">Sona · CUET Geography mentor</option></select></div><div id="sonaCoachIntro" class="callout hidden" style="margin-top:12px"><strong>Sona’s learning-first mode:</strong> questions in simple language, difficult words explained, step-by-step reasoning, daily CUET-style practice, mistake review and spaced revision. The coach should ask one question at a time when she requests interactive practice and should never shame her for a wrong answer.</div></div>
+      <div class="grid" style="grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:16px;align-items:start">
+        <div class="card">
+          <div class="section-title"><div><h3 id="coachPanelTitle">Ask your coach</h3><p id="coachPanelDesc">Ask about a study plan, weak areas, mock analysis, revisions or HOC workflow.</p></div></div>
+          <div id="priyanshuCoachPrompts" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+            <button class="btn small" type="button" data-coach-prompt="Analyse my current preparation and give me the three highest-impact next actions.">Analyse my prep</button>
+            <button class="btn small" type="button" data-coach-prompt="Make a realistic study plan for today based on my current progress.">Today's plan</button>
+            <button class="btn small" type="button" data-coach-prompt="Analyse my mock test trend and explain what data is missing for a reliable diagnosis.">Mock analysis</button>
+            <button class="btn small" type="button" data-coach-prompt="Help me apply the HOC progression without promoting me to a stage automatically.">HOC review</button>
+          </div>
+          <div id="sonaCoachPrompts" class="hidden" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+            <button class="btn small" type="button" data-coach-prompt="Give me today's CUET UG Geography practice test with 10 syllabus-relevant MCQs. Ask one question at a time, wait for my answer, then explain why the answer is correct in very easy language.">Start today's CUET test</button>
+            <button class="btn small" type="button" data-coach-prompt="Look at the Geography topics I have added. Choose one topic and teach it in very easy English, define difficult words, give a real-life example, then ask me 3 quick questions one at a time.">Teach one topic simply</button>
+            <button class="btn small" type="button" data-coach-prompt="Help me understand how to read CUET Geography MCQs. Show me how to identify what the question is asking, explain difficult words, eliminate options, and solve one example step by step.">Understand questions</button>
+            <button class="btn small" type="button" data-coach-prompt="Create a short revision session from my Geography topics: key concepts, easy memory cues, 5 active-recall questions and answers with explanations after I attempt them.">Revision & memory</button>
+            <button class="btn small" type="button" data-coach-prompt="Review my Geography topic tracker, identify topics with missing or low accuracy data, and suggest a gentle 30-minute study plan for today. Do not assume a blank score means I performed badly.">Today's study plan</button>
+          </div>
+          <div id="coachTranscript" aria-live="polite" style="display:grid;gap:12px;max-height:440px;overflow:auto;margin-bottom:14px"><div class="empty"><strong>Your coach is ready</strong>Choose a prompt above or type a question. Suggestions are advisory; you decide what to implement.</div></div>
+          <form id="coachForm" style="display:grid;gap:10px">
+            <label for="coachQuestion" style="font-weight:700;font-size:13px">Your question</label>
+            <textarea id="coachQuestion" class="field" rows="3" maxlength="1200" required placeholder="e.g. I keep making mistakes in arithmetic. How should I structure practice and revision?"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><small id="coachStatus" class="record-meta" role="status">Connect the Edge Function to enable AI responses.</small><button id="coachSend" class="btn primary" type="submit">Ask AI Coach ↗</button></div>
+          </form>
+        </div>
+        <div class="card">
+          <div class="section-title"><div><h3 id="coachSnapshotTitle">Current study snapshot</h3><p id="coachSnapshotDesc">Calculated from existing local/cloud-synced tracker data.</p></div><button class="btn small" id="coachRefresh" type="button">Refresh</button></div>
+          <div id="coachSnapshot" class="records"></div>
+          <div id="priyanshuCoachLimit" class="callout" style="margin-top:14px"><strong>Data limitation:</strong> current mock entries store score, maximum marks, percentile and free-text weak areas. The coach will not invent missing metrics.</div>
+          <div id="sonaCoachTips" class="callout hidden" style="margin-top:14px"><strong>How Sona’s mentor helps:</strong><ul style="margin:8px 0 0 18px;padding:0"><li>Simple-English explanations and glossary of difficult words.</li><li>CUET-style MCQs with why each option is right or wrong.</li><li>One-question-at-a-time practice to build confidence.</li><li>Topic-wise revision, memory cues and spaced recall.</li><li>Gentle review of mistakes and a manageable daily plan.</li><li>Uses only the Geography topics in the tracker; asks before assuming an unlisted syllabus topic.</li></ul></div>
+        </div>
+      </div>
+    </section>
   </div>
 </main>
 </div>
@@ -503,7 +540,7 @@ let voiceRecorder=null, voiceChunks=[], voiceStream=null;
 function uid(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36)}
 function freshState(){let lectures=[];subjects.forEach(subject=>{for(let n=1;n<=50;n++)lectures.push({id:uid(),subject,num:n,topic:'',pdf:'',done:false,r1:'',r2:'',r3:''})});return {lectures,mocks:[],topics:[],activity:[]}}
 function loadState(){try{let s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.lectures)&&Array.isArray(s.mocks)&&Array.isArray(s.topics))return s}catch(e){}return freshState()}
-function save(){localStorage.setItem(KEY,JSON.stringify(state));if(window.ssSave)ssSave();renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderManifestation==='function')renderManifestation();if(typeof renderPersonal==='function')renderPersonal();if(typeof renderMediaGallery==='function')renderMediaGallery();if(typeof renderExpenses==='function')renderExpenses();if(typeof renderSocialFeed==='function')renderSocialFeed();}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){console.error('[StudySprint] Local backup failed; cloud save will still be attempted',e);notify('Browser backup unavailable; checking cloud sync')}if(window.ssSave)ssSave();renderDashboard();renderLectures();renderMocks();renderSona();if(typeof renderManifestation==='function')renderManifestation();if(typeof renderPersonal==='function')renderPersonal();if(typeof renderMediaGallery==='function')renderMediaGallery();if(typeof renderExpenses==='function')renderExpenses();if(typeof renderSocialFeed==='function')renderSocialFeed();}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function notify(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
 const REWARD_TARGETS={Sona:{daily:40,weekly:250,monthly:1000},Priyanshu:{daily:40,weekly:250,monthly:1000}};
@@ -673,7 +710,7 @@ function renderSona(){
  document.getElementById('sonaRows').innerHTML=filtered.map(x=>`<tr><td>${esc(x.branch)}</td><td>${esc(x.topic)}</td><td>${x.pdf?`<a class="link" href="${esc(x.pdf)}" target="_blank" rel="noopener">Open PDF ↗</a>`:'<span style="color:#9aa3b2">No link</span>'}</td><td><span class="tag ${x.platform==='Testbook'?'blue':x.platform==='Oliveboard'?'orange':''}">${esc(x.platform||'Not set')}</span></td><td>${x.correct===''?'—':esc(x.correct)}</td><td>${x.total===''?'—':esc(x.total)}</td><td><strong>${fmt(pct(x.correct,x.total))}</strong></td><td><span class="tag ${x.status==='Revised'?'green':x.status==='In Progress'?'orange':''}">${esc(x.status)}</span></td><td><button class="btn small" data-edit-record="topic" data-id="${x.id}">Edit</button> <button class="btn small danger" data-delete="topic" data-id="${x.id}">Delete</button></td></tr>`).join('')||'<tr><td colspan="9"><div class="empty">No topics match. Add a Geography topic to get started.</div></td></tr>';
  document.getElementById('sonaCount').textContent=`Showing ${filtered.length} of ${state.topics.length} topics`;
 }
-function go(page){currentPage=page;document.querySelectorAll('[id^="page-"]').forEach(s=>s.classList.toggle('hidden',s.id!==`page-${page}`));document.querySelectorAll('.navbtn[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let names={dashboard:'Dashboard',lectures:'Priyanshu · Lectures',mocks:'Priyanshu · Mock tests',sona:'Sona · Geography',calls:'Call records',meetups:'Meetups & Google Meet',diary:'Diary & messages',library:'Library check-in/out',voice:'Daily voice notes',habits:'Daily wellness',expenses:'Daily expenses',social:'Thoughts & posts'};document.getElementById('crumb').textContent=names[page];document.getElementById('topTitle').textContent=page==='dashboard'?'Your preparation at a glance':names[page];document.getElementById('sidebar').classList.remove('open');}
+function go(page){currentPage=page;document.querySelectorAll('[id^="page-"]').forEach(s=>s.classList.toggle('hidden',s.id!==`page-${page}`));document.querySelectorAll('.navbtn[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let names={dashboard:'Dashboard',lectures:'Priyanshu · Lectures',mocks:'Priyanshu · Mock tests',sona:'Sona · Geography',calls:'Call records',meetups:'Meetups & Google Meet',diary:'Diary & messages',library:'Library check-in/out',voice:'Daily voice notes',habits:'Daily wellness',expenses:'Daily expenses',social:'Thoughts & posts','ai-coach':'AI Study Coach'};document.getElementById('crumb').textContent=names[page];document.getElementById('topTitle').textContent=page==='dashboard'?'Your preparation at a glance':names[page];document.getElementById('sidebar').classList.remove('open');}
 function field(name,label,type='text',value='',opts=[],required=false,full=false,placeholder=''){let input='';if(type==='select')input=`<select name="${name}" ${required?'required':''}>${opts.map(o=>`<option value="${esc(o)}" ${o===value?'selected':''}>${esc(o||'Choose…')}</option>`).join('')}</select>`;else if(type==='textarea')input=`<textarea name="${name}" rows="3" placeholder="${esc(placeholder)}">${esc(value)}</textarea>`;else input=`<input name="${name}" type="${type}" value="${esc(value)}" placeholder="${esc(placeholder)}" ${required?'required':''} ${type==='number'?'min="0" step="any"':''}>`;return `<div class="form-field ${full?'full':''}"><label>${label}${required?' *':''}</label>${input}</div>`}
 function openEditor(kind,id=null){editorKind=kind;editId=id;let old=id?(kind==='mock'?state.mocks:state.topics).find(x=>x.id===id):{};old=old||{};let fields='',title='',eyebrow='';
  if(kind==='mock'){title=id?'Edit mock test':'Add mock test';eyebrow='Priyanshu · Bank exam';fields=field('platform','Platform','select',old.platform||'Testbook',['Testbook','Oliveboard'],true)+field('name','Test name','text',old.name||'','',true)+field('score','Score','number',old.score??'',[],true)+field('total','Total marks','number',old.total??'',[],true)+field('percentile','Percentile (as reported)','number',old.percentile??'',[],false)+field('weak','Weak areas to revise','textarea',old.weak||'',[],false,true,'e.g. syllogism, time & work');}
@@ -859,6 +896,45 @@ window.StudySprintTests={
   return {passed:results.length-failed.length,failed:failed.length,results};
  }
 };
+// Focused, read-only persistence audit for learner topics and resource links.
+// Run from DevTools: await StudySprintTests.auditTopicsAndLinks()
+window.StudySprintTests=window.StudySprintTests||{};
+window.StudySprintTests.auditTopicsAndLinks=async function(){
+ const results=[];const check=(name,ok,detail='')=>results.push({name,status:ok?'PASS':'FAIL',detail});
+ const arrays=['lectures','topics'];
+ arrays.forEach(k=>check(`Local ${k} array exists`,Array.isArray(state[k]),`records=${Array.isArray(state[k])?state[k].length:'not-array'}`));
+ const validUrl=x=>{if(!x)return true;try{const u=new URL(x);return u.protocol==='https:'||u.protocol==='http:'}catch{return false}};
+ const localLectures=Array.isArray(state.lectures)?state.lectures:[],localTopics=Array.isArray(state.topics)?state.topics:[];
+ check('Priyanshu lecture IDs are present',localLectures.every(x=>!!x.id),`records=${localLectures.length}`);
+ check('Sona topic IDs are present',localTopics.every(x=>!!x.id),`records=${localTopics.length}`);
+ check('Priyanshu lecture links are valid URLs',localLectures.every(x=>validUrl(x.pdf)),`links=${localLectures.filter(x=>x.pdf).length}`);
+ check('Sona topic links are valid URLs',localTopics.every(x=>validUrl(x.pdf)),`links=${localTopics.filter(x=>x.pdf).length}`);
+ check('Sona topics contain required names',localTopics.every(x=>typeof x.topic==='string'&&x.topic.trim()),`records=${localTopics.length}`);
+ check('Priyanshu lectures have valid subject/number',localLectures.every(x=>!!x.subject&&Number(x.num)>=1&&Number(x.num)<=50),`records=${localLectures.length}`);
+ let localSnapshot;try{localSnapshot=JSON.parse(localStorage.getItem(KEY)||'null');check('LocalStorage JSON is readable',!!localSnapshot&&typeof localSnapshot==='object')}catch(e){check('LocalStorage JSON is readable',false,e.message)}
+ if(localSnapshot){check('LocalStorage topics match in-memory IDs',JSON.stringify((localSnapshot.topics||[]).map(x=>x.id).sort())===JSON.stringify(localTopics.map(x=>x.id).sort()),`stored=${(localSnapshot.topics||[]).length}; memory=${localTopics.length}`);check('LocalStorage lectures match in-memory IDs',JSON.stringify((localSnapshot.lectures||[]).map(x=>x.id).sort())===JSON.stringify(localLectures.map(x=>x.id).sort()),`stored=${(localSnapshot.lectures||[]).length}; memory=${localLectures.length}`)}
+ try{
+  const r=await ssSupabase.from('shared_content').select('id,content').eq('id',1).maybeSingle();
+  check('Supabase shared_content read succeeds',!r.error,r.error?.message||'read-only query');
+  check('Supabase row 1 exists',!!r.data?.content,`row=${r.data?.id??'missing'}`);
+  if(!r.error&&r.data?.content){
+   const cloud=ssNormalizeState(r.data.content),ct=cloud.topics||[],cl=cloud.lectures||[];
+   const localTopicIds=new Set(localTopics.map(x=>String(x.id))),cloudTopicIds=new Set(ct.map(x=>String(x.id)));
+   const localLectureIds=new Set(localLectures.map(x=>String(x.id))),cloudLectureIds=new Set(cl.map(x=>String(x.id)));
+   check('Cloud Sona topics have IDs',ct.every(x=>!!x.id),`records=${ct.length}`);
+   check('Cloud Priyanshu lectures have IDs',cl.every(x=>!!x.id),`records=${cl.length}`);
+   check('Every local Sona topic exists in cloud',localTopics.every(x=>cloudTopicIds.has(String(x.id))),`local=${localTopics.length}; cloud=${ct.length}; missing=${localTopics.filter(x=>!cloudTopicIds.has(String(x.id))).length}`);
+   check('Every local Priyanshu lecture exists in cloud',localLectures.every(x=>cloudLectureIds.has(String(x.id))),`local=${localLectures.length}; cloud=${cl.length}; missing=${localLectures.filter(x=>!cloudLectureIds.has(String(x.id))).length}`);
+   check('Sona PDF links match cloud values',localTopics.filter(x=>x.pdf).every(x=>ct.some(y=>String(y.id)===String(x.id)&&y.pdf===x.pdf)),`localLinks=${localTopics.filter(x=>x.pdf).length}; cloudLinks=${ct.filter(x=>x.pdf).length}`);
+   check('Priyanshu PDF links match cloud values',localLectures.filter(x=>x.pdf).every(x=>cl.some(y=>String(y.id)===String(x.id)&&y.pdf===x.pdf)),`localLinks=${localLectures.filter(x=>x.pdf).length}; cloudLinks=${cl.filter(x=>x.pdf).length}`);
+   check('Cloud Sona topic records have names',ct.every(x=>typeof x.topic==='string'&&x.topic.trim()),`records=${ct.length}`);
+   check('Cloud Priyanshu lecture records have subject and number',cl.every(x=>!!x.subject&&Number(x.num)>=1&&Number(x.num)<=50),`records=${cl.length}`);
+   console.info('[StudySprint audit] Data model note: Priyanshu lecture records are stored in `lectures`; Sona Geography topics are stored in `topics`. They are separate lists by design; a lecture will not automatically appear as a Sona Geography topic.');
+  }
+ }catch(e){check('Supabase shared_content read succeeds',false,e.message||String(e))}
+ console.table(results);const failed=results.filter(x=>x.status==='FAIL');const summary={passed:results.length-failed.length,failed:failed.length,total:results.length,results};console.info(`[StudySprint audit] ${summary.passed}/${summary.total} checks passed; failures=${summary.failed}. Read-only: no records were inserted, changed, or deleted.`);return summary;
+};
+
 // Daily expenses: independent entries per person with daily, Monday-Sunday and calendar-month totals.
 const STUDENT_DAILY_GUIDE=200;
 function moneyINR(n){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(n)||0)}
@@ -891,5 +967,77 @@ init();
 <style>
 @media print{.sidebar,.topbar,.btn,.filters,.callout{display:none!important}.app{display:block}.content{padding:0}.hidden{display:none!important}.card{box-shadow:none;break-inside:avoid}.table-wrap{overflow:visible}body{background:white}}
 </style>
+<script>
+// AI Coach integration: sends only the selected learner's minimal study context; does not modify tracker records.
+(function(){
+ const $=id=>document.getElementById(id);
+ const transcript=$('coachTranscript'), status=$('coachStatus'), send=$('coachSend'), question=$('coachQuestion');
+ let busy=false, activeLearner='Priyanshu', conversation=[];
+ function escCoach(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+ function sonaSnapshot(){
+  const topics=Array.isArray(state.topics)?state.topics:[];
+  const recent=topics.slice(0,60).map(x=>({branch:String(x.branch||'Unspecified'),topic:String(x.topic||'Untitled topic').slice(0,160),correct:x.correct===''||x.correct==null?null:Number(x.correct),total:x.total===''||x.total==null?null:Number(x.total),accuracy:(x.correct!==''&&x.correct!=null&&x.total!==''&&x.total!=null&&Number(x.total)>0)?Math.round(Number(x.correct)/Number(x.total)*1000)/10:null,revisionStatus:x.status||'Not Started',platform:x.platform||null}));
+  const scored=recent.filter(x=>x.accuracy!==null);
+  const branchesSummary={};for(const x of recent){branchesSummary[x.branch]=(branchesSummary[x.branch]||0)+1;}
+  return {person:'Sona',examFocus:'CUET UG Geography',generatedAt:new Date().toISOString(),topicCount:topics.length,topicsWithScores:scored.length,averageRecordedAccuracy:scored.length?Math.round(scored.reduce((n,x)=>n+x.accuracy,0)/scored.length*10)/10:null,branchCounts:branchesSummary,geographyTopics:recent,dataLimitations:['Tracker records topic names and optional correct/total counts; blank scores are unknown, not zero.','The app does not store question-level answers or a verified current CUET syllabus version.','Use only the supplied topic list as her studied-topic history; do not claim she has mastered a topic from its presence in the list.']};
+ }
+ function snapshot(){
+  if(activeLearner==='Sona')return sonaSnapshot();
+  const lectures=Array.isArray(state.lectures)?state.lectures:[], mocks=Array.isArray(state.mocks)?state.mocks:[];
+  const done=lectures.filter(x=>x.done===true).length,total=lectures.length;
+  const revisions=lectures.reduce((n,x)=>n+['r1','r2','r3'].filter(k=>!!x[k]).length,0);
+  const scored=mocks.filter(x=>Number.isFinite(Number(x.score))&&Number.isFinite(Number(x.total))&&Number(x.total)>0);
+  const avg=scored.length?scored.reduce((n,x)=>n+Number(x.score)/Number(x.total)*100,0)/scored.length:null;
+  const subjectsSummary={};for(const sub of ['Reasoning','Maths','English']){const rows=lectures.filter(x=>x.subject===sub);subjectsSummary[sub]={completed:rows.filter(x=>x.done===true).length,total:rows.length,revisionChecks:rows.reduce((n,x)=>n+['r1','r2','r3'].filter(k=>!!x[k]).length,0)};}
+  const recent=mocks.slice(0,10).map(x=>({platform:x.platform||'Not set',name:x.name||'Unnamed mock',score:Number.isFinite(Number(x.score))?Number(x.score):null,total:Number.isFinite(Number(x.total))?Number(x.total):null,scorePercent:Number.isFinite(Number(x.score))&&Number(x.total)>0?Math.round(Number(x.score)/Number(x.total)*1000)/10:null,percentile:x.percentile===''||x.percentile==null?null:Number(x.percentile),weakAreas:String(x.weak||'').slice(0,300)}));
+  return {person:'Priyanshu',generatedAt:new Date().toISOString(),lectureProgress:{completed:done,total,percent:total?Math.round(done/total*1000)/10:0},revisionChecks:revisions,mockCount:mocks.length,mocksWithValidMarks:scored.length,averageMockScorePercent:avg===null?null:Math.round(avg*10)/10,subjects:subjectsSummary,recentMocks:recent,hocStages:['Starting','Basic Learning','Learning and Implementation','Learning, Implementation and Accuracy','Creativity','Speed','Scaling','Multiple-Exam Focus','Final Result'],dataLimitations:['Question-level attempted/correct/wrong counts not available in existing mock schema','Per-question time and structured mistake categories not available','Exam targets and official HOC readiness thresholds are not configured']};
+ }
+ function renderSnapshot(){const s=snapshot(),el=$('coachSnapshot');if(!el)return;if(activeLearner==='Sona'){const branches=Object.entries(s.branchCounts||{}).map(([k,v])=>`<div class="branch-card"><strong>${escCoach(k)}</strong><small>${v} tracked topic${v===1?'':'s'}</small></div>`).join('');const avg=s.averageRecordedAccuracy===null?'Not enough scored data':s.averageRecordedAccuracy+'%';el.innerHTML=`<div class="branch-card"><small>Geography topics in tracker</small><strong>${s.topicCount}</strong><small>${s.topicsWithScores} have recorded question scores</small></div><div class="branch-card"><small>Average recorded accuracy</small><strong>${escCoach(avg)}</strong><small>Only calculated from entries with valid scores</small></div>${branches||'<div class="empty">No Geography topics yet. Add topics in Sona · Geography to personalise revision.</div>'}`;return;}const avg=s.averageMockScorePercent===null?'Not enough data':s.averageMockScorePercent+'%';el.innerHTML=`<div class="branch-card"><small>Lectures completed</small><strong>${s.lectureProgress.completed} / ${s.lectureProgress.total}</strong><div class="track"><div class="fill" style="width:${s.lectureProgress.percent}%"></div></div><small>${s.lectureProgress.percent}% completion</small></div><div class="branch-card"><small>Revision checks</small><strong>${s.revisionChecks}</strong></div><div class="branch-card"><small>Mock tests logged</small><strong>${s.mockCount}</strong><small>Average score: ${escCoach(avg)}</small></div>${Object.entries(s.subjects).map(([k,v])=>`<div class="branch-card"><strong>${escCoach(k)}</strong><small>${v.completed}/${v.total} lectures · ${v.revisionChecks} revision checks</small></div>`).join('')}`;}
+ function setLearner(){const next=$('coachLearner')?.value||'Priyanshu';if(next!==activeLearner){conversation=[];transcript.innerHTML='<div class="empty"><strong>New mentor session</strong>Your previous chat is not saved. Choose a prompt or ask a question.</div>';}activeLearner=next;const sona=activeLearner==='Sona';$('sonaCoachIntro')?.classList.toggle('hidden',!sona);$('priyanshuCoachPrompts')?.classList.toggle('hidden',sona);$('sonaCoachPrompts')?.classList.toggle('hidden',!sona);$('priyanshuCoachLimit')?.classList.toggle('hidden',sona);$('sonaCoachTips')?.classList.toggle('hidden',!sona);$('coachPanelTitle').textContent=sona?'Sona’s CUET Geography mentor':'Ask your coach';$('coachPanelDesc').textContent=sona?'Learn in simple language, practise CUET-style MCQs and build confidence one question at a time.':'Ask about a study plan, weak areas, mock analysis, revisions or HOC workflow.';$('coachSnapshotTitle').textContent=sona?'Sona’s Geography snapshot':'Current study snapshot';$('coachSnapshotDesc').textContent=sona?'Based on topic records already in Sona’s Geography tracker.':'Calculated from existing local/cloud-synced tracker data.';question.placeholder=sona?'e.g. Explain monsoon in very easy English and then test me with one CUET-style question.':'e.g. I keep making mistakes in arithmetic. How should I structure practice and revision?';send.textContent=sona?'Ask Geography Mentor ↗':'Ask AI Coach ↗';status.textContent=sona?'Only Sona’s Geography topic summary will be sent.':'Only Priyanshu’s study summary will be sent.';renderSnapshot();}
+ function addBubble(role,text){if(transcript.querySelector('.empty'))transcript.innerHTML='';const d=document.createElement('article');d.className='record';const title=document.createElement('strong');title.textContent=role==='user'?(activeLearner==='Sona'?'Sona':'You'):(activeLearner==='Sona'?'CUET Geography Mentor':'AI Study Coach');const body=document.createElement('div');body.style.whiteSpace='pre-wrap';body.style.marginTop='8px';body.textContent=text;d.append(title,body);transcript.appendChild(d);transcript.scrollTop=transcript.scrollHeight;return body;}
+ async function ask(prompt){
+    if(busy)return;
+    const q=String(prompt||'').trim();
+    if(!q)return;
+    if(q.length>1200){status.textContent='Keep your question under 1,200 characters.';return;}
+    busy=true;send.disabled=true;status.textContent='Preparing a compact study snapshot…';
+    addBubble('user',q);question.value='';
+    const answer=addBubble('assistant','Thinking…');
+    try{
+      const learner=String($('coachLearner')?.value||activeLearner||'Priyanshu').trim();
+      const sona=learner.toLowerCase()==='sona';
+      const context=snapshot();
+      const priorConversation=conversation.slice(-10);
+      const requestBody={message:q,person:sona?'Sona':'Priyanshu',learner:sona?'Sona':'Priyanshu',mode:sona?'cuet-geography':'hoc-performance',context,conversation:priorConversation};
+      const result=await ssSupabase.functions.invoke('ai-coach',{body:requestBody});
+      if(result.error){
+        let detail=result.error.message||String(result.error);
+        try{const ctx=result.error.context;if(ctx&&typeof ctx.json==='function'){const payload=await ctx.json();if(payload?.error)detail=payload.error;}}catch(_){}
+        throw new Error(detail);
+      }
+      const data=result.data;
+      if(!data||typeof data!=='object')throw new Error('The AI endpoint returned an unreadable response.');
+      if(data.error)throw new Error(data.error);
+      if(data.person&&String(data.person).toLowerCase()!==(sona?'sona':'priyanshu'))throw new Error('The backend selected '+data.person+' instead of '+(sona?'Sona':'Priyanshu')+'. Redeploy the latest ai-coach Edge Function, then retry.');
+      const text=typeof data.answer==='string'?data.answer.trim():'';
+      if(!text)throw new Error('The AI endpoint returned no answer. Check the Edge Function logs and Gemini API quota.');
+      answer.textContent=text;
+      conversation.push({role:'user',text:q},{role:'assistant',text});
+      conversation=conversation.slice(-12);
+      status.textContent=(sona?'Sona’s CUET Geography mentor':'Priyanshu’s HOC coach')+' responded successfully.';
+    }catch(e){
+      const detail=String(e?.message||e).slice(0,700);
+      answer.textContent='AI request failed. Your tracker data is unchanged.\n\nReason: '+detail;
+      status.textContent='AI request failed — check the reason shown below.';
+    }finally{busy=false;send.disabled=false;}
+  }
+  $('coachForm')?.addEventListener('submit',e=>{e.preventDefault();ask(question.value)});
+ document.querySelectorAll('[data-coach-prompt]').forEach(b=>b.addEventListener('click',()=>{if((activeLearner==='Sona'&&b.closest('#sonaCoachPrompts'))||(activeLearner==='Priyanshu'&&b.closest('#priyanshuCoachPrompts')))ask(b.dataset.coachPrompt)}));
+ $('coachRefresh')?.addEventListener('click',renderSnapshot);$('coachLearner')?.addEventListener('change',setLearner);
+ document.querySelector('[data-page="ai-coach"]')?.addEventListener('click',setLearner);
+ setLearner();
+})();
+</script>
+
 </body>
 </html>
